@@ -1,25 +1,18 @@
 // @flow
 
-import type {
-  Action,
-  Image,
-  MainLayoutState,
-  Mode,
-  ToolEnum,
-} from "../MainLayout/types"
+import type { Node } from "react"
 import React, { useEffect, useReducer } from "react"
 import makeImmutable, { without } from "seamless-immutable"
-
+import useEventCallback from "use-event-callback"
 import type { KeypointsDefinition } from "../ImageCanvas/region-tools"
 import MainLayout from "../MainLayout"
-import type { Node } from "react"
+import type { Action, Image } from "../MainLayout/types"
 import SettingsProvider from "../SettingsProvider"
+import getFromLocalStorage from "../utils/get-from-local-storage"
 import combineReducers from "./reducers/combine-reducers.js"
 import generalReducer from "./reducers/general-reducer.js"
-import getFromLocalStorage from "../utils/get-from-local-storage"
 import historyHandler from "./reducers/history-handler.js"
 import imageReducer from "./reducers/image-reducer.js"
-import useEventCallback from "use-event-callback"
 import videoReducer from "./reducers/video-reducer.js"
 
 type Props = {
