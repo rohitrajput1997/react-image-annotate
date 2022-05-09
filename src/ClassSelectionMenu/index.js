@@ -1,13 +1,12 @@
-import React, { useEffect } from "react"
-import { styled } from "@mui/material/styles"
-import { createTheme, ThemeProvider } from "@mui/material/styles"
+import BallotIcon from "@mui/icons-material/Ballot"
 import Box from "@mui/material/Box"
 import * as muiColors from "@mui/material/colors"
-import SidebarBoxContainer from "../SidebarBoxContainer"
-import colors from "../colors"
-import BallotIcon from "@mui/icons-material/Ballot"
-import capitalize from "lodash/capitalize"
+import { createTheme, styled, ThemeProvider } from "@mui/material/styles"
 import classnames from "classnames"
+import capitalize from "lodash/capitalize"
+import React, { useEffect } from "react"
+import colors from "../colors"
+import SidebarBoxContainer from "../SidebarBoxContainer"
 
 const theme = createTheme()
 const LabelContainer = styled("div")(({ theme }) => ({
@@ -50,7 +49,7 @@ const Number = styled("div")(({ theme }) => ({
   paddingTop: 2,
   paddingBottom: 2,
   fontWeight: "bold",
-  color: muiColors.grey[700],
+  color: "#231f20",
 }))
 
 export const ClassSelectionMenu = ({

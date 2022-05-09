@@ -92,6 +92,11 @@ export const Annotator = ({
   hideFullScreen,
   hideSave,
   allowComments,
+  onAddQuery,
+  saveandnext,
+  issavenextDisabled = false,
+  isaddQueryDisabled = false,
+  isSubmitDisabled = false,
 }: Props) => {
   if (typeof selectedImage === "string") {
     selectedImage = (images || []).findIndex((img) => img.src === selectedImage)
@@ -144,12 +149,20 @@ export const Annotator = ({
 
   const dispatch = useEventCallback((action: Action) => {
     if (action.type === "HEADER_BUTTON_CLICKED") {
-      if (["Exit", "Done", "Save", "Complete"].includes(action.buttonName)) {
+      if (
+        ["Exit", "Done", "Save", "Complete", "Submit"].includes(
+          action.buttonName
+        )
+      ) {
         return onExit(without(state, "history"))
       } else if (action.buttonName === "Next" && onNextImage) {
         return onNextImage(without(state, "history"))
       } else if (action.buttonName === "Prev" && onPrevImage) {
         return onPrevImage(without(state, "history"))
+      } else if (action.buttonName === "Add Query" && onAddQuery) {
+        return onAddQuery(without(state, "history"))
+      } else if (action.buttonName === "Save & next" && saveandnext) {
+        return saveandnext(without(state, "history"))
       }
     }
     dispatchToReducer(action)
@@ -191,6 +204,9 @@ export const Annotator = ({
         hideSettings={hideSettings}
         hideFullScreen={hideFullScreen}
         hideSave={hideSave}
+        issavenextDisabled={issavenextDisabled}
+        isaddQueryDisabled={isaddQueryDisabled}
+        isSubmitDisabled={isSubmitDisabled}
       />
     </SettingsProvider>
   )

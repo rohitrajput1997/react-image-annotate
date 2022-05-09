@@ -3,11 +3,11 @@
 import { createTheme, styled, ThemeProvider } from "@mui/material/styles"
 import { makeStyles } from "@mui/styles"
 import classnames from "classnames"
+import Workspace from "ns_workflow_workspace/Workspace"
 import type { Node } from "react"
 import React, { useCallback, useRef } from "react"
 import { FullScreen, useFullScreenHandle } from "react-full-screen"
 import { withHotKeys } from "react-hotkeys"
-import Workspace from "react-material-workspace-layout/Workspace"
 import useEventCallback from "use-event-callback"
 import useKey from "use-key-hook"
 import getActiveImage from "../Annotator/reducers/get-active-image"
@@ -76,6 +76,9 @@ export const MainLayout = ({
   hideSettings = false,
   hideFullScreen = false,
   hideSave = false,
+  issavenextDisabled = false,
+  isaddQueryDisabled = false,
+  isSubmitDisabled = false,
 }: Props) => {
   const classes = useStyles()
   const settings = useSettings()
@@ -256,22 +259,64 @@ export const MainLayout = ({
                 ) : null,
               ].filter(Boolean)}
               headerItems={[
-                !hidePrev && { name: "Prev" },
-                !hideNext && { name: "Next" },
+                !hidePrev && {
+                  name: "Prev",
+                  className: "prev",
+                  iconName: "Prev",
+                },
+                !hideNext && {
+                  name: "Next",
+                  className: "next",
+                  iconName: "Next",
+                },
                 state.annotationType !== "video"
                   ? null
                   : !state.videoPlaying
-                  ? { name: "Play" }
-                  : { name: "Pause" },
+                  ? { name: "Play", className: "play", iconName: "Play" }
+                  : { name: "Pause", className: "pause", iconName: "Pause" },
                 !hideClone &&
                   !nextImageHasRegions &&
-                  activeImage.regions && { name: "Clone" },
-                !hideSettings && { name: "Settings" },
+                  activeImage.regions && {
+                    name: "Clone",
+                    className: "clone",
+                    iconName: "Clone",
+                  },
+                !hideSettings && {
+                  name: "Settings",
+                  className: "settings",
+                  iconName: "Settings",
+                },
+                {
+                  name: "Add Query",
+                  className: "query",
+                  iconName: "query",
+                  disabled: isaddQueryDisabled,
+                },
+                !hideSave && {
+                  name: "Submit",
+                  className: "save",
+                  iconName: "submit",
+                  disabled: isSubmitDisabled,
+                },
+
+                {
+                  name: "Save & next",
+                  className: "savenext",
+                  iconName: "savenext",
+                  disabled: issavenextDisabled,
+                },
                 !hideFullScreen &&
                   (state.fullScreen
-                    ? { name: "Window" }
-                    : { name: "Fullscreen" }),
-                !hideSave && { name: "Save" },
+                    ? {
+                        name: "Window",
+                        className: "window",
+                        iconName: "Window",
+                      }
+                    : {
+                        name: "Fullscreen",
+                        className: "Fullscreen",
+                        iconName: "Fullscreen",
+                      }),
               ].filter(Boolean)}
               onClickHeaderItem={onClickHeaderItem}
               onClickIconSidebarItem={onClickIconSidebarItem}
@@ -415,3 +460,4 @@ export const MainLayout = ({
 }
 
 export default MainLayout
+

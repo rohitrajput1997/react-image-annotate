@@ -25,11 +25,10 @@ export default () => {
   return (
     <div>
       <Annotator
-        hideFullScreen={true}
         {...(annotatorProps: any)}
         onExit={(e) => console.log(e)}
+        issavenextDisabled={true}
       />
     </div>
   )
 }
-

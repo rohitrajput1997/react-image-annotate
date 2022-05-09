@@ -1,5 +1,3 @@
-import { grey } from "@mui/material/colors"
-
 export default {
   canvas: { width: "100%", height: "100%", position: "relative", zIndex: 1 },
   zoomIndicator: {
@@ -14,6 +12,9 @@ export default {
     padding: 4,
   },
   fixedRegionLabel: {
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
     position: "absolute",
     zIndex: 10,
     top: 10,
@@ -25,3 +26,4 @@ export default {
     },
   },
 }
+
