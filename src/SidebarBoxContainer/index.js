@@ -1,6 +1,5 @@
 // @flow
 
-import { grey } from "@mui/material/colors"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
 import { makeStyles } from "@mui/styles"
 import classnames from "classnames"
@@ -24,9 +23,9 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "bold",
     flexGrow: 1,
     paddingLeft: 8,
-    color: grey[800],
+    color: "#005f86 !important",
     "& span": {
-      color: grey[600],
+      color: "#005f86 !important",
       fontSize: 12,
     },
   },
@@ -87,4 +86,3 @@ export default memo(
   SidebarBoxContainer,
   (prev, next) => prev.title === next.title && prev.children === next.children
 )
-

@@ -1,6 +1,6 @@
 // @flow weak
 
-import { useRef } from "react"
+import { useRef, useState } from "react"
 import { Matrix } from "transformation-matrix-js"
 
 const getDefaultMat = () => Matrix.from(1, 0, 0, 1, -10, -10)
@@ -35,9 +35,9 @@ export default ({
     if (mat.a > 2) mat.scaleU(2 / mat.a)
     if (mat.a < 0.05) mat.scaleU(0.05 / mat.a)
     mat.translate(-mx, -my)
-
     changeMat(mat.clone())
   }
+  const [scrollnum, set_scroll_number] = useState(0)
 
   const mouseEvents = {
     onMouseMove: (e) => {
@@ -111,11 +111,19 @@ export default ({
           Math.abs(zoomStart.x - zoomEnd.x) < 10 &&
           Math.abs(zoomStart.y - zoomEnd.y) < 10
         ) {
-          if (mat.a < 1) {
-            zoomIn({ to: 1 }, mousePosition.current)
+          if (0.4 < mat.a) {
+            set_scroll_number(scrollnum + 0.1)
+            zoomIn({ to: 0.9 - scrollnum }, mousePosition.current)
           } else {
-            zoomIn({ to: 0.25 }, mousePosition.current)
+            set_scroll_number(0)
+            zoomIn({ to: 1 }, mousePosition.current)
           }
+
+          // if (mat.a < 1) {
+          //   zoomIn({ to: 1 }, mousePosition.current)
+          // } else {
+          //   zoomIn({ to: 0.9 }, mousePosition.current)
+          // }
         } else {
           const { iw, ih } = layoutParams.current
 
@@ -166,3 +174,4 @@ export default ({
   }
   return { mouseEvents, mousePosition }
 }
+

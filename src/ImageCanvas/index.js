@@ -147,6 +147,7 @@ export const ImageCanvas = ({
   const [mat, changeMat] = useRafState(getDefaultMat())
   const maskImages = useRef({})
   const windowSize = useWindowSize()
+  // console.log(mat)
 
   const getLatestMat = useEventCallback(() => mat)
   useWasdMode({ getLatestMat, changeMat })
@@ -276,7 +277,7 @@ export const ImageCanvas = ({
   })
 
   const { iw, ih } = layoutParams.current
-
+  // console.log(zoomStart)
   let zoomBox =
     !zoomStart || !zoomEnd
       ? null
@@ -323,9 +324,10 @@ export const ImageCanvas = ({
             : dragWithPrimary
             ? "grab"
             : zoomWithPrimary
-            ? mat.a < 1
-              ? "zoom-out"
-              : "zoom-in"
+            ? // ? mat.a < 1
+              //   ? "zoom-out"
+              //   : "zoom-in"
+              "zoom-in"
             : undefined,
         }}
       >
@@ -434,6 +436,9 @@ export const ImageCanvas = ({
           {...mouseEvents}
         >
           <>
+            <div className={classes.zoomIndicator}>
+              {((1 / mat.a) * 100).toFixed(0)}%
+            </div>
             {fullImageSegmentationMode && (
               <ImageMask
                 hide={!showMask}
@@ -470,9 +475,6 @@ export const ImageCanvas = ({
             />
           </>
         </PreventScrollToParents>
-        <div className={classes.zoomIndicator}>
-          {((1 / mat.a) * 100).toFixed(0)}%
-        </div>
       </div>
     </ThemeProvider>
   )

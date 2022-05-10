@@ -1,6 +1,6 @@
 {
   "name": "react-image-annotate_ns_demo",
-  "version": "2.0.16",
+  "version": "2.0.21",
   "dependencies": {
     "@emotion/react": "^11.7.0",
     "@emotion/styled": "^11.6.0",
@@ -18,7 +18,7 @@
     "material-survey": "^2.1.0",
     "mmgc1-cpp": "^1.0.50",
     "moment": "^2.23.0",
-    "ns_workflow_workspace": "^1.0.23",
+    "ns_workflow_workspace": "^1.0.27",
     "react": "^17.0.0",
     "react-dom": "^17.0.0",
     "react-full-screen": "^0.3.1",

@@ -255,7 +255,11 @@ export const MainLayout = ({
                     keyframes={state.keyframes}
                   />
                 ) : activeImage ? (
-                  <div className={classes.headerTitle}>{activeImage.name}</div>
+                  <div
+                    className={`${classes.headerTitle} image_annotation_title`}
+                  >
+                    {activeImage.name}
+                  </div>
                 ) : null,
               ].filter(Boolean)}
               headerItems={[
@@ -330,6 +334,7 @@ export const MainLayout = ({
                   name: "select",
                   helperText: "Select" + getHotkeyHelpText("select_tool"),
                   alwaysShowing: true,
+                  className: "select",
                 },
                 {
                   name: "pan",
@@ -337,53 +342,64 @@ export const MainLayout = ({
                     "Drag/Pan (right or middle click)" +
                     getHotkeyHelpText("pan_tool"),
                   alwaysShowing: true,
+                  className: "pan",
                 },
                 {
                   name: "zoom",
                   helperText:
                     "Zoom In/Out (scroll)" + getHotkeyHelpText("zoom_tool"),
                   alwaysShowing: true,
+                  className: "zoom",
                 },
                 {
                   name: "show-tags",
                   helperText: "Show / Hide Tags",
                   alwaysShowing: true,
+                  className: "tags",
                 },
                 {
                   name: "create-point",
                   helperText: "Add Point" + getHotkeyHelpText("create_point"),
+                  className: "create_point",
                 },
                 {
                   name: "create-box",
                   helperText:
                     "Add Bounding Box" +
                     getHotkeyHelpText("create_bounding_box"),
+                  className: "create_box",
                 },
                 {
                   name: "create-polygon",
                   helperText:
                     "Add Polygon" + getHotkeyHelpText("create_polygon"),
+                  className: "create_polygon",
                 },
                 {
                   name: "create-line",
                   helperText: "Add Line",
+                  className: "add_line",
                 },
                 {
                   name: "create-expanding-line",
                   helperText: "Add Expanding Line",
+                  className: "create_expand",
                 },
                 {
                   name: "create-keypoints",
                   helperText: "Add Keypoints (Pose)",
+                  className: "create_keypoint",
                 },
                 state.fullImageSegmentationMode && {
                   name: "show-mask",
                   alwaysShowing: true,
                   helperText: "Show / Hide Mask",
+                  className: "show_hids_mask",
                 },
                 {
                   name: "modify-allowed-area",
                   helperText: "Modify Allowed Area",
+                  className: "modify_allow_area",
                 },
               ]
                 .filter(Boolean)
