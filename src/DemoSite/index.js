@@ -27,7 +27,14 @@ export default () => {
       <Annotator
         {...(annotatorProps: any)}
         onExit={(e) => console.log(e)}
-        issavenextDisabled={true}
+        enabledTools={[
+          "select",
+          "create-point",
+          "create-box",
+          "create-polygon",
+          "show-mask",
+          "pan_tool",
+        ]}
       />
     </div>
   )

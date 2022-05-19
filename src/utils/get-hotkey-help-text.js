@@ -9,3 +9,4 @@ export const getHotkeyHelpText = (commandName) => {
 }
 
 export default getHotkeyHelpText
+

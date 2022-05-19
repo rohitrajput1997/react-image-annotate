@@ -1,5 +1,6 @@
 // @flow
 
+import { Button } from "@mui/material"
 import { createTheme, styled, ThemeProvider } from "@mui/material/styles"
 import { makeStyles } from "@mui/styles"
 import classnames from "classnames"
@@ -201,6 +202,7 @@ export const MainLayout = ({
   )
 
   const onClickIconSidebarItem = useEventCallback((item) => {
+    console.log(item)
     dispatch({ type: "SELECT_TOOL", selectedTool: item.name })
   })
 
@@ -219,6 +221,7 @@ export const MainLayout = ({
 
   return (
     <ThemeProvider theme={theme}>
+      <Button onClick={() => console.log("hello")}>brush</Button>
       <FullScreenContainer>
         <FullScreen
           handle={fullScreenHandle}
@@ -341,6 +344,13 @@ export const MainLayout = ({
                   helperText:
                     "Drag/Pan (right or middle click)" +
                     getHotkeyHelpText("pan_tool"),
+                  alwaysShowing: true,
+                  className: "pan",
+                },
+                {
+                  name: "brush",
+                  helperText: "brush",
+
                   alwaysShowing: true,
                   className: "pan",
                 },
