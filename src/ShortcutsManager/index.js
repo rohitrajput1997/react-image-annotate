@@ -32,6 +32,11 @@ export const defaultHotkeys = [
     binding: "p",
   },
   {
+    id: "create-a-brush",
+    description: "Create a Brush",
+    binding: "b",
+  },
+  {
     id: "create_pixel",
     description: "Create a Pixel Mask",
   },
@@ -92,6 +97,12 @@ export const useDispatchHotkeyHandlers = ({ dispatch }) => {
         dispatch({
           type: "SELECT_TOOL",
           selectedTool: "create-box",
+        })
+      },
+      "create-a-brush": () => {
+        dispatch({
+          type: "SELECT_TOOL",
+          selectedTool: "create-a-brush",
         })
       },
       pan_tool: () => {
@@ -160,3 +171,4 @@ export default ({ children, dispatch }) => {
     </HotKeys>
   )
 }
+

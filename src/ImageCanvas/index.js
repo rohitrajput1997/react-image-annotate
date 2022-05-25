@@ -453,6 +453,7 @@ export const ImageCanvas = ({
               style={{ opacity: 0.25 }}
               className={classes.canvas}
               ref={canvasEl}
+              id="myPics"
             />
             <RegionShapes
               mat={mat}
@@ -481,3 +482,4 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
+

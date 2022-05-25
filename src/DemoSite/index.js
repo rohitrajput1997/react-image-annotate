@@ -34,6 +34,7 @@ export default () => {
           "create-polygon",
           "show-mask",
           "pan_tool",
+          "create-a-brush",
         ]}
       />
     </div>

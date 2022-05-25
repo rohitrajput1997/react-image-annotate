@@ -1,15 +1,20 @@
 // @flow
 
-import React from "react"
-
-import { storiesOf } from "@storybook/react"
 import { action } from "@storybook/addon-actions"
+import { storiesOf } from "@storybook/react"
+import React from "react"
 import Annotator from "./"
 
 storiesOf("Annotator(video)", module).add("Video Annotator", () => {
   const props = {
     regionClsList: ["valid", "invalid"],
-    enabledTools: ["select", "create-box", "create-polygon", "create-point"],
+    enabledTools: [
+      "select",
+      "create-box",
+      "create-polygon",
+      "create-point",
+      "create-brush",
+    ],
     keyframes: {
       0: {
         regions: [

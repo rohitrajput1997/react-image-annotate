@@ -1,9 +1,8 @@
+import { createTheme, styled, ThemeProvider } from "@mui/material/styles"
+import Tooltip from "@mui/material/Tooltip"
 import React, { Fragment, memo } from "react"
 import HighlightBox from "../HighlightBox"
-import { styled } from "@mui/material/styles"
-import { createTheme, ThemeProvider } from "@mui/material/styles"
 import PreventScrollToParents from "../PreventScrollToParents"
-import Tooltip from "@mui/material/Tooltip"
 
 const theme = createTheme()
 const TransformGrabber = styled("div")(({ theme }) => ({
@@ -136,7 +135,7 @@ export const RegionSelectAndTransformBox = memo(
                   />
                 )
               })}
-            {r.type === "polygon" &&
+            {/* {r.type === "brushed" &&
               r.highlighted &&
               !dragWithPrimary &&
               !zoomWithPrimary &&
@@ -171,6 +170,41 @@ export const RegionSelectAndTransformBox = memo(
                     />
                   )
                 })}
+            {r.type === "brushed" &&
+              r.highlighted &&
+              !dragWithPrimary &&
+              !zoomWithPrimary &&
+              !r.locked &&
+              !r.open &&
+              r.points.length > 1 &&
+              r.points
+                .map((p1, i) => [p1, r.points[(i + 1) % r.points.length]])
+                .map(([p1, p2]) => [(p1[0] + p2[0]) / 2, (p1[1] + p2[1]) / 2])
+                .map((pa, i) => {
+                  const proj = mat
+                    .clone()
+                    .inverse()
+                    .applyToPoint(pa[0] * iw, pa[1] * ih)
+                  return (
+                    <TransformGrabber
+                      key={i}
+                      {...mouseEvents}
+                      onMouseDown={(e) => {
+                        if (e.button === 0)
+                          return onAddPolygonPoint(r, pa, i + 1)
+                        mouseEvents.onMouseDown(e)
+                      }}
+                      style={{
+                        cursor: "copy",
+                        zIndex: 10,
+                        left: proj.x - 4,
+                        top: proj.y - 4,
+                        border: "2px dotted #fff",
+                        opacity: 0.5,
+                      }}
+                    />
+                  )
+                })} */}
             {r.type === "keypoints" &&
               !dragWithPrimary &&
               !zoomWithPrimary &&

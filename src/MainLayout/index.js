@@ -1,9 +1,9 @@
 // @flow
 
-import { Button } from "@mui/material"
 import { createTheme, styled, ThemeProvider } from "@mui/material/styles"
 import { makeStyles } from "@mui/styles"
 import classnames from "classnames"
+import { LazyBrush } from "lazy-brush"
 import Workspace from "ns_workflow_workspace/Workspace"
 import type { Node } from "react"
 import React, { useCallback, useRef } from "react"
@@ -26,6 +26,7 @@ import TagsSidebarBox from "../TagsSidebarBox"
 import TaskDescription from "../TaskDescriptionSidebarBox"
 import getHotkeyHelpText from "../utils/get-hotkey-help-text"
 import iconDictionary from "./icon-dictionary"
+import LazyBrushDraw from "./LazyBrushDraw"
 import styles from "./styles"
 import type { MainLayoutState } from "./types"
 import useImpliedVideoRegions from "./use-implied-video-regions"
@@ -202,7 +203,7 @@ export const MainLayout = ({
   )
 
   const onClickIconSidebarItem = useEventCallback((item) => {
-    console.log(item)
+    // console.log(item)
     dispatch({ type: "SELECT_TOOL", selectedTool: item.name })
   })
 
@@ -218,10 +219,19 @@ export const MainLayout = ({
   const debugModeOn = Boolean(window.localStorage.$ANNOTATE_DEBUG_MODE && state)
   const nextImageHasRegions =
     !nextImage || (nextImage.regions && nextImage.regions.length > 0)
+  const lazy = new LazyBrush({
+    radius: 30,
+    enabled: true,
+    initialPoint: { x: 0, y: 0 },
+  })
+
+  // console.log(lazy.getBrushCoordinates()) // { x: 0, y: 0 }
+
+  lazy.update({ x: 200, y: 50 })
+  // console.log(lazy.getBrushCoordinates())
 
   return (
     <ThemeProvider theme={theme}>
-      <Button onClick={() => console.log("hello")}>brush</Button>
       <FullScreenContainer>
         <FullScreen
           handle={fullScreenHandle}
@@ -347,13 +357,7 @@ export const MainLayout = ({
                   alwaysShowing: true,
                   className: "pan",
                 },
-                {
-                  name: "brush",
-                  helperText: "brush",
 
-                  alwaysShowing: true,
-                  className: "pan",
-                },
                 {
                   name: "zoom",
                   helperText:
@@ -378,6 +382,14 @@ export const MainLayout = ({
                     "Add Bounding Box" +
                     getHotkeyHelpText("create_bounding_box"),
                   className: "create_box",
+                },
+                {
+                  name: "create-a-brush",
+                  helperText:
+                    "Create By Paint Brush" +
+                    getHotkeyHelpText("create-a-brush"),
+                  alwaysShowing: true,
+                  className: "create-a-brush",
                 },
                 {
                   name: "create-polygon",
@@ -481,9 +493,9 @@ export const MainLayout = ({
           </HotkeyDiv>
         </FullScreen>
       </FullScreenContainer>
+      <LazyBrushDraw />
     </ThemeProvider>
   )
 }
 
 export default MainLayout
-

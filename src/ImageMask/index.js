@@ -1,10 +1,9 @@
 // @flow
 
-import React, { useState, useEffect, useMemo, useRef } from "react"
-import { colorInts } from "../colors"
+import autoseg from "autoseg/webworker"
+import React, { useEffect, useMemo, useState } from "react"
 import { useDebounce } from "react-use"
 import loadImage from "./load-image"
-import autoseg from "autoseg/webworker"
 
 function convertToUDTRegions(regions) {
   return regions
@@ -25,6 +24,13 @@ function convertToUDTRegions(regions) {
             points: r.points.map(([x, y]) => ({ x, y })),
           }
         }
+        // case "brushed": {
+        //   return {
+        //     regionType: "brushed",
+        //     classification: r.cls,
+        //     points: r.points.map(([x, y]) => ({ x, y })),
+        //   }
+        // }
         case "box": {
           return {
             regionType: "bounding-box",
@@ -120,8 +126,10 @@ export const ImageMask = ({
       width={sampleImageData ? sampleImageData.width : 0}
       height={sampleImageData ? sampleImageData.height : 0}
       ref={setCanvasRef}
+      id="myPics"
     />
   )
 }
 
 export default ImageMask
+

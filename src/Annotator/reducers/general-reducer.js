@@ -1,19 +1,31 @@
 // @flow
-import type { MainLayoutState, Action } from "../../MainLayout/types"
-import { moveRegion } from "../../ImageCanvas/region-tools.js"
-import { getIn, setIn, updateIn } from "seamless-immutable"
-import moment from "moment"
-import isEqual from "lodash/isEqual"
-import getActiveImage from "./get-active-image"
-import { saveToHistory } from "./history-handler.js"
-import colors from "../../colors"
-import fixTwisted from "./fix-twisted"
-import convertExpandingLineToPolygon from "./convert-expanding-line-to-polygon"
 import clamp from "clamp"
+import isEqual from "lodash/isEqual"
+import { getIn, setIn } from "seamless-immutable"
+import colors from "../../colors"
+import { moveRegion } from "../../ImageCanvas/region-tools.js"
+import type { Action, MainLayoutState } from "../../MainLayout/types"
 import getLandmarksWithTransform from "../../utils/get-landmarks-with-transform"
 import setInLocalStorage from "../../utils/set-in-local-storage"
+import convertExpandingLineToPolygon from "./convert-expanding-line-to-polygon"
+import fixTwisted from "./fix-twisted"
+import getActiveImage from "./get-active-image"
+import { saveToHistory } from "./history-handler.js"
 
 const getRandomId = () => Math.random().toString().split(".")[1]
+let isDrawing = false
+let a = 0
+let b = 0
+function drawLine(context, x1, y1, x2, y2) {
+  context.beginPath()
+  context.strokeStyle = "black"
+  context.lineWidth = 1
+  context.moveTo(x1, y1)
+  context.lineTo(x2, y2)
+  context.stroke()
+  context.closePath()
+  console.log(context)
+}
 
 export default (state: MainLayoutState, action: Action) => {
   if (
@@ -25,6 +37,9 @@ export default (state: MainLayoutState, action: Action) => {
     action.x = clamp(action.x, aa.x, aa.x + aa.w)
     action.y = clamp(action.y, aa.y, aa.y + aa.h)
   }
+
+  const myPics = document.getElementById("myPics")
+  const context = myPics.getContext("2d")
 
   if (action.type === "ON_CLS_ADDED" && action.cls && action.cls !== "") {
     const oldRegionClsList = state.regionClsList
@@ -240,6 +255,13 @@ export default (state: MainLayoutState, action: Action) => {
     }
     case "MOUSE_MOVE": {
       const { x, y } = action
+      myPics.addEventListener("mousemove", (e) => {
+        if (isDrawing === true) {
+          drawLine(context, a, b, e.offsetX, e.offsetY)
+          a = e.offsetX
+          b = e.offsetY
+        }
+      })
 
       if (!state.mode) return state
       if (!activeImage) return state
@@ -261,6 +283,8 @@ export default (state: MainLayoutState, action: Action) => {
             [x, y]
           )
         }
+        // case "MOVE_BRUSH_POINT": {
+        // }
         case "MOVE_KEYPOINT": {
           const { keypointId, regionId } = state.mode
           const [region, regionIndex] = getRegion(regionId)
@@ -379,6 +403,17 @@ export default (state: MainLayoutState, action: Action) => {
             [x, y]
           )
         }
+        case "DRAW_BRUSH": {
+          const { regionId } = state.mode
+          const [region, regionIndex] = getRegion(regionId)
+
+          if (!region) return setIn(state, ["mode"], null)
+          return setIn(state, [...pathToActiveImage, "regions", regionIndex], {
+            ...region,
+            x2: x,
+            y2: y,
+          })
+        }
         case "DRAW_LINE": {
           const { regionId } = state.mode
           const [region, regionIndex] = getRegion(regionId)
@@ -446,7 +481,14 @@ export default (state: MainLayoutState, action: Action) => {
     }
     case "MOUSE_DOWN": {
       if (!activeImage) return state
+
       const { x, y } = action
+
+      // myPics.addEventListener("mousedown", (e) => {
+      //   a = e.offsetX
+      //   b = e.offsetY
+      //   isDrawing = true
+      // })
 
       state = setIn(state, ["mouseDownAt"], { x, y })
 
@@ -460,6 +502,17 @@ export default (state: MainLayoutState, action: Action) => {
               [...pathToActiveImage, "regions", regionIndex],
               { ...polygon, points: polygon.points.concat([[x, y]]) }
             )
+          }
+          case "DRAW_BRUSH": {
+            // logic to draw cordinates ploygon ka logic
+            const [line, regionIndex] = getRegion(state.mode.regionId)
+            if (!line) break
+            setIn(state, [...pathToActiveImage, "regions", regionIndex], {
+              ...line,
+              x2: x,
+              y2: y,
+            })
+            return setIn(state, ["mode"], null)
           }
           case "DRAW_LINE": {
             const [line, regionIndex] = getRegion(state.mode.regionId)
@@ -571,6 +624,7 @@ export default (state: MainLayoutState, action: Action) => {
           })
           break
         }
+
         case "create-polygon": {
           if (state.mode && state.mode.mode === "DRAW_POLYGON") break
           state = saveToHistory(state, "Create Polygon")
@@ -592,6 +646,34 @@ export default (state: MainLayoutState, action: Action) => {
           })
           break
         }
+        case "create-a-brush": {
+          // sending cordinates on mouse events.
+
+          if (state.mode && state.mode.mode === "DRAW_BRUSH") break
+          state = saveToHistory(state, "Create Line")
+          newRegion = {
+            type: "brushed",
+            brush_points: [
+              [x, y],
+              [x, y],
+            ],
+            x1: x,
+            y1: y,
+            x2: x,
+            y2: y,
+            highlighted: true,
+            editingLabels: false,
+            color: defaultRegionColor,
+            cls: defaultRegionCls,
+            id: getRandomId(),
+          }
+          state = setIn(state, ["mode"], {
+            mode: "DRAW_BRUSH",
+            regionId: newRegion.id,
+          })
+          break
+        }
+
         case "create-expanding-line": {
           state = saveToHistory(state, "Create Expanding Line")
           newRegion = {
@@ -672,6 +754,14 @@ export default (state: MainLayoutState, action: Action) => {
     }
     case "MOUSE_UP": {
       const { x, y } = action
+      window.addEventListener("mouseup", (e) => {
+        if (isDrawing === true) {
+          drawLine(context, a, b, e.offsetX, e.offsetY)
+          a = 0
+          b = 0
+          isDrawing = false
+        }
+      })
 
       const { mouseDownAt = { x, y } } = state
       if (!state.mode) return state
@@ -875,6 +965,11 @@ export default (state: MainLayoutState, action: Action) => {
             const { regionId } = mode
             return modifyRegion(regionId, null)
           }
+          // case "DRAW_BRUSH": {
+          //   const { regionId } = mode
+          //   return modifyRegion(regionId, null)
+          // }
+
           case "MOVE_POLYGON_POINT":
           case "RESIZE_BOX":
           case "MOVE_REGION": {

@@ -1,11 +1,12 @@
 // @flow
 
-import React, { memo } from "react"
 import colorAlpha from "color-alpha"
+import React, { memo } from "react"
 
 function clamp(num, min, max) {
   return num <= min ? min : num >= max ? max : num
 }
+let newReg = []
 
 const RegionComponents = {
   point: memo(({ region, iw, ih }) => (
@@ -57,6 +58,41 @@ const RegionComponents = {
         stroke={colorAlpha(region.color, 0.75)}
         fill={colorAlpha(region.color, 0.25)}
       />
+    )
+  }),
+  brushed: memo(({ region, iw, ih }) => {
+    // region.brush_points?.map((item) => newReg.push([...item]))
+    console.log(region)
+    return (
+      <></>
+      // <g transform={`translate(${region.x * iw} ${region.y * ih})`}>
+      // <path
+      //   d="M 230 230
+      //   A 45 45, 0, 1, 1, 275 275
+      //   L 275 230 Z"
+      //   // strokeWidth={2}
+      //   // stroke={region.color}
+      //   // fill="transparent"
+      //   strokeWidth={2}
+      //   // d="M 130 10 C 120 20, 180 20, 170 10"
+      //   // x1={0}
+      //   // y1={0}
+      //   // x2={(region.x2 - region.x1) * iw}
+      //   // y2={(region.y2 - region.y1) * ih}
+      //   stroke={colorAlpha(region.color, 0.75)}
+      //   fill={"transparent"}
+      // />
+      // <path
+      //   d="M 10,30
+      //   A 20,20 0,0,1 50,30
+      //   A 20,20 0,0,1 90,30
+      //   Q 90,60 50,90
+      //   Q 10,60 10,30 z"
+      //   stroke={colorAlpha(region.color, 0.75)}
+      //   fill={"transparent"}
+      // />
+
+      // </g>
     )
   }),
   keypoints: ({ region, iw, ih, keypointDefinitions }) => {

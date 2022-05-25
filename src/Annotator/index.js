@@ -61,6 +61,7 @@ export const Annotator = ({
     "select",
     "create-point",
     "create-box",
+    "create-a-brush",
     "create-polygon",
     "create-line",
     "create-expanding-line",
@@ -146,7 +147,6 @@ export const Annotator = ({
           }),
     })
   )
-  console.log(state)
 
   const dispatch = useEventCallback((action: Action) => {
     if (action.type === "HEADER_BUTTON_CLICKED") {

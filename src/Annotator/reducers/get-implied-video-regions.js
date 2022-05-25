@@ -90,6 +90,23 @@ export default (
         }
         break
       }
+      // case "brushed": {
+      //   if (next.points.length === prev.points.length) {
+      //     impliedRegions.push({
+      //       ...prev,
+      //       highlighted: false,
+      //       editingLabels: false,
+      //       points: prev.points.map((pp, i) => [
+      //         pp[0] * w1 + next.points[i][0] * w2,
+      //         pp[1] * w1 + next.points[i][1] * w2,
+      //       ]),
+      //     })
+      //   } else {
+      //     impliedRegions.push(prev)
+      //   }
+      //   break
+      // }
+
       case "keypoints": {
         const newPoints = {}
         for (const [pointId, prevPoint] of Object.entries(prev.points)) {
@@ -113,3 +130,4 @@ export default (
 
   return impliedRegions
 }
+
