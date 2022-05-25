@@ -17,6 +17,7 @@ class LazyBrushDraw extends Component {
 
   componentWillMount() {
     localStorage.removeItem("savedDrawing")
+    console.log("this", this.props.setCanvasRef)
   }
 
   clearImage() {
@@ -71,7 +72,10 @@ class LazyBrushDraw extends Component {
           </button>
         </div>
         <CanvasDraw
-          ref={(canvasDraw) => (this.saveableCanvas = canvasDraw)}
+          ref={(canvasDraw) => {
+            this.saveableCanvas = canvasDraw
+            this.props.setCanvasRef(canvasDraw?.canvas?.interface || null)
+          }}
           brushColor={this.state.color}
           hideGrid
           brushRadius={this.state.brushRadius}

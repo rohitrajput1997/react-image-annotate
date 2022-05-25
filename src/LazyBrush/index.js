@@ -135,6 +135,7 @@ export default class extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
+    console.log("this.props", this.props)
     if (prevProps.lazyRadius !== this.props.lazyRadius) {
       // Set new lazyRadius values
       this.chainLength = this.props.lazyRadius * window.devicePixelRatio
@@ -548,7 +549,11 @@ export default class extends PureComponent {
                   this.ctx[name] = canvas.getContext("2d")
                 }
               }}
-              style={{ ...canvasStyle, zIndex }}
+              style={{
+                ...canvasStyle,
+                zIndex,
+              }}
+              id={isInterface && "myPics"}
               onMouseDown={isInterface ? this.handleMouseDown : undefined}
               onMouseMove={isInterface ? this.handleMouseMove : undefined}
               onMouseUp={isInterface ? this.handleMouseUp : undefined}

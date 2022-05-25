@@ -219,16 +219,6 @@ export const MainLayout = ({
   const debugModeOn = Boolean(window.localStorage.$ANNOTATE_DEBUG_MODE && state)
   const nextImageHasRegions =
     !nextImage || (nextImage.regions && nextImage.regions.length > 0)
-  const lazy = new LazyBrush({
-    radius: 30,
-    enabled: true,
-    initialPoint: { x: 0, y: 0 },
-  })
-
-  // console.log(lazy.getBrushCoordinates()) // { x: 0, y: 0 }
-
-  lazy.update({ x: 200, y: 50 })
-  // console.log(lazy.getBrushCoordinates())
 
   return (
     <ThemeProvider theme={theme}>
@@ -493,7 +483,6 @@ export const MainLayout = ({
           </HotkeyDiv>
         </FullScreen>
       </FullScreenContainer>
-      <LazyBrushDraw />
     </ThemeProvider>
   )
 }

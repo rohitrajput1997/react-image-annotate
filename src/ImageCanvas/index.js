@@ -17,6 +17,7 @@ import Crosshairs from "../Crosshairs"
 import useExcludePattern from "../hooks/use-exclude-pattern"
 import useWindowSize from "../hooks/use-window-size.js"
 import ImageMask from "../ImageMask"
+import LazyBrushDraw from "../MainLayout/LazyBrushDraw"
 import PointDistances from "../PointDistances"
 import PreventScrollToParents from "../PreventScrollToParents"
 import RegionLabel from "../RegionLabel"
@@ -170,7 +171,7 @@ export const ImageCanvas = ({
     onMouseUp,
   })
 
-  useLayoutEffect(() => changeMat(mat.clone()), [windowSize])
+  useLayoutEffect(() => changeMat(mat.clone()), [changeMat, mat, windowSize])
 
   const innerMousePos = mat.applyToPoint(
     mousePosition.current.x,
@@ -307,6 +308,12 @@ export const ImageCanvas = ({
     if (highlightedRegions.length !== 1) return null
     return highlightedRegions[0]
   }, [regions])
+
+  const setCanvasRef = (ref) => {
+    if (canvasEl.current !== ref) {
+      canvasEl.current = ref
+    }
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -449,11 +456,10 @@ export const ImageCanvas = ({
                 regions={regions}
               />
             )}
-            <canvas
-              style={{ opacity: 0.25 }}
-              className={classes.canvas}
-              ref={canvasEl}
-              id="myPics"
+            <LazyBrushDraw
+              {...{
+                setCanvasRef,
+              }}
             />
             <RegionShapes
               mat={mat}
@@ -482,4 +488,3 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
-
