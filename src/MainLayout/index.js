@@ -3,7 +3,6 @@
 import { createTheme, styled, ThemeProvider } from "@mui/material/styles"
 import { makeStyles } from "@mui/styles"
 import classnames from "classnames"
-import { LazyBrush } from "lazy-brush"
 import Workspace from "ns_workflow_workspace/Workspace"
 import type { Node } from "react"
 import React, { useCallback, useRef } from "react"
@@ -26,7 +25,6 @@ import TagsSidebarBox from "../TagsSidebarBox"
 import TaskDescription from "../TaskDescriptionSidebarBox"
 import getHotkeyHelpText from "../utils/get-hotkey-help-text"
 import iconDictionary from "./icon-dictionary"
-import LazyBrushDraw from "./LazyBrushDraw"
 import styles from "./styles"
 import type { MainLayoutState } from "./types"
 import useImpliedVideoRegions from "./use-implied-video-regions"
@@ -199,6 +197,7 @@ export const MainLayout = ({
       onChangeVideoPlaying={action("CHANGE_VIDEO_PLAYING", "isPlaying")}
       onRegionClassAdded={onRegionClassAdded}
       allowComments={state.allowComments}
+      selectedTool={state.selectedTool}
     />
   )
 

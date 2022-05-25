@@ -136,6 +136,7 @@ export const ImageCanvas = ({
   modifyingAllowedArea = false,
   keypointDefinitions,
   allowComments,
+  selectedTool,
 }: Props) => {
   const classes = useStyles()
 
@@ -456,11 +457,27 @@ export const ImageCanvas = ({
                 regions={regions}
               />
             )}
-            <div className="main-container-lazy-brush">
+
+            <div
+              className="main-container-lazy-brush"
+              // style={{ position: "relative" }}
+            >
               <LazyBrushDraw
                 {...{
                   setCanvasRef,
                 }}
+                width={iw}
+                height={ih}
+                customStyle={{
+                  // position: "absloute",
+                  // zIndex: 2,
+                  left: imagePosition.topLeft.x,
+                  top: imagePosition.topLeft.y,
+                  pointerEvents: "none",
+                  // width: iw,
+                  // height: ih,
+                }}
+                selectedTool={selectedTool}
               />
 
               <RegionShapes

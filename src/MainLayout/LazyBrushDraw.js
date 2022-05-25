@@ -2,8 +2,8 @@ import React, { Component } from "react"
 import CanvasDraw from "./../LazyBrush/index"
 
 class LazyBrushDraw extends Component {
-  constructor() {
-    super()
+  constructor(props) {
+    super(props)
     this.state = {
       color: "#ffc600",
       width: 800,
@@ -17,7 +17,7 @@ class LazyBrushDraw extends Component {
 
   componentWillMount() {
     localStorage.removeItem("savedDrawing")
-    console.log("this", this.props.setCanvasRef)
+    // console.log("this", this.props.setCanvasRef)
   }
 
   clearImage() {
@@ -50,6 +50,10 @@ class LazyBrushDraw extends Component {
           lazyRadius={this.state.lazyRadius}
           canvasWidth={this.state.width}
           canvasHeight={this.state.height}
+          customStyle={this.props.customStyle}
+          width={this.props.width}
+          height={this.props.height}
+          selectedTool={this.props.selectedTool}
         />
       </>
     )

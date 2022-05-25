@@ -62,7 +62,7 @@ const RegionComponents = {
   }),
   brushed: memo(({ region, iw, ih }) => {
     // region.brush_points?.map((item) => newReg.push([...item]))
-    console.log(region)
+    // console.log(region)
     return (
       <></>
       // <g transform={`translate(${region.x * iw} ${region.y * ih})`}>

@@ -88,6 +88,7 @@ export default class extends PureComponent {
     this.isDrawing = false
     this.isPressing = false
   }
+  //  let brush= this.props.selectedTool === "create-a-brush"
 
   componentDidMount() {
     this.lazy = new LazyBrush({
@@ -131,7 +132,7 @@ export default class extends PureComponent {
   }
 
   componentDidUpdate(prevProps) {
-    console.log("this.props", this.props)
+    // console.log("this.props", this.props)
     if (prevProps.lazyRadius !== this.props.lazyRadius) {
       // Set new lazyRadius values
       this.chainLength = this.props.lazyRadius * window.devicePixelRatio
@@ -503,7 +504,11 @@ export default class extends PureComponent {
         }}
       >
         {canvasTypes.map(({ name, zIndex }) => {
+          // console.log(name)
           const isInterface = name === "interface"
+          const brush = this.props.selectedTool === "create-a-brush"
+          const drawing = name === "drawing"
+          let obj = drawing ? this.props.customStyle : {}
           return (
             <canvas
               key={name}
@@ -518,17 +523,32 @@ export default class extends PureComponent {
               }}
               style={{
                 ...canvasStyle,
+                ...obj,
                 zIndex,
               }}
+              height={drawing && this.props.height}
+              width={drawing && this.props.width}
               id={isInterface && "myPics"}
-              onMouseDown={isInterface ? this.handleMouseDown : undefined}
-              onMouseMove={isInterface ? this.handleMouseMove : undefined}
-              onMouseUp={isInterface ? this.handleMouseUp : undefined}
-              onMouseOut={isInterface ? this.handleMouseUp : undefined}
-              onTouchStart={isInterface ? this.handleTouchStart : undefined}
-              onTouchMove={isInterface ? this.handleTouchMove : undefined}
-              onTouchEnd={isInterface ? this.handleTouchEnd : undefined}
-              onTouchCancel={isInterface ? this.handleTouchEnd : undefined}
+              onMouseDown={
+                isInterface && brush ? this.handleMouseDown : undefined
+              }
+              onMouseMove={
+                isInterface && brush ? this.handleMouseMove : undefined
+              }
+              onMouseUp={isInterface && brush ? this.handleMouseUp : undefined}
+              onMouseOut={isInterface && brush ? this.handleMouseUp : undefined}
+              onTouchStart={
+                isInterface && brush ? this.handleTouchStart : undefined
+              }
+              onTouchMove={
+                isInterface && brush ? this.handleTouchMove : undefined
+              }
+              onTouchEnd={
+                isInterface && brush ? this.handleTouchEnd : undefined
+              }
+              onTouchCancel={
+                isInterface && brush ? this.handleTouchEnd : undefined
+              }
             />
           )
         })}

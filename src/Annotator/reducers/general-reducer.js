@@ -24,10 +24,11 @@ function drawLine(context, x1, y1, x2, y2) {
   context.lineTo(x2, y2)
   context.stroke()
   context.closePath()
-  console.log(context)
+  // console.log(context)
 }
 
 export default (state: MainLayoutState, action: Action) => {
+  // console.log(state)
   if (
     state.allowedArea &&
     state.selectedTool !== "modify-allowed-area" &&

@@ -212,7 +212,7 @@ storiesOf("Annotator", module)
     <Annotator
       onExit={(out) => {
         window.lastOutput = out
-        console.log(out)
+        // console.log(out)
       }}
       taskDescription={`## Annotate Hands\nDraw a bounding box around each hand.`}
       enabledTools={["select", "create-a-brush"]}
