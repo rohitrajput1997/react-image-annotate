@@ -21,19 +21,8 @@ class LazyBrushDraw extends Component {
   }
 
   clearImage() {
-    this.saveableCanvas.clear()
+    // this.saveableCanvas.clear()
     this.loadableCanvas.clear()
-  }
-
-  saveImage() {
-    let compressedString = this.saveableCanvas.getSaveData()
-    let currentSavedDrawing = localStorage.getItem("savedDrawing")
-
-    if (currentSavedDrawing === compressedString) {
-      return
-    }
-    console.log(compressedString)
-    localStorage.setItem("savedDrawing", compressedString)
   }
 
   loadImage() {
@@ -45,37 +34,16 @@ class LazyBrushDraw extends Component {
     this.loadableCanvas.loadSaveData(savedImage)
   }
 
-  startSave() {
-    this.intervalCode = window.setInterval(() => {
-      this.saveImage()
-      this.loadImage()
-    }, 500)
-  }
-
   componentWillUnmount() {
     window.clearInterval(this.intervalCode)
   }
 
   render() {
+    const ele = document.querySelector(".main-container-lazy-brush > svg")
     return (
-      <div>
-        <div>
-          <button onClick={() => this.startSave()}>Start!</button>
-          <button onClick={() => this.saveImage()}>Save</button>
-          <button onClick={() => this.clearImage()}>Clear</button>
-          <button
-            onClick={() => {
-              this.saveableCanvas.undo()
-            }}
-          >
-            Undo
-          </button>
-        </div>
+      <>
         <CanvasDraw
-          ref={(canvasDraw) => {
-            this.saveableCanvas = canvasDraw
-            this.props.setCanvasRef(canvasDraw?.canvas?.interface || null)
-          }}
+          setCanvasRef={this.props.setCanvasRef}
           brushColor={this.state.color}
           hideGrid
           brushRadius={this.state.brushRadius}
@@ -83,13 +51,7 @@ class LazyBrushDraw extends Component {
           canvasWidth={this.state.width}
           canvasHeight={this.state.height}
         />
-        <button onClick={() => this.loadImage()}>Load Drawing!</button>
-        <CanvasDraw
-          disabled
-          hideGrid
-          ref={(canvasDraw) => (this.loadableCanvas = canvasDraw)}
-        />
-      </div>
+      </>
     )
   }
 }

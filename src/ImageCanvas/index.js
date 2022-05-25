@@ -456,30 +456,33 @@ export const ImageCanvas = ({
                 regions={regions}
               />
             )}
-            <LazyBrushDraw
-              {...{
-                setCanvasRef,
-              }}
-            />
-            <RegionShapes
-              mat={mat}
-              keypointDefinitions={keypointDefinitions}
-              imagePosition={imagePosition}
-              regions={regions}
-              fullSegmentationMode={fullImageSegmentationMode}
-            />
-            <VideoOrImageCanvasBackground
-              videoPlaying={videoPlaying}
-              imagePosition={imagePosition}
-              mouseEvents={mouseEvents}
-              onLoad={onVideoOrImageLoaded}
-              videoTime={videoTime}
-              videoSrc={videoSrc}
-              imageSrc={imageSrc}
-              useCrossOrigin={fullImageSegmentationMode}
-              onChangeVideoTime={onChangeVideoTime}
-              onChangeVideoPlaying={onChangeVideoPlaying}
-            />
+            <div className="main-container-lazy-brush">
+              <LazyBrushDraw
+                {...{
+                  setCanvasRef,
+                }}
+              />
+
+              <RegionShapes
+                mat={mat}
+                keypointDefinitions={keypointDefinitions}
+                imagePosition={imagePosition}
+                regions={regions}
+                fullSegmentationMode={fullImageSegmentationMode}
+              />
+              <VideoOrImageCanvasBackground
+                videoPlaying={videoPlaying}
+                imagePosition={imagePosition}
+                mouseEvents={mouseEvents}
+                onLoad={onVideoOrImageLoaded}
+                videoTime={videoTime}
+                videoSrc={videoSrc}
+                imageSrc={imageSrc}
+                useCrossOrigin={fullImageSegmentationMode}
+                onChangeVideoTime={onChangeVideoTime}
+                onChangeVideoPlaying={onChangeVideoPlaying}
+              />
+            </div>
           </>
         </PreventScrollToParents>
       </div>

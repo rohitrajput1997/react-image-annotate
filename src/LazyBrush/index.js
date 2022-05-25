@@ -30,10 +30,6 @@ const canvasTypes = [
     name: "temp",
     zIndex: 12,
   },
-  {
-    name: "grid",
-    zIndex: 10,
-  },
 ]
 
 const dimensionsPropTypes = PropTypes.oneOfType([
@@ -296,9 +292,7 @@ export default class extends PureComponent {
       this.setCanvasSize(this.canvas.interface, width, height)
       this.setCanvasSize(this.canvas.drawing, width, height)
       this.setCanvasSize(this.canvas.temp, width, height)
-      this.setCanvasSize(this.canvas.grid, width, height)
 
-      this.drawGrid(this.ctx.grid)
       this.loop({ once: true })
     }
     this.loadSaveData(saveData, true)
@@ -452,36 +446,6 @@ export default class extends PureComponent {
     }
   }
 
-  drawGrid = (ctx) => {
-    if (this.props.hideGrid) return
-
-    ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
-
-    ctx.beginPath()
-    ctx.setLineDash([5, 1])
-    ctx.setLineDash([])
-    ctx.strokeStyle = this.props.gridColor
-    ctx.lineWidth = 0.5
-
-    const gridSize = 25
-
-    let countX = 0
-    while (countX < ctx.canvas.width) {
-      countX += gridSize
-      ctx.moveTo(countX, 0)
-      ctx.lineTo(countX, ctx.canvas.height)
-    }
-    ctx.stroke()
-
-    let countY = 0
-    while (countY < ctx.canvas.height) {
-      countY += gridSize
-      ctx.moveTo(0, countY)
-      ctx.lineTo(ctx.canvas.width, countY)
-    }
-    ctx.stroke()
-  }
-
   drawInterface = (ctx, pointer, brush) => {
     ctx.clearRect(0, 0, ctx.canvas.width, ctx.canvas.height)
 
@@ -547,6 +511,9 @@ export default class extends PureComponent {
                 if (canvas) {
                   this.canvas[name] = canvas
                   this.ctx[name] = canvas.getContext("2d")
+                  if (isInterface) {
+                    this.props.setCanvasRef(canvas)
+                  }
                 }
               }}
               style={{
