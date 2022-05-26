@@ -4,6 +4,7 @@ import PropTypes from "prop-types"
 import React, { PureComponent } from "react"
 import ResizeObserver from "resize-observer-polyfill"
 import drawImage from "./DrwaImage"
+import "./style.css"
 
 function midPointBtw(p1, p2) {
   return {
@@ -13,8 +14,8 @@ function midPointBtw(p1, p2) {
 }
 
 const canvasStyle = {
-  display: "block",
-  position: "absolute",
+  width: "100%",
+  height: "100%",
 }
 
 const canvasTypes = [
@@ -47,8 +48,6 @@ export default class extends PureComponent {
     gridColor: PropTypes.string,
     backgroundColor: PropTypes.string,
     hideGrid: PropTypes.bool,
-    canvasWidth: dimensionsPropTypes,
-    canvasHeight: dimensionsPropTypes,
     disabled: PropTypes.bool,
     imgSrc: PropTypes.string,
     saveData: PropTypes.string,
@@ -64,8 +63,6 @@ export default class extends PureComponent {
     gridColor: "rgba(150,150,150,0.17)",
     backgroundColor: "#FFF",
     hideGrid: false,
-    canvasWidth: 400,
-    canvasHeight: 400,
     disabled: false,
     imgSrc: "",
     saveData: "",
@@ -87,8 +84,11 @@ export default class extends PureComponent {
     this.valuesChanged = true
     this.isDrawing = false
     this.isPressing = false
+    this.state = {
+      canvasWidth: window.innerWidth,
+      canvasHeight: window.innerHeight,
+    }
   }
-  //  let brush= this.props.selectedTool === "create-a-brush"
 
   componentDidMount() {
     this.lazy = new LazyBrush({
@@ -129,10 +129,19 @@ export default class extends PureComponent {
         this.loadSaveData(this.props.saveData)
       }
     }, 100)
+
+    const imageElement = document.querySelector(
+      "#main-container-lazy-brush > svg"
+    )
+    const width = imageElement && imageElement.getBoundingClientRect().width
+    const height = imageElement && imageElement.getBoundingClientRect().height
+    this.setState({
+      canvasWidth: width,
+      canvasHeight: height,
+    })
   }
 
   componentDidUpdate(prevProps) {
-    // console.log("this.props", this.props)
     if (prevProps.lazyRadius !== this.props.lazyRadius) {
       // Set new lazyRadius values
       this.chainLength = this.props.lazyRadius * window.devicePixelRatio
@@ -174,8 +183,8 @@ export default class extends PureComponent {
     // Construct and return the stringified saveData object
     return JSON.stringify({
       lines: this.lines,
-      width: this.props.canvasWidth,
-      height: this.props.canvasHeight,
+      width: this.state.canvasWidth,
+      height: this.state.canvasHeight,
     })
   }
 
@@ -191,8 +200,8 @@ export default class extends PureComponent {
     }
 
     if (
-      width === this.props.canvasWidth &&
-      height === this.props.canvasHeight
+      width === this.state.canvasWidth &&
+      height === this.state.canvasHeight
     ) {
       this.simulateDrawingLines({
         lines,
@@ -200,8 +209,8 @@ export default class extends PureComponent {
       })
     } else {
       // we need to rescale the lines based on saved & current dimensions
-      const scaleX = this.props.canvasWidth / width
-      const scaleY = this.props.canvasHeight / height
+      const scaleX = this.state.canvasWidth / width
+      const scaleY = this.state.canvasHeight / height
       const scaleAvg = (scaleX + scaleY) / 2
 
       this.simulateDrawingLines({
@@ -486,29 +495,43 @@ export default class extends PureComponent {
   }
 
   render() {
+    const imageElement = document.querySelector(
+      "#main-container-lazy-brush > svg"
+    )
+    const width = imageElement && imageElement.getBoundingClientRect().width
+    const height = imageElement && imageElement.getBoundingClientRect().height
+    const top = imageElement && imageElement.style.top
+    const left = imageElement && imageElement.style.left
     return (
       <div
-        className={this.props.className}
-        style={{
-          display: "block",
-          background: this.props.backgroundColor,
-          touchAction: "none",
-          width: this.props.canvasWidth,
-          height: this.props.canvasHeight,
-          ...this.props.style,
-        }}
+        className="lazyBrushContainer"
         ref={(container) => {
           if (container) {
             this.canvasContainer = container
           }
         }}
       >
+        <canvas
+          id="myPics"
+          ref={(canvas) => {
+            if (canvas) {
+              this.props.setCanvasRef(canvas)
+            }
+          }}
+        />
         {canvasTypes.map(({ name, zIndex }) => {
-          // console.log(name)
           const isInterface = name === "interface"
-          const brush = this.props.selectedTool === "create-a-brush"
-          const drawing = name === "drawing"
-          let obj = drawing ? this.props.customStyle : {}
+          const brush = true // this.props.selectedTool === "create-a-brush"
+          console.log(this.props)
+          const style = {
+            width: `${width}px`,
+            height: `${height}px`,
+            position: "absolute",
+            top: top,
+            left: left,
+            zIndex: zIndex,
+          }
+
           return (
             <canvas
               key={name}
@@ -516,19 +539,9 @@ export default class extends PureComponent {
                 if (canvas) {
                   this.canvas[name] = canvas
                   this.ctx[name] = canvas.getContext("2d")
-                  if (isInterface) {
-                    this.props.setCanvasRef(canvas)
-                  }
                 }
               }}
-              style={{
-                ...canvasStyle,
-                ...obj,
-                zIndex,
-              }}
-              height={drawing && this.props.height}
-              width={drawing && this.props.width}
-              id={isInterface && "myPics"}
+              style={style}
               onMouseDown={
                 isInterface && brush ? this.handleMouseDown : undefined
               }

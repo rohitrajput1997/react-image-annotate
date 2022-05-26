@@ -459,23 +459,12 @@ export const ImageCanvas = ({
             )}
 
             <div
-              className="main-container-lazy-brush"
-              // style={{ position: "relative" }}
+              id="main-container-lazy-brush"
+              className={classes.mainContainer}
             >
               <LazyBrushDraw
                 {...{
                   setCanvasRef,
-                }}
-                width={iw}
-                height={ih}
-                customStyle={{
-                  // position: "absloute",
-                  // zIndex: 2,
-                  left: imagePosition.topLeft.x,
-                  top: imagePosition.topLeft.y,
-                  pointerEvents: "none",
-                  // width: iw,
-                  // height: ih,
                 }}
                 selectedTool={selectedTool}
               />

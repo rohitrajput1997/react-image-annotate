@@ -6,10 +6,8 @@ class LazyBrushDraw extends Component {
     super(props)
     this.state = {
       color: "#ffc600",
-      width: 800,
-      height: 800,
       brushRadius: 10,
-      lazyRadius: 12,
+      lazyRadius: 1,
     }
     this.intervalCode = 0
     this.imageData = ""
@@ -39,7 +37,6 @@ class LazyBrushDraw extends Component {
   }
 
   render() {
-    const ele = document.querySelector(".main-container-lazy-brush > svg")
     return (
       <>
         <CanvasDraw
@@ -48,11 +45,6 @@ class LazyBrushDraw extends Component {
           hideGrid
           brushRadius={this.state.brushRadius}
           lazyRadius={this.state.lazyRadius}
-          canvasWidth={this.state.width}
-          canvasHeight={this.state.height}
-          customStyle={this.props.customStyle}
-          width={this.props.width}
-          height={this.props.height}
           selectedTool={this.props.selectedTool}
         />
       </>
