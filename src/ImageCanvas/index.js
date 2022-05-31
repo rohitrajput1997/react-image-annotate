@@ -137,6 +137,7 @@ export const ImageCanvas = ({
   keypointDefinitions,
   allowComments,
   selectedTool,
+  lazyBrush,
 }: Props) => {
   const classes = useStyles()
 
@@ -467,6 +468,7 @@ export const ImageCanvas = ({
                   setCanvasRef,
                 }}
                 selectedTool={selectedTool}
+                lazyBrush={lazyBrush}
               />
 
               <RegionShapes
@@ -497,3 +499,4 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
+

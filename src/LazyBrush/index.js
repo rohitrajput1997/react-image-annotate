@@ -5,6 +5,7 @@ import React, { PureComponent } from "react"
 import ResizeObserver from "resize-observer-polyfill"
 import drawImage from "./DrwaImage"
 import "./style.css"
+// const useStyles = makeStyles((theme) => customStyles)
 
 function midPointBtw(p1, p2) {
   return {
@@ -52,6 +53,7 @@ export default class extends PureComponent {
     imgSrc: PropTypes.string,
     saveData: PropTypes.string,
     immediateLoading: PropTypes.bool,
+    lazyBrush: PropTypes.array,
   }
 
   static defaultProps = {
@@ -67,6 +69,7 @@ export default class extends PureComponent {
     imgSrc: "",
     saveData: "",
     immediateLoading: false,
+    dialogOpen: false,
   }
 
   constructor(props) {
@@ -78,7 +81,7 @@ export default class extends PureComponent {
     this.catenary = new Catenary()
 
     this.points = []
-    this.lines = []
+    this.lines = this.props.lazyBrush
 
     this.mouseHasMoved = true
     this.valuesChanged = true
@@ -87,10 +90,15 @@ export default class extends PureComponent {
     this.state = {
       canvasWidth: window.innerWidth,
       canvasHeight: window.innerHeight,
+      lines: [],
     }
   }
 
   componentDidMount() {
+    this.intialActivity()
+  }
+
+  intialActivity = () => {
     this.lazy = new LazyBrush({
       radius: this.props.lazyRadius * window.devicePixelRatio,
       enabled: true,
@@ -189,6 +197,7 @@ export default class extends PureComponent {
   }
 
   loadSaveData = (saveData, immediate = this.props.immediateLoading) => {
+    // console.log("load")
     if (typeof saveData !== "string") {
       throw new Error("saveData needs to be of type string!")
     }
@@ -293,6 +302,7 @@ export default class extends PureComponent {
     this.isPressing = false
 
     this.saveLine()
+    this.setState({ ...this.state, dialogOpen: true })
   }
 
   handleCanvasResize = (entries, observer) => {
@@ -502,6 +512,10 @@ export default class extends PureComponent {
     const height = imageElement && imageElement.getBoundingClientRect().height
     const top = imageElement && imageElement.style.top
     const left = imageElement && imageElement.style.left
+    window.lazyCords = () => {
+      return this.lines || []
+    }
+
     return (
       <div
         className="lazyBrushContainer"
@@ -521,8 +535,8 @@ export default class extends PureComponent {
         />
         {canvasTypes.map(({ name, zIndex }) => {
           const isInterface = name === "interface"
-          const brush = true // this.props.selectedTool === "create-a-brush"
-          console.log(this.props)
+          const brush = this.props.selectedTool === "create-a-brush"
+          // console.log(this.props)
           const style = {
             width: `${width}px`,
             height: `${height}px`,
@@ -565,6 +579,18 @@ export default class extends PureComponent {
             />
           )
         })}
+        {/* <div key="topLeftTag" className={classes.fixedRegionLabel}>
+          <Dialog open={this.state.dialogOpen}>
+            <button
+              onClick={() => {
+                this.setState({ ...this.state, dialogOpen: false })
+              }}
+            >
+              Close me
+            </button>
+            <DialogTitle>Hello</DialogTitle>
+          </Dialog>
+        </div> */}
       </div>
     )
   }

@@ -79,6 +79,7 @@ export const MainLayout = ({
   issavenextDisabled = false,
   isaddQueryDisabled = false,
   isSubmitDisabled = false,
+  lazyBrush = [],
 }: Props) => {
   const classes = useStyles()
   const settings = useSettings()
@@ -198,6 +199,7 @@ export const MainLayout = ({
       onRegionClassAdded={onRegionClassAdded}
       allowComments={state.allowComments}
       selectedTool={state.selectedTool}
+      lazyBrush={lazyBrush}
     />
   )
 

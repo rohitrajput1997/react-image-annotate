@@ -46,6 +46,7 @@ class LazyBrushDraw extends Component {
           brushRadius={this.state.brushRadius}
           lazyRadius={this.state.lazyRadius}
           selectedTool={this.props.selectedTool}
+          lazyBrush={this.props.lazyBrush}
         />
       </>
     )
