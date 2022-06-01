@@ -15,6 +15,7 @@ export const loadImage = (imageSrc) => {
 
   return new Promise((resolve, reject) => {
     image.onload = () => {
+      console.log(image)
       canvas.width = image.naturalWidth
       canvas.height = image.naturalHeight
       ctx.drawImage(image, 0, 0)

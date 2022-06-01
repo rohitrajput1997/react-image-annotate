@@ -1,6 +1,5 @@
 // @flow
 
-import { Button } from "@mui/material"
 import { createTheme, styled, ThemeProvider } from "@mui/material/styles"
 import { makeStyles } from "@mui/styles"
 import classnames from "classnames"
@@ -80,6 +79,7 @@ export const MainLayout = ({
   issavenextDisabled = false,
   isaddQueryDisabled = false,
   isSubmitDisabled = false,
+  lazyBrush = [],
 }: Props) => {
   const classes = useStyles()
   const settings = useSettings()
@@ -198,11 +198,12 @@ export const MainLayout = ({
       onChangeVideoPlaying={action("CHANGE_VIDEO_PLAYING", "isPlaying")}
       onRegionClassAdded={onRegionClassAdded}
       allowComments={state.allowComments}
+      selectedTool={state.selectedTool}
+      lazyBrush={lazyBrush}
     />
   )
 
   const onClickIconSidebarItem = useEventCallback((item) => {
-    console.log(item)
     dispatch({ type: "SELECT_TOOL", selectedTool: item.name })
   })
 
@@ -221,7 +222,6 @@ export const MainLayout = ({
 
   return (
     <ThemeProvider theme={theme}>
-      <Button onClick={() => console.log("hello")}>brush</Button>
       <FullScreenContainer>
         <FullScreen
           handle={fullScreenHandle}
@@ -347,13 +347,7 @@ export const MainLayout = ({
                   alwaysShowing: true,
                   className: "pan",
                 },
-                {
-                  name: "brush",
-                  helperText: "brush",
 
-                  alwaysShowing: true,
-                  className: "pan",
-                },
                 {
                   name: "zoom",
                   helperText:
@@ -378,6 +372,14 @@ export const MainLayout = ({
                     "Add Bounding Box" +
                     getHotkeyHelpText("create_bounding_box"),
                   className: "create_box",
+                },
+                {
+                  name: "create-a-brush",
+                  helperText:
+                    "Create By Paint Brush" +
+                    getHotkeyHelpText("create-a-brush"),
+                  alwaysShowing: true,
+                  className: "create-a-brush",
                 },
                 {
                   name: "create-polygon",

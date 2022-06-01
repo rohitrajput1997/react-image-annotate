@@ -1,7 +1,7 @@
 // @flow
 
-import React, { memo } from "react"
 import colorAlpha from "color-alpha"
+import React, { memo } from "react"
 
 function clamp(num, min, max) {
   return num <= min ? min : num >= max ? max : num
@@ -57,6 +57,11 @@ const RegionComponents = {
         stroke={colorAlpha(region.color, 0.75)}
         fill={colorAlpha(region.color, 0.25)}
       />
+    )
+  }),
+  brushed: memo(({ region, iw, ih }) => {
+    return (
+      <></>
     )
   }),
   keypoints: ({ region, iw, ih, keypointDefinitions }) => {

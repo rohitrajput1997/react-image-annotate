@@ -33,9 +33,9 @@ export default () => {
           "create-box",
           "create-polygon",
           "show-mask",
-          "pan_tool",
         ]}
       />
     </div>
   )
 }
+

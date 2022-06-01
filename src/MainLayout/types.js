@@ -18,6 +18,7 @@ export type ToolEnum =
   | "zoom"
   | "create-point"
   | "create-box"
+  | "create-a-brush"
   | "create-polygon"
   | "create-pixel"
   | "create-expanding-line"
@@ -35,6 +36,7 @@ export type Image = {
 
 export type Mode =
   | null
+  | {| mode: "DRAW_BRUSH", regionId: string |}
   | {| mode: "DRAW_POLYGON", regionId: string |}
   | {| mode: "MOVE_POLYGON_POINT", regionId: string, pointIndex: number |}
   | {|

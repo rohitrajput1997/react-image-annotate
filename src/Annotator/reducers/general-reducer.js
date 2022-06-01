@@ -1,19 +1,30 @@
 // @flow
-import type { MainLayoutState, Action } from "../../MainLayout/types"
-import { moveRegion } from "../../ImageCanvas/region-tools.js"
-import { getIn, setIn, updateIn } from "seamless-immutable"
-import moment from "moment"
-import isEqual from "lodash/isEqual"
-import getActiveImage from "./get-active-image"
-import { saveToHistory } from "./history-handler.js"
-import colors from "../../colors"
-import fixTwisted from "./fix-twisted"
-import convertExpandingLineToPolygon from "./convert-expanding-line-to-polygon"
 import clamp from "clamp"
+import isEqual from "lodash/isEqual"
+import { getIn, setIn } from "seamless-immutable"
+import colors from "../../colors"
+import { moveRegion } from "../../ImageCanvas/region-tools.js"
+import type { Action, MainLayoutState } from "../../MainLayout/types"
 import getLandmarksWithTransform from "../../utils/get-landmarks-with-transform"
 import setInLocalStorage from "../../utils/set-in-local-storage"
+import convertExpandingLineToPolygon from "./convert-expanding-line-to-polygon"
+import fixTwisted from "./fix-twisted"
+import getActiveImage from "./get-active-image"
+import { saveToHistory } from "./history-handler.js"
 
 const getRandomId = () => Math.random().toString().split(".")[1]
+let isDrawing = false
+let a = 0
+let b = 0
+function drawLine(context, x1, y1, x2, y2) {
+  context.beginPath()
+  context.strokeStyle = "black"
+  context.lineWidth = 1
+  context.moveTo(x1, y1)
+  context.lineTo(x2, y2)
+  context.stroke()
+  context.closePath()
+}
 
 export default (state: MainLayoutState, action: Action) => {
   if (
@@ -379,6 +390,17 @@ export default (state: MainLayoutState, action: Action) => {
             [x, y]
           )
         }
+        case "DRAW_BRUSH": {
+          const { regionId } = state.mode
+          const [region, regionIndex] = getRegion(regionId)
+
+          if (!region) return setIn(state, ["mode"], null)
+          return setIn(state, [...pathToActiveImage, "regions", regionIndex], {
+            ...region,
+            x2: x,
+            y2: y,
+          })
+        }
         case "DRAW_LINE": {
           const { regionId } = state.mode
           const [region, regionIndex] = getRegion(regionId)
@@ -460,6 +482,17 @@ export default (state: MainLayoutState, action: Action) => {
               [...pathToActiveImage, "regions", regionIndex],
               { ...polygon, points: polygon.points.concat([[x, y]]) }
             )
+          }
+          case "DRAW_BRUSH": {
+            // logic to draw cordinates ploygon ka logic
+            const [line, regionIndex] = getRegion(state.mode.regionId)
+            if (!line) break
+            setIn(state, [...pathToActiveImage, "regions", regionIndex], {
+              ...line,
+              x2: x,
+              y2: y,
+            })
+            return setIn(state, ["mode"], null)
           }
           case "DRAW_LINE": {
             const [line, regionIndex] = getRegion(state.mode.regionId)
@@ -592,6 +625,34 @@ export default (state: MainLayoutState, action: Action) => {
           })
           break
         }
+        case "create-a-brush": {
+          // sending cordinates on mouse events.
+
+          if (state.mode && state.mode.mode === "DRAW_BRUSH") break
+          state = saveToHistory(state, "Create Line")
+          newRegion = {
+            type: "brushed",
+            brush_points: [
+              [x, y],
+              [x, y],
+            ],
+            x1: x,
+            y1: y,
+            x2: x,
+            y2: y,
+            highlighted: true,
+            editingLabels: false,
+            color: defaultRegionColor,
+            cls: defaultRegionCls,
+            id: getRandomId(),
+          }
+          state = setIn(state, ["mode"], {
+            mode: "DRAW_BRUSH",
+            regionId: newRegion.id,
+          })
+          break
+        }
+
         case "create-expanding-line": {
           state = saveToHistory(state, "Create Expanding Line")
           newRegion = {

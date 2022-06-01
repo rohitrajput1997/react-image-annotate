@@ -17,6 +17,7 @@ import {
   faMask,
   faEdit,
   faChartLine,
+  faBrush
 } from "@fortawesome/free-solid-svg-icons"
 import FullscreenIcon from "@mui/icons-material/Fullscreen"
 import AccessibilityNewIcon from "@mui/icons-material/AccessibilityNew"
@@ -50,6 +51,14 @@ export const iconDictionary = {
       size="xs"
       fixedWidth
       icon={faVectorSquare}
+    />
+  ),
+  "create-a-brush": () => (
+    <FontAwesomeIcon
+      style={faStyle}
+      size="xs"
+      fixedWidth
+      icon={faBrush}
     />
   ),
   "create-polygon": () => (

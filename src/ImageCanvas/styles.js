@@ -25,4 +25,9 @@ export default {
       opacity: 1,
     },
   },
+  mainContainer: {
+    position: "relative",
+    height: "600px",
+    width: "100%",
+  },
 }

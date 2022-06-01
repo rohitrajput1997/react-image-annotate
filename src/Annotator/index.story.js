@@ -1,18 +1,15 @@
 // @flow
 
-import React, { useState } from "react"
-
-import { storiesOf } from "@storybook/react"
 import { action as actionAddon } from "@storybook/addon-actions"
+import { storiesOf } from "@storybook/react"
+import React, { useState } from "react"
+import { HotKeys } from "react-hotkeys"
+import { testRegions } from "../ImageCanvas/index.story"
 import exampleImage from "../ImageCanvas/seves_desk.story.jpg"
+import { defaultKeyMap } from "../ShortcutsManager"
+import Annotator from "./"
 import bikeImg1 from "./bike-pic.png"
 import bikeImg2 from "./bike-pic2.png"
-import { HotKeys } from "react-hotkeys"
-import { defaultKeyMap } from "../ShortcutsManager"
-
-import Annotator from "./"
-
-import { testRegions } from "../ImageCanvas/index.story"
 
 const middlewares = [
   (store) => (next) => (action) => {
@@ -174,7 +171,6 @@ storiesOf("Annotator", module)
     <Annotator
       onExit={(out) => {
         window.lastOutput = out
-        console.log(out)
       }}
       taskDescription={`## Annotate Hands\nDraw a bounding box around each hand.`}
       enabledTools={["select", "create-box"]}
@@ -199,6 +195,48 @@ storiesOf("Annotator", module)
     <Annotator
       taskDescription={`## Annotate Hands\nDraw a bounding box around each hand.`}
       enabledTools={["select", "create-box"]}
+      regionClsList={["Hand", "Face"]}
+      regionTagList={["Open Pinch", "Closed Pinch", "In Frame"]}
+      showTags={false}
+      allowedArea={{ x: 0, y: 0.6, w: 0.3, h: 0.3 }}
+      images={[
+        {
+          src: "https://s3.amazonaws.com/jobstorage.workaround.online/Atheer/video-frames/VID_20190111_161054.mp4_frame017.png",
+          name: "Bounding Box Test",
+          regions: [],
+        },
+      ]}
+    />
+  ))
+  .add("Paint Brush Annotator with output to console.log", () => (
+    <Annotator
+      onExit={(out) => {
+        window.lastOutput = out
+        // console.log(out)
+      }}
+      taskDescription={`## Annotate Hands\nDraw a bounding box around each hand.`}
+      enabledTools={["select", "create-a-brush"]}
+      regionClsList={["Hand", "Face"]}
+      regionTagList={["Open Pinch", "Closed Pinch", "In Frame"]}
+      showTags={false}
+      images={[
+        {
+          src: "https://s3.amazonaws.com/jobstorage.workaround.online/Atheer/video-frames/VID_20190111_161054.mp4_frame017.png",
+          name: "Bounding Box Test",
+          regions: [],
+        },
+        {
+          src: "https://s3.amazonaws.com/jobstorage.workaround.online/Atheer/video-frames/VID_20190111_161054.mp4_frame001.png",
+          name: "Bounding Box Test",
+          regions: [],
+        },
+      ]}
+    />
+  ))
+  .add("Paint Brush Annotator with allowed area", () => (
+    <Annotator
+      taskDescription={`## Annotate Hands\nDraw a bounding box around each hand.`}
+      enabledTools={["select", "create-a-brush"]}
       regionClsList={["Hand", "Face"]}
       regionTagList={["Open Pinch", "Closed Pinch", "In Frame"]}
       showTags={false}

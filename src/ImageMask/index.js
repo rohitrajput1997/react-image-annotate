@@ -1,10 +1,9 @@
 // @flow
 
-import React, { useState, useEffect, useMemo, useRef } from "react"
-import { colorInts } from "../colors"
+import autoseg from "autoseg/webworker"
+import React, { useEffect, useMemo, useState } from "react"
 import { useDebounce } from "react-use"
 import loadImage from "./load-image"
-import autoseg from "autoseg/webworker"
 
 function convertToUDTRegions(regions) {
   return regions
@@ -67,6 +66,7 @@ export const ImageMask = ({
         ...autoSegmentationOptions,
       })
       autoseg.loadImage(imageData)
+      console.log(imageData)
       setSampleImageData(imageData)
     })
   }, [imageSrc])
@@ -113,13 +113,15 @@ export const ImageMask = ({
     zIndex,
     hide,
   ])
+  console.log(sampleImageData)
 
   return (
     <canvas
-      style={style}
-      width={sampleImageData ? sampleImageData.width : 0}
-      height={sampleImageData ? sampleImageData.height : 0}
+      // style={style}
+      width={sampleImageData ? 500 : 0}
+      height={sampleImageData ? 500 : 0}
       ref={setCanvasRef}
+      id="myPics"
     />
   )
 }

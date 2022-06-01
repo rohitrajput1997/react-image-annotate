@@ -1,7 +1,6 @@
 // @flow
 
-import type { Node } from "react"
-import React, { useEffect, useReducer } from "react"
+import React, { Node, useEffect, useReducer } from "react"
 import makeImmutable, { without } from "seamless-immutable"
 import useEventCallback from "use-event-callback"
 import type { KeypointsDefinition } from "../ImageCanvas/region-tools"
@@ -61,6 +60,7 @@ export const Annotator = ({
     "select",
     "create-point",
     "create-box",
+    "create-a-brush",
     "create-polygon",
     "create-line",
     "create-expanding-line",
@@ -97,6 +97,7 @@ export const Annotator = ({
   issavenextDisabled = false,
   isaddQueryDisabled = false,
   isSubmitDisabled = false,
+  lazyBrush = [],
 }: Props) => {
   if (typeof selectedImage === "string") {
     selectedImage = (images || []).findIndex((img) => img.src === selectedImage)
@@ -146,8 +147,6 @@ export const Annotator = ({
           }),
     })
   )
-  console.log(state)
-
   const dispatch = useEventCallback((action: Action) => {
     if (action.type === "HEADER_BUTTON_CLICKED") {
       if (
@@ -155,7 +154,12 @@ export const Annotator = ({
           action.buttonName
         )
       ) {
-        return onExit(without(state, "history"))
+        return onExit(
+          without(
+            { annotation: state, lazyBrush: window.lazyCords() || [] },
+            "history"
+          )
+        )
       } else if (action.buttonName === "Next" && onNextImage) {
         return onNextImage(without(state, "history"))
       } else if (action.buttonName === "Prev" && onPrevImage) {
@@ -163,7 +167,12 @@ export const Annotator = ({
       } else if (action.buttonName === "Add Query" && onAddQuery) {
         return onAddQuery(without(state, "history"))
       } else if (action.buttonName === "Save & next" && saveandnext) {
-        return saveandnext(without(state, "history"))
+        return saveandnext(
+          without(
+            { annotation: state, lazyBrush: window.lazyCords() || [] },
+            "history"
+          )
+        )
       }
     }
     dispatchToReducer(action)
@@ -208,6 +217,7 @@ export const Annotator = ({
         issavenextDisabled={issavenextDisabled}
         isaddQueryDisabled={isaddQueryDisabled}
         isSubmitDisabled={isSubmitDisabled}
+        lazyBrush={lazyBrush}
       />
     </SettingsProvider>
   )

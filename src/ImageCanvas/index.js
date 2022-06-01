@@ -17,6 +17,7 @@ import Crosshairs from "../Crosshairs"
 import useExcludePattern from "../hooks/use-exclude-pattern"
 import useWindowSize from "../hooks/use-window-size.js"
 import ImageMask from "../ImageMask"
+import LazyBrushDraw from "../MainLayout/LazyBrushDraw"
 import PointDistances from "../PointDistances"
 import PreventScrollToParents from "../PreventScrollToParents"
 import RegionLabel from "../RegionLabel"
@@ -135,6 +136,8 @@ export const ImageCanvas = ({
   modifyingAllowedArea = false,
   keypointDefinitions,
   allowComments,
+  selectedTool,
+  lazyBrush,
 }: Props) => {
   const classes = useStyles()
 
@@ -170,7 +173,7 @@ export const ImageCanvas = ({
     onMouseUp,
   })
 
-  useLayoutEffect(() => changeMat(mat.clone()), [windowSize])
+  useLayoutEffect(() => changeMat(mat.clone()), [changeMat, mat, windowSize])
 
   const innerMousePos = mat.applyToPoint(
     mousePosition.current.x,
@@ -307,6 +310,12 @@ export const ImageCanvas = ({
     if (highlightedRegions.length !== 1) return null
     return highlightedRegions[0]
   }, [regions])
+
+  const setCanvasRef = (ref) => {
+    if (canvasEl.current !== ref) {
+      canvasEl.current = ref
+    }
+  }
 
   return (
     <ThemeProvider theme={theme}>
@@ -449,30 +458,39 @@ export const ImageCanvas = ({
                 regions={regions}
               />
             )}
-            <canvas
-              style={{ opacity: 0.25 }}
-              className={classes.canvas}
-              ref={canvasEl}
-            />
-            <RegionShapes
-              mat={mat}
-              keypointDefinitions={keypointDefinitions}
-              imagePosition={imagePosition}
-              regions={regions}
-              fullSegmentationMode={fullImageSegmentationMode}
-            />
-            <VideoOrImageCanvasBackground
-              videoPlaying={videoPlaying}
-              imagePosition={imagePosition}
-              mouseEvents={mouseEvents}
-              onLoad={onVideoOrImageLoaded}
-              videoTime={videoTime}
-              videoSrc={videoSrc}
-              imageSrc={imageSrc}
-              useCrossOrigin={fullImageSegmentationMode}
-              onChangeVideoTime={onChangeVideoTime}
-              onChangeVideoPlaying={onChangeVideoPlaying}
-            />
+
+            <div
+              id="main-container-lazy-brush"
+              className={classes.mainContainer}
+            >
+              <LazyBrushDraw
+                {...{
+                  setCanvasRef,
+                }}
+                selectedTool={selectedTool}
+                lazyBrush={lazyBrush}
+              />
+
+              <RegionShapes
+                mat={mat}
+                keypointDefinitions={keypointDefinitions}
+                imagePosition={imagePosition}
+                regions={regions}
+                fullSegmentationMode={fullImageSegmentationMode}
+              />
+              <VideoOrImageCanvasBackground
+                videoPlaying={videoPlaying}
+                imagePosition={imagePosition}
+                mouseEvents={mouseEvents}
+                onLoad={onVideoOrImageLoaded}
+                videoTime={videoTime}
+                videoSrc={videoSrc}
+                imageSrc={imageSrc}
+                useCrossOrigin={fullImageSegmentationMode}
+                onChangeVideoTime={onChangeVideoTime}
+                onChangeVideoPlaying={onChangeVideoPlaying}
+              />
+            </div>
           </>
         </PreventScrollToParents>
       </div>
