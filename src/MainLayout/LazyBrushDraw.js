@@ -6,8 +6,8 @@ class LazyBrushDraw extends Component {
     super(props)
     this.state = {
       color: "#ffc600",
-      brushRadius: 10,
-      lazyRadius: 1,
+      brushRadius: 5,
+      lazyRadius: 0,
     }
     this.intervalCode = 0
     this.imageData = ""

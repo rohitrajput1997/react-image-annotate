@@ -14,23 +14,25 @@ function midPointBtw(p1, p2) {
   }
 }
 
-const canvasStyle = {
-  width: "100%",
-  height: "100%",
-}
-
 const canvasTypes = [
+  {
+    name: "myPics",
+    id: "myPics",
+  },
   {
     name: "interface",
     zIndex: 15,
+    id: "interface",
   },
   {
     name: "drawing",
     zIndex: 11,
+    id: "drawing",
   },
   {
     name: "temp",
     zIndex: 12,
+    id: "temp",
   },
 ]
 
@@ -517,8 +519,15 @@ export default class extends PureComponent {
             this.canvasContainer = container
           }
         }}
+        style={{
+          width: "100%",
+          height: "100%",
+          position: "absolute",
+          top: 0,
+          left: 0,
+        }}
       >
-        <canvas
+        {/* <canvas
           id="myPics"
           ref={(canvas) => {
             if (canvas) {
@@ -527,19 +536,28 @@ export default class extends PureComponent {
           }}
           width={500}
           height={500}
-        />
-        {canvasTypes.map(({ name, zIndex }) => {
+        /> */}
+        {canvasTypes.map(({ name, zIndex, id }) => {
           const isInterface = name === "interface"
           const brush = this.props.selectedTool === "create-a-brush"
 
-          // console.log(this.props)
-          const style = {
-            width: `${width}px`,
+          let style = {
+            top: `${top}`,
+            left: `${left}`,
             height: `${height}px`,
+            width: `${width}px`,
             position: "absolute",
-            top: top,
-            left: left,
             zIndex: zIndex,
+          }
+
+          if (id === "myPics") {
+            style = {
+              ...style,
+              height: `500px`,
+              width: `500px`,
+              top: 0,
+              left: 0,
+            }
           }
 
           return (
@@ -549,9 +567,13 @@ export default class extends PureComponent {
                 if (canvas) {
                   this.canvas[name] = canvas
                   this.ctx[name] = canvas.getContext("2d")
+                  if (id === "myPics") this.props.setCanvasRef(canvas)
                 }
               }}
               style={style}
+              id={id}
+              width="500"
+              height="500"
               onMouseDown={
                 isInterface && brush ? this.handleMouseDown : undefined
               }
