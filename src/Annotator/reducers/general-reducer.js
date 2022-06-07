@@ -404,17 +404,18 @@ export default (state: MainLayoutState, action: Action) => {
             [x, y]
           )
         }
-        case "DRAW_BRUSH": {
-          const { regionId } = state.mode
-          const [region, regionIndex] = getRegion(regionId)
+        // case "DRAW_BRUSH": {
+        //   // const { regionId } = state.mode
+        //   // const [region, regionIndex] = getRegion(regionId)
 
-          if (!region) return setIn(state, ["mode"], null)
-          return setIn(state, [...pathToActiveImage, "regions", regionIndex], {
-            ...region,
-            x2: x,
-            y2: y,
-          })
-        }
+        //   // if (!region) return setIn(state, ["mode"], null)
+        //   // return setIn(state, [...pathToActiveImage, "regions", regionIndex], {
+        //   //   ...region,
+        //   //   x2: x,
+        //   //   y2: y,
+        //   // })
+        //   return
+        // }
         case "DRAW_LINE": {
           const { regionId } = state.mode
           const [region, regionIndex] = getRegion(regionId)
@@ -504,17 +505,18 @@ export default (state: MainLayoutState, action: Action) => {
               { ...polygon, points: polygon.points.concat([[x, y]]) }
             )
           }
-          case "DRAW_BRUSH": {
-            // logic to draw cordinates ploygon ka logic
-            const [line, regionIndex] = getRegion(state.mode.regionId)
-            if (!line) break
-            setIn(state, [...pathToActiveImage, "regions", regionIndex], {
-              ...line,
-              x2: x,
-              y2: y,
-            })
-            return setIn(state, ["mode"], null)
-          }
+          // case "DRAW_BRUSH": {
+          //   // logic to draw cordinates ploygon ka logic
+          //   // const [line, regionIndex] = getRegion(state.mode.regionId)
+          //   // if (!line) break
+          //   // setIn(state, [...pathToActiveImage, "regions", regionIndex], {
+          //   //   ...line,
+          //   //   x2: x,
+          //   //   y2: y,
+          //   // })
+          //   // return setIn(state, ["mode"], null)
+          //   return
+          // }
           case "DRAW_LINE": {
             const [line, regionIndex] = getRegion(state.mode.regionId)
             if (!line) break
@@ -647,33 +649,33 @@ export default (state: MainLayoutState, action: Action) => {
           })
           break
         }
-        case "create-a-brush": {
-          // sending cordinates on mouse events.
+        // case "create-a-brush": {
+        // sending cordinates on mouse events.
 
-          if (state.mode && state.mode.mode === "DRAW_BRUSH") break
-          state = saveToHistory(state, "Create Line")
-          newRegion = {
-            type: "brushed",
-            brush_points: [
-              [x, y],
-              [x, y],
-            ],
-            x1: x,
-            y1: y,
-            x2: x,
-            y2: y,
-            highlighted: true,
-            editingLabels: false,
-            color: defaultRegionColor,
-            cls: defaultRegionCls,
-            id: getRandomId(),
-          }
-          state = setIn(state, ["mode"], {
-            mode: "DRAW_BRUSH",
-            regionId: newRegion.id,
-          })
-          break
-        }
+        // if (state.mode && state.mode.mode === "DRAW_BRUSH") break
+        // state = saveToHistory(state, "Create Line")
+        // newRegion = {
+        //   type: "brushed",
+        //   brush_points: [
+        //     [x, y],
+        //     [x, y],
+        //   ],
+        //   x1: x,
+        //   y1: y,
+        //   x2: x,
+        //   y2: y,
+        //   highlighted: true,
+        //   editingLabels: false,
+        //   color: defaultRegionColor,
+        //   cls: defaultRegionCls,
+        //   id: getRandomId(),
+        // }
+        // state = setIn(state, ["mode"], {
+        //   mode: "DRAW_BRUSH",
+        //   regionId: newRegion.id,
+        // })
+        // break
+        // }
 
         case "create-expanding-line": {
           state = saveToHistory(state, "Create Expanding Line")
@@ -1008,3 +1010,4 @@ export default (state: MainLayoutState, action: Action) => {
   }
   return state
 }
+

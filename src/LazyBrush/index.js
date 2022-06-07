@@ -4,7 +4,7 @@ import PropTypes from "prop-types"
 import React, { PureComponent } from "react"
 import ResizeObserver from "resize-observer-polyfill"
 import drawImage from "./DrwaImage"
-import "./style.css"
+// import "./style.css"
 // const useStyles = makeStyles((theme) => customStyles)
 
 function midPointBtw(p1, p2) {
@@ -49,11 +49,12 @@ export default class extends PureComponent {
     gridColor: PropTypes.string,
     backgroundColor: PropTypes.string,
     hideGrid: PropTypes.bool,
+    canvasWidth: dimensionsPropTypes,
+    canvasHeight: dimensionsPropTypes,
     disabled: PropTypes.bool,
     imgSrc: PropTypes.string,
     saveData: PropTypes.string,
     immediateLoading: PropTypes.bool,
-    lazyBrush: PropTypes.array,
   }
 
   static defaultProps = {
@@ -65,11 +66,12 @@ export default class extends PureComponent {
     gridColor: "rgba(150,150,150,0.17)",
     backgroundColor: "#FFF",
     hideGrid: false,
+    canvasWidth: 400,
+    canvasHeight: 400,
     disabled: false,
     imgSrc: "",
     saveData: "",
     immediateLoading: false,
-    dialogOpen: false,
   }
 
   constructor(props) {
@@ -82,7 +84,6 @@ export default class extends PureComponent {
 
     this.points = []
     this.lines = this.props.lazyBrush
-
     this.mouseHasMoved = true
     this.valuesChanged = true
     this.isDrawing = false
@@ -95,10 +96,6 @@ export default class extends PureComponent {
   }
 
   componentDidMount() {
-    this.intialActivity()
-  }
-
-  intialActivity = () => {
     this.lazy = new LazyBrush({
       radius: this.props.lazyRadius * window.devicePixelRatio,
       enabled: true,
@@ -137,7 +134,6 @@ export default class extends PureComponent {
         this.loadSaveData(this.props.saveData)
       }
     }, 100)
-
     const imageElement = document.querySelector(
       "#main-container-lazy-brush > svg"
     )
@@ -197,7 +193,6 @@ export default class extends PureComponent {
   }
 
   loadSaveData = (saveData, immediate = this.props.immediateLoading) => {
-    // console.log("load")
     if (typeof saveData !== "string") {
       throw new Error("saveData needs to be of type string!")
     }
@@ -302,7 +297,6 @@ export default class extends PureComponent {
     this.isPressing = false
 
     this.saveLine()
-    this.setState({ ...this.state, dialogOpen: true })
   }
 
   handleCanvasResize = (entries, observer) => {
@@ -312,7 +306,6 @@ export default class extends PureComponent {
       this.setCanvasSize(this.canvas.interface, width, height)
       this.setCanvasSize(this.canvas.drawing, width, height)
       this.setCanvasSize(this.canvas.temp, width, height)
-
       this.loop({ once: true })
     }
     this.loadSaveData(saveData, true)
@@ -515,7 +508,7 @@ export default class extends PureComponent {
     window.lazyCords = () => {
       return this.lines || []
     }
-
+    // window.lazyPointer = this.state.cusror
     return (
       <div
         className="lazyBrushContainer"
@@ -532,10 +525,13 @@ export default class extends PureComponent {
               this.props.setCanvasRef(canvas)
             }
           }}
+          width={500}
+          height={500}
         />
         {canvasTypes.map(({ name, zIndex }) => {
           const isInterface = name === "interface"
           const brush = this.props.selectedTool === "create-a-brush"
+
           // console.log(this.props)
           const style = {
             width: `${width}px`,

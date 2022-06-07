@@ -1,26 +1,23 @@
 // @flow
 
-import React from "react"
-import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import {
-  faArrowsAlt,
-  faMousePointer,
-  faExpandArrowsAlt,
-  faGripLines,
-  faTag,
-  faPaintBrush,
+  faBrush,
+  faChartLine,
   faCrosshairs,
   faDrawPolygon,
-  faVectorSquare,
-  faHandPaper,
-  faSearch,
-  faMask,
   faEdit,
-  faChartLine,
-  faBrush
+  faGripLines,
+  faHandPaper,
+  faMask,
+  faMousePointer,
+  faSearch,
+  faTag,
+  faVectorSquare,
 } from "@fortawesome/free-solid-svg-icons"
-import FullscreenIcon from "@mui/icons-material/Fullscreen"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import AccessibilityNewIcon from "@mui/icons-material/AccessibilityNew"
+import FullscreenIcon from "@mui/icons-material/Fullscreen"
+import React from "react"
 
 const faStyle = { marginTop: 4, width: 16, height: 16, marginBottom: 4 }
 
@@ -54,12 +51,7 @@ export const iconDictionary = {
     />
   ),
   "create-a-brush": () => (
-    <FontAwesomeIcon
-      style={faStyle}
-      size="xs"
-      fixedWidth
-      icon={faBrush}
-    />
+    <FontAwesomeIcon style={faStyle} size="xs" fixedWidth icon={faBrush} />
   ),
   "create-polygon": () => (
     <FontAwesomeIcon
@@ -86,3 +78,4 @@ export const iconDictionary = {
 }
 
 export default iconDictionary
+

@@ -316,7 +316,9 @@ export const ImageCanvas = ({
       canvasEl.current = ref
     }
   }
+  window.canvasPointer = mousePosition.current
 
+  // console.log(window.lazyPointer)
   return (
     <ThemeProvider theme={theme}>
       <div
@@ -469,6 +471,17 @@ export const ImageCanvas = ({
                 }}
                 selectedTool={selectedTool}
                 lazyBrush={lazyBrush}
+                width={iw}
+                height={ih}
+                customStyle={{
+                  // position: "absloute",
+                  // zIndex: 2,
+                  left: imagePosition.topLeft.x,
+                  top: imagePosition.topLeft.y,
+                  pointerEvents: "none",
+                  // width: iw,
+                  // height: ih,
+                }}
               />
 
               <RegionShapes
@@ -499,4 +512,3 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
-

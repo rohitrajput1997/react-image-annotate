@@ -24,8 +24,17 @@ export default () => {
 
   return (
     <div>
-      <Annotator {...(annotatorProps: any)} onExit={(e) => console.log(e)} />
+      <Annotator
+        {...(annotatorProps: any)}
+        onExit={(e) => console.log(e)}
+        enabledTools={[
+          "select",
+          "create-point",
+          "create-box",
+          "create-polygon",
+          "show-mask",
+        ]}
+      />
     </div>
   )
 }
-

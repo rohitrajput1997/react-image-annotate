@@ -134,7 +134,9 @@ export const MainLayout = ({
       {...settings}
       showCrosshairs={
         settings.showCrosshairs &&
-        !["select", "pan", "zoom"].includes(state.selectedTool)
+        !["select", "pan", "zoom", "create-a-brush"].includes(
+          state.selectedTool
+        )
       }
       key={state.selectedImage}
       showMask={state.showMask}
@@ -489,3 +491,4 @@ export const MainLayout = ({
 }
 
 export default MainLayout
+
