@@ -1,6 +1,6 @@
 // @flow
 
-import React, { Node, useEffect, useReducer } from "react"
+import React, { useEffect, useReducer } from "react"
 import makeImmutable, { without } from "seamless-immutable"
 import useEventCallback from "use-event-callback"
 import type { KeypointsDefinition } from "../ImageCanvas/region-tools"
@@ -28,7 +28,7 @@ type Props = {
   images?: Array<Image>,
   showPointDistances?: boolean,
   pointDistancePrecision?: number,
-  RegionEditLabel?: Node,
+  RegionEditLabel?: React.Node,
   onExit: (MainLayoutState) => any,
   videoTime?: number,
   videoSrc?: string,
@@ -218,6 +218,8 @@ export const Annotator = ({
         isaddQueryDisabled={isaddQueryDisabled}
         isSubmitDisabled={isSubmitDisabled}
         lazyBrush={lazyBrush}
+        lazyBrushTags={regionTagList}
+        lazyBrushClassification={regionClsList}
       />
     </SettingsProvider>
   )

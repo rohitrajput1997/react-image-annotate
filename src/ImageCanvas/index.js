@@ -138,10 +138,12 @@ export const ImageCanvas = ({
   allowComments,
   selectedTool,
   lazyBrush,
+  lazyBrushClassification,
+  lazyBrushTags,
 }: Props) => {
   const classes = useStyles()
 
-  const canvasEl = useRef(null)
+  const canvasEl = React.useRef(null)
   const layoutParams = useRef({})
   const [dragging, changeDragging] = useRafState(false)
   const [maskImagesLoaded, changeMaskImagesLoaded] = useRafState(0)
@@ -482,6 +484,8 @@ export const ImageCanvas = ({
                   // width: iw,
                   // height: ih,
                 }}
+                lazyBrushClassification={lazyBrushClassification || []}
+                lazyBrushTags={lazyBrushTags || []}
               />
 
               <RegionShapes
@@ -512,3 +516,4 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
+

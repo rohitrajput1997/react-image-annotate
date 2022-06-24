@@ -1,9 +1,18 @@
+import { Button, Paper } from "@mui/material"
+import IconButton from "@mui/material/IconButton"
 import { Catenary } from "catenary-curve"
 import { LazyBrush } from "lazy-brush"
 import PropTypes from "prop-types"
-import React, { PureComponent } from "react"
+import React from "react"
+import CreatableSelect from "react-select/creatable"
 import ResizeObserver from "resize-observer-polyfill"
 import drawImage from "./DrwaImage"
+
+import CheckIcon from "@mui/icons-material/Check"
+import TrashIcon from "@mui/icons-material/Delete"
+import { asMutable } from "seamless-immutable"
+
+// import drawImage from "./DrwaImage"
 // import "./style.css"
 // const useStyles = makeStyles((theme) => customStyles)
 
@@ -41,7 +50,7 @@ const dimensionsPropTypes = PropTypes.oneOfType([
   PropTypes.string,
 ])
 
-export default class extends PureComponent {
+export default class extends React.PureComponent {
   static propTypes = {
     loadTimeOffset: PropTypes.number,
     lazyRadius: PropTypes.number,
@@ -85,6 +94,7 @@ export default class extends PureComponent {
     this.catenary = new Catenary()
 
     this.points = []
+    this.popUp = {}
     this.lines = this.props.lazyBrush
     this.mouseHasMoved = true
     this.valuesChanged = true
@@ -141,6 +151,7 @@ export default class extends PureComponent {
     )
     const width = imageElement && imageElement.getBoundingClientRect().width
     const height = imageElement && imageElement.getBoundingClientRect().height
+    // console.log("width ", width, " -height ", height)
     this.setState({
       canvasWidth: width,
       canvasHeight: height,
@@ -187,6 +198,7 @@ export default class extends PureComponent {
 
   getSaveData = () => {
     // Construct and return the stringified saveData object
+
     return JSON.stringify({
       lines: this.lines,
       width: this.state.canvasWidth,
@@ -240,8 +252,7 @@ export default class extends PureComponent {
     let timeoutGap = immediate ? 0 : this.props.loadTimeOffset
 
     lines.forEach((line) => {
-      const { points, brushColor, brushRadius } = line
-
+      const { points, brushColor, brushRadius, popUp } = line
       for (let i = 1; i < points.length; i++) {
         curTime += timeoutGap
         window.setTimeout(() => {
@@ -249,6 +260,7 @@ export default class extends PureComponent {
             points: points.slice(0, i + 1),
             brushColor,
             brushRadius,
+            popUp,
           })
         }, curTime)
       }
@@ -257,6 +269,7 @@ export default class extends PureComponent {
       window.setTimeout(() => {
         // Save this line with its props instead of this.props
         this.points = points
+        this.popUp = popUp
         this.saveLine({ brushColor, brushRadius })
       }, curTime)
     })
@@ -284,7 +297,7 @@ export default class extends PureComponent {
   }
 
   handleMouseDown = (e) => {
-    e.preventDefault()
+    //e.preventDefault()
     this.isPressing = true
   }
 
@@ -319,18 +332,45 @@ export default class extends PureComponent {
     canvas.style.width = width
     canvas.style.height = height
   }
-
+  lastPoint = { x: null, y: null }
   getPointerPos = (e) => {
     const rect = this.canvas.interface.getBoundingClientRect()
 
+    /*const leftOrRight = (
+      e.clientX > this.lastPoint.x ? 'right'
+      : e.clientX < this.lastPoint.x ? 'left'
+      : 'none'
+    )
+    const upOrDown = (
+      e.clientY > this.lastPoint.y ? 'down'
+      : e.clientY < this.lastPoint.y ? 'up'
+      : 'none'
+    )
+    this.lastPoint.x = e.clientX
+    this.lastPoint.y = e.clientY
+      */
     // use cursor pos as default
-    let clientX = e.clientX
-    let clientY = e.clientY
+    //console.log("e.clientX ", e.clientX);
+    //console.log("e.clientY ", e.clientY);
+    // console.log(e)
+    let yPosition = e.clientY * 0.25
+    let xPosition = e.clientX * 2
 
+    let clientX = e.clientX + xPosition
+    let clientY = e.clientY + yPosition
+    //if (e.clientX > lastXPoint) {
+    //  xPosition = e.clientX * 0.20
+    //  console.log("move...")
+    //}
+
+    //check condition to add or substract the values
+    //console.log("client x ", clientX, " client y ", clientY, " event x ", e.clientX, " e.clienty ", e.clientY);
+    //console.log(e.clientX)
+    //console.log("Positons 1", clientX, clientY);
     // use first touch if available
     if (e.changedTouches && e.changedTouches.length > 0) {
-      clientX = e.changedTouches[0].clientX
-      clientY = e.changedTouches[0].clientY
+      clientX = e.changedTouches[0].clientX + xPosition
+      clientY = e.changedTouches[0].clientY + yPosition
     }
 
     // return mouse/touch position inside canvas
@@ -406,12 +446,13 @@ export default class extends PureComponent {
 
   saveLine = ({ brushColor, brushRadius } = {}) => {
     if (this.points.length < 2) return
-
+    console.log(this.popUp, "saves", this.points)
     // Save as new line
     this.lines.push({
       points: [...this.points],
       brushColor: brushColor || this.props.brushColor,
       brushRadius: brushRadius || this.props.brushRadius,
+      popUp: { ...this.popUp },
     })
 
     // Reset points array
@@ -510,7 +551,9 @@ export default class extends PureComponent {
     window.lazyCords = () => {
       return this.lines || []
     }
+
     // window.lazyPointer = this.state.cusror
+
     return (
       <div
         className="lazyBrushContainer"
@@ -597,18 +640,127 @@ export default class extends PureComponent {
             />
           )
         })}
-        {/* <div key="topLeftTag" className={classes.fixedRegionLabel}>
-          <Dialog open={this.state.dialogOpen}>
-            <button
-              onClick={() => {
-                this.setState({ ...this.state, dialogOpen: false })
-              }}
-            >
-              Close me
-            </button>
-            <DialogTitle>Hello</DialogTitle>
-          </Dialog>
-        </div> */}
+
+        {this.lines?.map((item, index) => (
+          <Paper
+            style={{
+              position: "absolute",
+              zIndex: 1000,
+              top: item.points[item.points.length - 1].y / 1.2,
+              left: item.points[item.points.length - 1].x / 2.8,
+            }}
+          >
+            {item.popUp.open ? (
+              <div style={{ width: 200, padding: 10 }}>
+                <div style={{ display: "flex", flexDirection: "row" }}>
+                  <div
+                    style={{
+                      display: "flex",
+                      backgroundColor: "red",
+                      color: "#fff",
+                      padding: 4,
+                      paddingLeft: 8,
+                      paddingRight: 8,
+                      borderRadius: 4,
+                      fontWeight: "bold",
+                      textShadow: "0px 0px 5px rgba(0,0,0,0.4)",
+                    }}
+                  >
+                    Brush
+                  </div>
+                  <div style={{ flexGrow: 1 }} />
+                  <IconButton
+                    onClick={(e) => {
+                      let linessave = [...this.lines]
+                      linessave.splice(index, 1)
+                      this.lines = linessave
+                      this.setState({ ...this.state, lines: linessave })
+                      let lines = this.lines
+                      let newArr = lines.splice(index, 1)
+
+                      this.clear()
+                      this.simulateDrawingLines({ lines, immediate: true })
+                    }}
+                    tabIndex={-1}
+                    style={{ width: 22, height: 22 }}
+                    size="small"
+                    variant="outlined"
+                  >
+                    <TrashIcon
+                      style={{ marginTop: -8, width: 16, height: 16 }}
+                    />
+                  </IconButton>
+                </div>
+                <div style={{ marginTop: 6 }}>
+                  <CreatableSelect
+                    placeholder="Classification"
+                    onChange={(o, actionMeta) => {
+                      let linessave = [...this.lines]
+                      this.lines[index].popUp.classification = o
+                      this.setState({ ...this.state, lines: linessave })
+                    }}
+                    value={this.lines[index].popUp.classification}
+                    options={asMutable(
+                      this.props.lazyBrushClassification.map((c) => ({
+                        value: c,
+                        label: c,
+                      }))
+                    )}
+                  />
+                </div>
+                <div style={{ marginTop: 4 }}>
+                  <CreatableSelect
+                    value={this.lines[index].popUp.tags}
+                    placeholder="Tags"
+                    onChange={(o, actionMeta) => {
+                      let linessave = [...this.lines]
+                      this.lines[index].popUp.tags = o
+                      this.setState({ ...this.state, lines: linessave })
+                    }}
+                    isMulti
+                    options={asMutable(
+                      this.props.lazyBrushTags.map((c) => ({
+                        value: c,
+                        label: c,
+                      }))
+                    )}
+                  />
+                </div>
+
+                <div style={{ marginTop: 4, display: "flex" }}>
+                  <div style={{ flexGrow: 1 }} />
+                  <Button
+                    onClick={() => {
+                      let linessave = [...this.lines]
+                      this.lines[index].popUp.open = false
+                      this.setState({ ...this.state, lines: linessave })
+                    }}
+                    size="small"
+                    variant="contained"
+                    color="primary"
+                  >
+                    <CheckIcon />
+                  </Button>
+                </div>
+              </div>
+            ) : (
+              <div
+                style={{ padding: 8 }}
+                onClick={() => {
+                  let linessave = [...this.lines]
+                  this.lines[index].popUp.open = true
+                  let i = 0
+                  for (i = 0; i < this.lines?.length; i++) {
+                    if (i !== index) {
+                      this.lines[i].popUp.open = false
+                    }
+                  }
+                  this.setState({ ...this.state, lines: linessave })
+                }}
+              ></div>
+            )}
+          </Paper>
+        ))}
       </div>
     )
   }

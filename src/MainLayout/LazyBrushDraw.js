@@ -1,7 +1,7 @@
-import React, { Component } from "react"
+import React from "react"
 import CanvasDraw from "./../LazyBrush/index"
 
-class LazyBrushDraw extends Component {
+class LazyBrushDraw extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
@@ -47,9 +47,12 @@ class LazyBrushDraw extends Component {
           lazyRadius={this.state.lazyRadius}
           selectedTool={this.props.selectedTool}
           lazyBrush={this.props.lazyBrush}
+          lazyBrushClassification={this.props.lazyBrushClassification}
+          lazyBrushTags={this.props.lazyBrushTags}
         />
       </>
     )
   }
 }
 export default LazyBrushDraw
+

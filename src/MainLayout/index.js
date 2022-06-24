@@ -80,12 +80,14 @@ export const MainLayout = ({
   isaddQueryDisabled = false,
   isSubmitDisabled = false,
   lazyBrush = [],
+  lazyBrushClassification,
+  lazyBrushTags,
 }: Props) => {
   const classes = useStyles()
   const settings = useSettings()
   const fullScreenHandle = useFullScreenHandle()
 
-  const memoizedActionFns = useRef({})
+  const memoizedActionFns = React.useRef({})
   const action = (type: string, ...params: Array<string>) => {
     const fnKey = `${type}(${params.join(",")})`
     if (memoizedActionFns.current[fnKey])
@@ -202,6 +204,8 @@ export const MainLayout = ({
       allowComments={state.allowComments}
       selectedTool={state.selectedTool}
       lazyBrush={lazyBrush}
+      lazyBrushClassification={lazyBrushClassification}
+      lazyBrushTags={lazyBrushTags}
     />
   )
 
@@ -491,4 +495,3 @@ export const MainLayout = ({
 }
 
 export default MainLayout
-
