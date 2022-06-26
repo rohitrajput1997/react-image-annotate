@@ -1,38 +1,36 @@
 // @flow
 
-import type { Action, MainLayoutState } from "./types"
-import { FullScreen, useFullScreenHandle } from "react-full-screen"
-import React, { useCallback, useRef } from "react"
+import { createTheme, styled, ThemeProvider } from "@mui/material/styles"
 import { makeStyles } from "@mui/styles"
-import { createTheme, ThemeProvider } from "@mui/material/styles"
-import { styled } from "@mui/material/styles"
-
+import classnames from "classnames"
+import Workspace from "ns_workflow_workspace/Workspace"
+import type { Node } from "react"
+import React, { useCallback, useRef } from "react"
+import { FullScreen, useFullScreenHandle } from "react-full-screen"
+import { withHotKeys } from "react-hotkeys"
+import useEventCallback from "use-event-callback"
+import useKey from "use-key-hook"
+import getActiveImage from "../Annotator/reducers/get-active-image"
 import ClassSelectionMenu from "../ClassSelectionMenu"
 import DebugBox from "../DebugSidebarBox"
 import HistorySidebarBox from "../HistorySidebarBox"
 import ImageCanvas from "../ImageCanvas"
-import ImageSelector from "../ImageSelectorSidebarBox"
-import KeyframeTimeline from "../KeyframeTimeline"
 import KeyframesSelector from "../KeyframesSelectorSidebarBox"
-import type { Node } from "react"
+import KeyframeTimeline from "../KeyframeTimeline"
 import RegionSelector from "../RegionSelectorSidebarBox"
 import SettingsDialog from "../SettingsDialog"
+import { useSettings } from "../SettingsProvider"
+import { useDispatchHotkeyHandlers } from "../ShortcutsManager"
 import TagsSidebarBox from "../TagsSidebarBox"
 import TaskDescription from "../TaskDescriptionSidebarBox"
-import Workspace from "react-material-workspace-layout/Workspace"
-import classnames from "classnames"
-import getActiveImage from "../Annotator/reducers/get-active-image"
 import getHotkeyHelpText from "../utils/get-hotkey-help-text"
 import iconDictionary from "./icon-dictionary"
 import styles from "./styles"
-import { useDispatchHotkeyHandlers } from "../ShortcutsManager"
-import useEventCallback from "use-event-callback"
+import type { MainLayoutState } from "./types"
 import useImpliedVideoRegions from "./use-implied-video-regions"
-import useKey from "use-key-hook"
-import { useSettings } from "../SettingsProvider"
-import { withHotKeys } from "react-hotkeys"
 
 // import Fullscreen from "../Fullscreen"
+
 
 const emptyArr = []
 const theme = createTheme()
@@ -79,12 +77,18 @@ export const MainLayout = ({
   hideSettings = false,
   hideFullScreen = false,
   hideSave = false,
+  issavenextDisabled = false,
+  isaddQueryDisabled = false,
+  isSubmitDisabled = false,
+  lazyBrush = [],
+  lazyBrushClassification,
+  lazyBrushTags,
 }: Props) => {
   const classes = useStyles()
   const settings = useSettings()
   const fullScreenHandle = useFullScreenHandle()
 
-  const memoizedActionFns = useRef({})
+  const memoizedActionFns = React.useRef({})
   const action = (type: string, ...params: Array<string>) => {
     const fnKey = `${type}(${params.join(",")})`
     if (memoizedActionFns.current[fnKey])
@@ -133,7 +137,9 @@ export const MainLayout = ({
       {...settings}
       showCrosshairs={
         settings.showCrosshairs &&
-        !["select", "pan", "zoom"].includes(state.selectedTool)
+        !["select", "pan", "zoom", "create-a-brush"].includes(
+          state.selectedTool
+        )
       }
       key={state.selectedImage}
       showMask={state.showMask}
@@ -197,6 +203,10 @@ export const MainLayout = ({
       onChangeVideoPlaying={action("CHANGE_VIDEO_PLAYING", "isPlaying")}
       onRegionClassAdded={onRegionClassAdded}
       allowComments={state.allowComments}
+      selectedTool={state.selectedTool}
+      lazyBrush={lazyBrush}
+      lazyBrushClassification={lazyBrushClassification}
+      lazyBrushTags={lazyBrushTags}
     />
   )
 
@@ -255,26 +265,72 @@ export const MainLayout = ({
                     keyframes={state.keyframes}
                   />
                 ) : activeImage ? (
-                  <div className={classes.headerTitle}>{activeImage.name}</div>
+                  <div
+                    className={`${classes.headerTitle} image_annotation_title`}
+                  >
+                    {activeImage.name}
+                  </div>
                 ) : null,
               ].filter(Boolean)}
               headerItems={[
-                !hidePrev && { name: "Prev" },
-                !hideNext && { name: "Next" },
+                !hidePrev && {
+                  name: "Prev",
+                  className: "prev",
+                  iconName: "Prev",
+                },
+                !hideNext && {
+                  name: "Next",
+                  className: "next",
+                  iconName: "Next",
+                },
                 state.annotationType !== "video"
                   ? null
                   : !state.videoPlaying
-                  ? { name: "Play" }
-                  : { name: "Pause" },
+                  ? { name: "Play", className: "play", iconName: "Play" }
+                  : { name: "Pause", className: "pause", iconName: "Pause" },
                 !hideClone &&
                   !nextImageHasRegions &&
-                  activeImage.regions && { name: "Clone" },
-                !hideSettings && { name: "Settings" },
+                  activeImage.regions && {
+                    name: "Clone",
+                    className: "clone",
+                    iconName: "Clone",
+                  },
+                !hideSettings && {
+                  name: "Settings",
+                  className: "settings",
+                  iconName: "Settings",
+                },
+                {
+                  name: "Add Query",
+                  className: "query",
+                  iconName: "query",
+                  disabled: isaddQueryDisabled,
+                },
+                !hideSave && {
+                  name: "Submit",
+                  className: "save",
+                  iconName: "submit",
+                  disabled: isSubmitDisabled,
+                },
+
+                {
+                  name: "Save & next",
+                  className: "savenext",
+                  iconName: "savenext",
+                  disabled: issavenextDisabled,
+                },
                 !hideFullScreen &&
                   (state.fullScreen
-                    ? { name: "Window" }
-                    : { name: "Fullscreen" }),
-                !hideSave && { name: "Save" },
+                    ? {
+                        name: "Window",
+                        className: "window",
+                        iconName: "Window",
+                      }
+                    : {
+                        name: "Fullscreen",
+                        className: "Fullscreen",
+                        iconName: "Fullscreen",
+                      }),
               ].filter(Boolean)}
               onClickHeaderItem={onClickHeaderItem}
               onClickIconSidebarItem={onClickIconSidebarItem}
@@ -288,6 +344,7 @@ export const MainLayout = ({
                   name: "select",
                   helperText: "Select" + getHotkeyHelpText("select_tool"),
                   alwaysShowing: true,
+                  className: "select",
                 },
                 {
                   name: "pan",
@@ -295,53 +352,73 @@ export const MainLayout = ({
                     "Drag/Pan (right or middle click)" +
                     getHotkeyHelpText("pan_tool"),
                   alwaysShowing: true,
+                  className: "pan",
                 },
+
                 {
                   name: "zoom",
                   helperText:
                     "Zoom In/Out (scroll)" + getHotkeyHelpText("zoom_tool"),
                   alwaysShowing: true,
+                  className: "zoom",
                 },
                 {
                   name: "show-tags",
                   helperText: "Show / Hide Tags",
                   alwaysShowing: true,
+                  className: "tags",
                 },
                 {
                   name: "create-point",
                   helperText: "Add Point" + getHotkeyHelpText("create_point"),
+                  className: "create_point",
                 },
                 {
                   name: "create-box",
                   helperText:
                     "Add Bounding Box" +
                     getHotkeyHelpText("create_bounding_box"),
+                  className: "create_box",
+                },
+                {
+                  name: "create-a-brush",
+                  helperText:
+                    "Create By Paint Brush" +
+                    getHotkeyHelpText("create-a-brush"),
+                  alwaysShowing: true,
+                  className: "create-a-brush",
                 },
                 {
                   name: "create-polygon",
                   helperText:
                     "Add Polygon" + getHotkeyHelpText("create_polygon"),
+                  className: "create_polygon",
                 },
                 {
                   name: "create-line",
                   helperText: "Add Line",
+                  className: "add_line",
                 },
                 {
                   name: "create-expanding-line",
                   helperText: "Add Expanding Line",
+                  className: "create_expand",
                 },
                 {
                   name: "create-keypoints",
                   helperText: "Add Keypoints (Pose)",
+                  className: "create_keypoint",
                 },
                 state.fullImageSegmentationMode && {
                   name: "show-mask",
                   alwaysShowing: true,
                   helperText: "Show / Hide Mask",
+                  className: "show_hids_mask",
                 },
                 {
                   name: "modify-allowed-area",
                   helperText: "Modify Allowed Area",
+                  className: "modify_allow_area",
                 },
               ]
                 .filter(Boolean)

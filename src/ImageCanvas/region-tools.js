@@ -48,6 +48,12 @@ export type Polygon = {|
   open?: boolean,
   points: Array<[number, number]>,
 |}
+export type Brushed = {|
+  ...$Exact<BaseRegion>,
+  type: "brushed",
+  open?: boolean,
+  points: Array<[number, number]>,
+|}
 
 export type Line = {|
   ...$Exact<BaseRegion>,
@@ -97,6 +103,7 @@ export type Region =
   | Polygon
   | ExpandingLine
   | Keypoints
+  | Brushed
 
 export const getEnclosingBox = (region: Region) => {
   switch (region.type) {
@@ -110,6 +117,9 @@ export const getEnclosingBox = (region: Region) => {
       box.w = Math.max(...region.points.map(([x, y]) => x)) - box.x
       box.h = Math.max(...region.points.map(([x, y]) => y)) - box.y
       return box
+    }
+    case "brushed": {
+      return { x: region.x1, y: region.y1, w: 0, h: 0 }
     }
     case "keypoints": {
       const minX = Math.min(

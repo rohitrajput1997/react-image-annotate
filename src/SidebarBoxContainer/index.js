@@ -1,16 +1,11 @@
 // @flow
 
-import React, { useState, memo } from "react"
-import Paper from "@mui/material/Paper"
-import { makeStyles } from "@mui/styles"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
-import ExpandIcon from "@mui/icons-material/ExpandMore"
-import IconButton from "@mui/material/IconButton"
-import Collapse from "@mui/material/Collapse"
-import { grey } from "@mui/material/colors"
+import { makeStyles } from "@mui/styles"
 import classnames from "classnames"
+import SidebarBox from "ns_workflow_workspace/SidebarBox"
+import React, { memo, useState } from "react"
 import useEventCallback from "use-event-callback"
-import SidebarBox from "react-material-workspace-layout/SidebarBox"
 
 const theme = createTheme()
 const useStyles = makeStyles((theme) => ({
@@ -28,9 +23,9 @@ const useStyles = makeStyles((theme) => ({
     fontWeight: "bold",
     flexGrow: 1,
     paddingLeft: 8,
-    color: grey[800],
+    color: "#005f86 !important",
     "& span": {
-      color: grey[600],
+      color: "#005f86 !important",
       fontSize: 12,
     },
   },

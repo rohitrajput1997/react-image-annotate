@@ -1,25 +1,17 @@
 // @flow
 
-import type {
-  Action,
-  Image,
-  MainLayoutState,
-  Mode,
-  ToolEnum,
-} from "../MainLayout/types"
 import React, { useEffect, useReducer } from "react"
 import makeImmutable, { without } from "seamless-immutable"
-
+import useEventCallback from "use-event-callback"
 import type { KeypointsDefinition } from "../ImageCanvas/region-tools"
 import MainLayout from "../MainLayout"
-import type { Node } from "react"
+import type { Action, Image } from "../MainLayout/types"
 import SettingsProvider from "../SettingsProvider"
+import getFromLocalStorage from "../utils/get-from-local-storage"
 import combineReducers from "./reducers/combine-reducers.js"
 import generalReducer from "./reducers/general-reducer.js"
-import getFromLocalStorage from "../utils/get-from-local-storage"
 import historyHandler from "./reducers/history-handler.js"
 import imageReducer from "./reducers/image-reducer.js"
-import useEventCallback from "use-event-callback"
 import videoReducer from "./reducers/video-reducer.js"
 
 type Props = {
@@ -36,7 +28,7 @@ type Props = {
   images?: Array<Image>,
   showPointDistances?: boolean,
   pointDistancePrecision?: number,
-  RegionEditLabel?: Node,
+  RegionEditLabel?: React.Node,
   onExit: (MainLayoutState) => any,
   videoTime?: number,
   videoSrc?: string,
@@ -68,6 +60,7 @@ export const Annotator = ({
     "select",
     "create-point",
     "create-box",
+    "create-a-brush",
     "create-polygon",
     "create-line",
     "create-expanding-line",
@@ -99,6 +92,12 @@ export const Annotator = ({
   hideFullScreen,
   hideSave,
   allowComments,
+  onAddQuery,
+  saveandnext,
+  issavenextDisabled = false,
+  isaddQueryDisabled = false,
+  isSubmitDisabled = false,
+  lazyBrush = [],
 }: Props) => {
   if (typeof selectedImage === "string") {
     selectedImage = (images || []).findIndex((img) => img.src === selectedImage)
@@ -151,12 +150,30 @@ export const Annotator = ({
 
   const dispatch = useEventCallback((action: Action) => {
     if (action.type === "HEADER_BUTTON_CLICKED") {
-      if (["Exit", "Done", "Save", "Complete"].includes(action.buttonName)) {
-        return onExit(without(state, "history"))
+      if (
+        ["Exit", "Done", "Save", "Complete", "Submit"].includes(
+          action.buttonName
+        )
+      ) {
+        return onExit(
+          without(
+            { annotation: state, lazyBrush: window.lazyCords() || [] },
+            "history"
+          )
+        )
       } else if (action.buttonName === "Next" && onNextImage) {
         return onNextImage(without(state, "history"))
       } else if (action.buttonName === "Prev" && onPrevImage) {
         return onPrevImage(without(state, "history"))
+      } else if (action.buttonName === "Add Query" && onAddQuery) {
+        return onAddQuery(without(state, "history"))
+      } else if (action.buttonName === "Save & next" && saveandnext) {
+        return saveandnext(
+          without(
+            { annotation: state, lazyBrush: window.lazyCords() || [] },
+            "history"
+          )
+        )
       }
     }
     dispatchToReducer(action)
@@ -198,6 +215,12 @@ export const Annotator = ({
         hideSettings={hideSettings}
         hideFullScreen={hideFullScreen}
         hideSave={hideSave}
+        issavenextDisabled={issavenextDisabled}
+        isaddQueryDisabled={isaddQueryDisabled}
+        isSubmitDisabled={isSubmitDisabled}
+        lazyBrush={lazyBrush}
+        lazyBrushTags={regionTagList}
+        lazyBrushClassification={regionClsList}
       />
     </SettingsProvider>
   )

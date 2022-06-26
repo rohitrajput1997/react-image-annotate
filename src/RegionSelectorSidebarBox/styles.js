@@ -1,4 +1,4 @@
-import { grey, blue, orange, purple } from "@mui/material/colors"
+import { blue, grey } from "@mui/material/colors"
 
 export default {
   container: {
@@ -9,8 +9,10 @@ export default {
       marginTop: 4,
       width: 16,
       height: 16,
+      color: "#005f86 !important",
     },
     "& .icon2": {
+      color: "#005f86 !important",
       opacity: 0.5,
       width: 16,
       height: 16,
