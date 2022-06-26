@@ -570,16 +570,6 @@ export default class extends React.PureComponent {
           left: 0,
         }}
       >
-        {/* <canvas
-          id="myPics"
-          ref={(canvas) => {
-            if (canvas) {
-              this.props.setCanvasRef(canvas)
-            }
-          }}
-          width={500}
-          height={500}
-        /> */}
         {canvasTypes.map(({ name, zIndex, id }) => {
           const isInterface = name === "interface"
           const brush = this.props.selectedTool === "create-a-brush"
@@ -613,7 +603,7 @@ export default class extends React.PureComponent {
                   if (id === "myPics") this.props.setCanvasRef(canvas)
                 }
               }}
-              style={style}
+              style={(brush && style) || {}}
               id={id}
               width="500"
               height="500"

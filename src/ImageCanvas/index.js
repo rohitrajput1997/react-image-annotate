@@ -458,30 +458,49 @@ export const ImageCanvas = ({
                 regions={regions}
               />
             )}
-            <canvas
-              style={{ opacity: 0.25 }}
-              className={classes.canvas}
-              ref={canvasEl}
-            />
-            <RegionShapes
-              mat={mat}
-              keypointDefinitions={keypointDefinitions}
-              imagePosition={imagePosition}
-              regions={regions}
-              fullSegmentationMode={fullImageSegmentationMode}
-            />
-            <VideoOrImageCanvasBackground
-              videoPlaying={videoPlaying}
-              imagePosition={imagePosition}
-              mouseEvents={mouseEvents}
-              onLoad={onVideoOrImageLoaded}
-              videoTime={videoTime}
-              videoSrc={videoSrc}
-              imageSrc={imageSrc}
-              useCrossOrigin={fullImageSegmentationMode}
-              onChangeVideoTime={onChangeVideoTime}
-              onChangeVideoPlaying={onChangeVideoPlaying}
-            />
+            <div
+              id="main-container-lazy-brush"
+              className={classes.mainContainer}
+            >
+              {
+                <LazyBrushDraw
+                  {...{
+                    setCanvasRef,
+                  }}
+                  selectedTool={selectedTool}
+                  lazyBrush={lazyBrush}
+                  width={iw}
+                  height={ih}
+                  customStyle={{
+                    left: imagePosition.topLeft.x,
+                    top: imagePosition.topLeft.y,
+                    pointerEvents: "none",
+                  }}
+                  lazyBrushClassification={lazyBrushClassification || []}
+                  lazyBrushTags={lazyBrushTags || []}
+                  canvasClass={classes.canvas}
+                />
+              }
+              <RegionShapes
+                mat={mat}
+                keypointDefinitions={keypointDefinitions}
+                imagePosition={imagePosition}
+                regions={regions}
+                fullSegmentationMode={fullImageSegmentationMode}
+              />
+              <VideoOrImageCanvasBackground
+                videoPlaying={videoPlaying}
+                imagePosition={imagePosition}
+                mouseEvents={mouseEvents}
+                onLoad={onVideoOrImageLoaded}
+                videoTime={videoTime}
+                videoSrc={videoSrc}
+                imageSrc={imageSrc}
+                useCrossOrigin={fullImageSegmentationMode}
+                onChangeVideoTime={onChangeVideoTime}
+                onChangeVideoPlaying={onChangeVideoPlaying}
+              />
+            </div>
           </>
         </PreventScrollToParents>
       </div>
@@ -490,3 +509,4 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
+
