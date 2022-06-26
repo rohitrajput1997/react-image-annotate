@@ -1,40 +1,34 @@
 // @flow weak
 
+import { createTheme, ThemeProvider } from "@mui/material/styles"
+import { makeStyles } from "@mui/styles"
+import type { Node } from "react"
 import React, {
+  useEffect,
+  useLayoutEffect,
+  useMemo,
   useRef,
   useState,
-  useLayoutEffect,
-  useEffect,
-  useMemo,
 } from "react"
-import type { Node } from "react"
+import { useRafState } from "react-use"
 import { Matrix } from "transformation-matrix-js"
+import useEventCallback from "use-event-callback"
 import Crosshairs from "../Crosshairs"
-import type {
-  Region,
-  Point,
-  Polygon,
-  Box,
-  Keypoints,
-  KeypointsDefinition,
-} from "./region-tools.js"
-import { makeStyles } from "@mui/styles"
-import { createTheme, ThemeProvider } from "@mui/material/styles"
-import styles from "./styles"
-import PreventScrollToParents from "../PreventScrollToParents"
+import useExcludePattern from "../hooks/use-exclude-pattern"
 import useWindowSize from "../hooks/use-window-size.js"
+import ImageMask from "../ImageMask"
+import LazyBrushDraw from "../MainLayout/LazyBrushDraw"
+import PointDistances from "../PointDistances"
+import PreventScrollToParents from "../PreventScrollToParents"
+import RegionLabel from "../RegionLabel"
+import RegionSelectAndTransformBoxes from "../RegionSelectAndTransformBoxes"
+import RegionShapes from "../RegionShapes"
+import RegionTags from "../RegionTags"
+import VideoOrImageCanvasBackground from "../VideoOrImageCanvasBackground"
+import type { Region } from "./region-tools.js"
+import styles from "./styles"
 import useMouse from "./use-mouse"
 import useProjectRegionBox from "./use-project-box"
-import useExcludePattern from "../hooks/use-exclude-pattern"
-import { useRafState } from "react-use"
-import PointDistances from "../PointDistances"
-import RegionTags from "../RegionTags"
-import RegionLabel from "../RegionLabel"
-import ImageMask from "../ImageMask"
-import RegionSelectAndTransformBoxes from "../RegionSelectAndTransformBoxes"
-import VideoOrImageCanvasBackground from "../VideoOrImageCanvasBackground"
-import useEventCallback from "use-event-callback"
-import RegionShapes from "../RegionShapes"
 import useWasdMode from "./use-wasd-mode"
 
 const theme = createTheme()
@@ -142,10 +136,14 @@ export const ImageCanvas = ({
   modifyingAllowedArea = false,
   keypointDefinitions,
   allowComments,
+  selectedTool,
+  lazyBrush,
+  lazyBrushClassification,
+  lazyBrushTags,
 }: Props) => {
   const classes = useStyles()
 
-  const canvasEl = useRef(null)
+  const canvasEl = React.useRef(null)
   const layoutParams = useRef({})
   const [dragging, changeDragging] = useRafState(false)
   const [maskImagesLoaded, changeMaskImagesLoaded] = useRafState(0)
@@ -176,7 +174,7 @@ export const ImageCanvas = ({
     onMouseUp,
   })
 
-  useLayoutEffect(() => changeMat(mat.clone()), [windowSize])
+  useLayoutEffect(() => changeMat(mat.clone()), [changeMat, mat, windowSize])
 
   const innerMousePos = mat.applyToPoint(
     mousePosition.current.x,
@@ -314,6 +312,11 @@ export const ImageCanvas = ({
     return highlightedRegions[0]
   }, [regions])
 
+  const setCanvasRef = (ref) => {
+    if (canvasEl.current !== ref) {
+      canvasEl.current = ref
+    }
+  }
   return (
     <ThemeProvider theme={theme}>
       <div
@@ -330,9 +333,10 @@ export const ImageCanvas = ({
             : dragWithPrimary
             ? "grab"
             : zoomWithPrimary
-            ? mat.a < 1
-              ? "zoom-out"
-              : "zoom-in"
+            ? // ? mat.a < 1
+              //   ? "zoom-out"
+              //   : "zoom-in"
+              "zoom-in"
             : undefined,
         }}
       >
@@ -441,6 +445,9 @@ export const ImageCanvas = ({
           {...mouseEvents}
         >
           <>
+            <div className={classes.zoomIndicator}>
+              {((1 / mat.a) * 100).toFixed(0)}%
+            </div>
             {fullImageSegmentationMode && (
               <ImageMask
                 hide={!showMask}
@@ -477,9 +484,6 @@ export const ImageCanvas = ({
             />
           </>
         </PreventScrollToParents>
-        <div className={classes.zoomIndicator}>
-          {((1 / mat.a) * 100).toFixed(0)}%
-        </div>
       </div>
     </ThemeProvider>
   )
