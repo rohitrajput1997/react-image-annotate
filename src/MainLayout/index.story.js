@@ -1,14 +1,11 @@
 // @flow
 
-import React from "react"
-
-import { storiesOf } from "@storybook/react"
 import { action } from "@storybook/addon-actions"
-import { testRegions } from "../ImageCanvas/index.story"
-
-import exampleImage from "../ImageCanvas/seves_desk.story.jpg"
+import { storiesOf } from "@storybook/react"
 import moment from "moment"
-
+import React from "react"
+import { testRegions } from "../ImageCanvas/index.story"
+import exampleImage from "../ImageCanvas/seves_desk.story.jpg"
 import MainLayout from "./"
 
 storiesOf("MainLayout", module)
