@@ -34,9 +34,10 @@ export default () => {
           "create-polygon",
           "show-mask",
         ]}
-        xPosition={0.75}
-        yPosition={1.25}
+        xPosition={0.25}
+        yPosition={2.0}
       />
     </div>
   )
 }
+

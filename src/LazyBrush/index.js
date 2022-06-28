@@ -26,7 +26,7 @@ const canvasTypes = [
   },
   {
     name: "interface",
-    zIndex: 15,
+    zIndex: 14,
     id: "interface",
   },
   {
@@ -319,7 +319,7 @@ export default class extends React.PureComponent {
   lastPoint = { x: null, y: null }
   getPointerPos = (e) => {
     const rect = this.canvas.interface.getBoundingClientRect()
-    console.log(e.clientY, e.clientX, "before")
+
     let yPosition = e.clientY * this.props.yPosition
     let xPosition = e.clientX * this.props.xPosition
 
@@ -330,7 +330,7 @@ export default class extends React.PureComponent {
       clientX = e.changedTouches[0].clientX + xPosition
       clientY = e.changedTouches[0].clientY + yPosition
     }
-    console.log(clientX, clientY, "after")
+
     return {
       x: clientX - rect.left,
       y: clientY - rect.top,
@@ -575,9 +575,10 @@ export default class extends React.PureComponent {
           <Paper
             style={{
               position: "absolute",
-              zIndex: 1000,
+              zIndex: 14,
               top: item.points[item.points.length - 1].y / 1.2,
               left: item.points[item.points.length - 1].x / 2.8,
+              cursor: "pointer",
             }}
           >
             {item.popUp.open ? (
@@ -687,7 +688,34 @@ export default class extends React.PureComponent {
                   }
                   this.setState({ ...this.state, lines: linessave })
                 }}
-              ></div>
+              >
+                {item?.popUp?.classification && (
+                  <div className="name">
+                    <div
+                      className="circle"
+                      // style={{ backgroundColor: region.color }}
+                    />
+                    {item?.popUp?.classification.label}
+                  </div>
+                )}
+
+                {item?.popUp.tags && (
+                  <div className="tags">
+                    {item?.popUp.tags?.map((t) => (
+                      <div
+                        key={t.label}
+                        className="tag"
+                        style={{ fontSize: "12px" }}
+                      >
+                        <u>
+                          {" "}
+                          <b>{t.label}</b>
+                        </u>
+                      </div>
+                    ))}
+                  </div>
+                )}
+              </div>
             )}
           </Paper>
         ))}

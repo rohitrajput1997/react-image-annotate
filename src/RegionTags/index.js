@@ -83,7 +83,7 @@ export const RegionTags = ({
           style={{
             position: "absolute",
             ...coords,
-            zIndex: 10 + (region.editingLabels ? 5 : 0),
+            zIndex: 15,
             width: 200,
           }}
           onMouseDown={(e) => e.preventDefault()}
