@@ -98,6 +98,8 @@ export const Annotator = ({
   isaddQueryDisabled = false,
   isSubmitDisabled = false,
   lazyBrush = [],
+  xPosition,
+  yPosition,
 }: Props) => {
   if (typeof selectedImage === "string") {
     selectedImage = (images || []).findIndex((img) => img.src === selectedImage)
@@ -221,6 +223,8 @@ export const Annotator = ({
         lazyBrush={lazyBrush}
         lazyBrushTags={regionTagList}
         lazyBrushClassification={regionClsList}
+        xPosition={xPosition}
+        yPosition={yPosition}
       />
     </SettingsProvider>
   )

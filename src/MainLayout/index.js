@@ -31,7 +31,6 @@ import useImpliedVideoRegions from "./use-implied-video-regions"
 
 // import Fullscreen from "../Fullscreen"
 
-
 const emptyArr = []
 const theme = createTheme()
 const useStyles = makeStyles((theme) => styles)
@@ -83,6 +82,8 @@ export const MainLayout = ({
   lazyBrush = [],
   lazyBrushClassification,
   lazyBrushTags,
+  xPosition,
+  yPosition,
 }: Props) => {
   const classes = useStyles()
   const settings = useSettings()
@@ -207,6 +208,8 @@ export const MainLayout = ({
       lazyBrush={lazyBrush}
       lazyBrushClassification={lazyBrushClassification}
       lazyBrushTags={lazyBrushTags}
+      yPosition={yPosition}
+      xPosition={xPosition}
     />
   )
 

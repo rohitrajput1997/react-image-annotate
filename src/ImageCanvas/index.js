@@ -140,6 +140,8 @@ export const ImageCanvas = ({
   lazyBrush,
   lazyBrushClassification,
   lazyBrushTags,
+  yPosition,
+  xPosition,
 }: Props) => {
   const classes = useStyles()
 
@@ -479,6 +481,8 @@ export const ImageCanvas = ({
                   lazyBrushClassification={lazyBrushClassification || []}
                   lazyBrushTags={lazyBrushTags || []}
                   canvasClass={classes.canvas}
+                  yPosition={yPosition}
+                  xPosition={xPosition}
                 />
               }
               <RegionShapes
@@ -509,4 +513,3 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
-

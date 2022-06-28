@@ -65,7 +65,7 @@ export const RegionLabel = ({
         })}
       >
         {!editing ? (
-          <div>
+          <div id="image_annotation">
             {region.cls && (
               <div className="name">
                 <div
