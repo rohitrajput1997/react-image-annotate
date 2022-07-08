@@ -346,7 +346,7 @@ export const MainLayout = ({
                 {
                   name: "select",
                   helperText: "Select" + getHotkeyHelpText("select_tool"),
-                  alwaysShowing: true,
+                  // alwaysShowing: true,
                   className: "select",
                 },
                 {
@@ -354,7 +354,7 @@ export const MainLayout = ({
                   helperText:
                     "Drag/Pan (right or middle click)" +
                     getHotkeyHelpText("pan_tool"),
-                  alwaysShowing: true,
+                  // alwaysShowing: true,
                   className: "pan",
                 },
 
@@ -362,7 +362,7 @@ export const MainLayout = ({
                   name: "zoom",
                   helperText:
                     "Zoom In/Out (scroll)" + getHotkeyHelpText("zoom_tool"),
-                  alwaysShowing: true,
+                  // alwaysShowing: true,
                   className: "zoom",
                 },
                 {

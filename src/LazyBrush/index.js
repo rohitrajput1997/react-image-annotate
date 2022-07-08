@@ -11,6 +11,10 @@ import drawImage from "./DrwaImage"
 import CheckIcon from "@mui/icons-material/Check"
 import TrashIcon from "@mui/icons-material/Delete"
 import { asMutable } from "seamless-immutable"
+// this.window.lazyX = 0
+// this.window.lazyY = 0
+window.lazyX = 60
+window.lazyY = 45
 
 function midPointBtw(p1, p2) {
   return {
@@ -318,6 +322,7 @@ export default class extends React.PureComponent {
   }
   lastPoint = { x: null, y: null }
   getPointerPos = (e) => {
+    e.preventDefault()
     const rect = this.canvas.interface.getBoundingClientRect()
 
     let yPosition = e.clientY * this.props.yPosition
@@ -331,9 +336,11 @@ export default class extends React.PureComponent {
       clientY = e.changedTouches[0].clientY + yPosition
     }
 
+    // console.log("1", window.event.clientX, window.event.clienty)
+
     return {
-      x: clientX - rect.left,
-      y: clientY - rect.top,
+      x: window.event.clientX - window.lazyX,
+      y: window.event.clientY - window.lazyY,
     }
   }
 
@@ -517,8 +524,6 @@ export default class extends React.PureComponent {
           let style = {
             top: `${top}`,
             left: `${left}`,
-            height: `${height}px`,
-            width: `${width}px`,
             position: "absolute",
             zIndex: zIndex - 7,
           }
@@ -526,8 +531,8 @@ export default class extends React.PureComponent {
           if (id === "myPics") {
             style = {
               ...style,
-              height: `500px`,
-              width: `500px`,
+              height: `500`,
+              width: `500`,
               top: 0,
               left: 0,
             }
@@ -543,10 +548,10 @@ export default class extends React.PureComponent {
                   if (id === "myPics") this.props.setCanvasRef(canvas)
                 }
               }}
-              className={this.props.originalClass}
+              // className={this.props.originalClass}
               style={style}
               id={id}
-              width="500"
+              width="1000"
               height="500"
               onMouseDown={
                 isInterface && brush ? this.handleMouseDown : undefined

@@ -1,17 +1,16 @@
 // @flow
-import type { MainLayoutState, Action } from "../../MainLayout/types"
-import { moveRegion } from "../../ImageCanvas/region-tools.js"
-import { getIn, setIn, updateIn } from "seamless-immutable"
-import moment from "moment"
-import isEqual from "lodash/isEqual"
-import getActiveImage from "./get-active-image"
-import { saveToHistory } from "./history-handler.js"
-import colors from "../../colors"
-import fixTwisted from "./fix-twisted"
-import convertExpandingLineToPolygon from "./convert-expanding-line-to-polygon"
 import clamp from "clamp"
+import isEqual from "lodash/isEqual"
+import { getIn, setIn } from "seamless-immutable"
+import colors from "../../colors"
+import { moveRegion } from "../../ImageCanvas/region-tools.js"
+import type { Action, MainLayoutState } from "../../MainLayout/types"
 import getLandmarksWithTransform from "../../utils/get-landmarks-with-transform"
 import setInLocalStorage from "../../utils/set-in-local-storage"
+import convertExpandingLineToPolygon from "./convert-expanding-line-to-polygon"
+import fixTwisted from "./fix-twisted"
+import getActiveImage from "./get-active-image"
+import { saveToHistory } from "./history-handler.js"
 
 const getRandomId = () => Math.random().toString().split(".")[1]
 
@@ -691,10 +690,10 @@ export default (state: MainLayoutState, action: Action) => {
             }
           }
           if (state.mode.editLabelEditorAfter) {
-            return {
-              ...modifyRegion(state.mode.regionId, { editingLabels: true }),
-              mode: null,
-            }
+            // return {
+            //   ...modifyRegion(state.mode.regionId, { editingLabels: true }),
+            //   mode: null,
+            // }
           }
         }
         case "MOVE_REGION":
