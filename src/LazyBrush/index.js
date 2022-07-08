@@ -520,7 +520,7 @@ export default class extends React.PureComponent {
             height: `${height}px`,
             width: `${width}px`,
             position: "absolute",
-            zIndex: zIndex,
+            zIndex: zIndex - 7,
           }
 
           if (id === "myPics") {
@@ -543,6 +543,7 @@ export default class extends React.PureComponent {
                   if (id === "myPics") this.props.setCanvasRef(canvas)
                 }
               }}
+              className={this.props.originalClass}
               style={style}
               id={id}
               width="500"

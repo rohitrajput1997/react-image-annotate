@@ -51,9 +51,12 @@ class LazyBrushDraw extends React.Component {
           lazyBrushTags={this.props.lazyBrushTags}
           yPosition={this.props.yPosition}
           xPosition={this.props.xPosition}
+          originalClass={this.props.originalClass}
+          canvasEl={this.props.canvasEl}
         />
       </>
     )
   }
 }
 export default LazyBrushDraw
+

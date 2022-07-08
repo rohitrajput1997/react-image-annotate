@@ -483,6 +483,7 @@ export const ImageCanvas = ({
                   canvasClass={classes.canvas}
                   yPosition={yPosition}
                   xPosition={xPosition}
+                  originalClass={classes.canvas}
                 />
               }
               <RegionShapes
@@ -513,3 +514,4 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
+
