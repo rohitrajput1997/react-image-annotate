@@ -612,11 +612,11 @@ export default class extends React.PureComponent {
                       linessave.splice(index, 1)
                       this.lines = linessave
                       this.setState({ ...this.state, lines: linessave })
-                      let lines = this.lines
-                      let newArr = lines.splice(index, 1)
-
                       this.clear()
-                      this.simulateDrawingLines({ lines, immediate: true })
+                      this.simulateDrawingLines({
+                        lines: linessave,
+                        immediate: true,
+                      })
                     }}
                     tabIndex={-1}
                     style={{ width: 22, height: 22 }}

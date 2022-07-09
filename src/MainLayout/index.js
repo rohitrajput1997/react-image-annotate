@@ -319,7 +319,7 @@ export const MainLayout = ({
                 {
                   name: "Save & next",
                   className: "savenext",
-                  iconName: "savenext",
+                  iconName: "submit",
                   disabled: issavenextDisabled,
                 },
                 !hideFullScreen &&
