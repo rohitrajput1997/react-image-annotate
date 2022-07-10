@@ -11,7 +11,7 @@ export default () => {
     enabledTools: ["select", "create-box"],
     images: [
       {
-        src: "https://images.unsplash.com/photo-1496905583330-eb54c7e5915a?ixlib=rb-1.2.1&ixid=eyJhcHBfaWQiOjEyMDd9&auto=format&fit=crop&w=634&q=80",
+        src: "https://www.bianchi.com/wp-content/uploads/2019/07/YPB17I555K.jpg",
         name: "hot-dogs-1",
       },
       {
@@ -29,6 +29,7 @@ export default () => {
         onExit={(e) => console.log(e)}
         enabledTools={[
           "select",
+          "zoom",
           "create-point",
           "create-box",
           "create-polygon",
@@ -40,3 +41,4 @@ export default () => {
     </div>
   )
 }
+
