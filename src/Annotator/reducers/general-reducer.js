@@ -65,21 +65,25 @@ export default (state: MainLayoutState, action: Action) => {
     return [region, regionIndex]
   }
   const modifyRegion = (regionId, obj) => {
-    const [region, regionIndex] = getRegion(regionId)
-    if (!region) return state
-    if (obj !== null) {
-      return setIn(state, [...pathToActiveImage, "regions", regionIndex], {
-        ...region,
-        ...obj,
-      })
-    } else {
-      // delete region
-      const regions = activeImage.regions
-      return setIn(
-        state,
-        [...pathToActiveImage, "regions"],
-        (regions || []).filter((r) => r.id !== region.id)
-      )
+    try {
+      const [region, regionIndex] = getRegion(regionId)
+      if (!region) return state
+      if (obj !== null) {
+        return setIn(state, [...pathToActiveImage, "regions", regionIndex], {
+          ...region,
+          ...obj,
+        })
+      } else {
+        // delete region
+        const regions = activeImage.regions
+        return setIn(
+          state,
+          [...pathToActiveImage, "regions"],
+          (regions || []).filter((r) => r.id !== region.id)
+        )
+      }
+    } catch (err) {
+      console.log(err)
     }
   }
   const unselectRegions = (state: MainLayoutState) => {
@@ -690,10 +694,14 @@ export default (state: MainLayoutState, action: Action) => {
             }
           }
           if (state.mode.editLabelEditorAfter) {
-            // return {
-            //   ...modifyRegion(state.mode.regionId, { editingLabels: true }),
-            //   mode: null,
-            // }
+            try {
+              return {
+                ...modifyRegion(state.mode.regionId, { editingLabels: true }),
+                mode: null,
+              }
+            } catch (err) {
+              console.log(err, "retunr")
+            }
           }
         }
         case "MOVE_REGION":
@@ -911,3 +919,4 @@ export default (state: MainLayoutState, action: Action) => {
   }
   return state
 }
+

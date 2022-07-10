@@ -154,7 +154,7 @@ export const MainLayout = ({
       regions={
         state.annotationType === "image"
           ? activeImage.regions || []
-          : impliedVideoRegions
+          : impliedVideoRegions || []
       }
       realSize={activeImage ? activeImage.realSize : undefined}
       videoPlaying={state.videoPlaying}
@@ -342,6 +342,11 @@ export const MainLayout = ({
                 state.showTags && "show-tags",
                 state.showMask && "show-mask",
               ].filter(Boolean)}
+              selectToolsP={
+                state.showTags
+                  ? ["show-tags", state.selectedTool]
+                  : [state.selectedTool]
+              }
               iconSidebarItems={[
                 {
                   name: "select",
@@ -498,3 +503,4 @@ export const MainLayout = ({
 }
 
 export default MainLayout
+
