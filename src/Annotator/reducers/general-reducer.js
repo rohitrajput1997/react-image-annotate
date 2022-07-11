@@ -694,14 +694,14 @@ export default (state: MainLayoutState, action: Action) => {
             }
           }
           if (state.mode.editLabelEditorAfter) {
-            try {
-              return {
-                ...modifyRegion(state.mode.regionId, { editingLabels: true }),
-                mode: null,
-              }
-            } catch (err) {
-              console.log(err, "retunr")
-            }
+            // try {
+            //   return {
+            //     ...modifyRegion(state.mode.regionId, { editingLabels: true }),
+            //     mode: null,
+            //   }
+            // } catch (err) {
+            //   console.log(err, "retunr")
+            // }
           }
         }
         case "MOVE_REGION":

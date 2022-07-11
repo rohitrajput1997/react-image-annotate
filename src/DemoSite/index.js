@@ -29,14 +29,13 @@ export default () => {
         onExit={(e) => console.log(e)}
         enabledTools={[
           "select",
-          "zoom",
+          // "zoom",
+          // "pan",
           "create-point",
           "create-box",
           "create-polygon",
           "show-mask",
         ]}
-        xPosition={0.25}
-        yPosition={2.0}
       />
     </div>
   )

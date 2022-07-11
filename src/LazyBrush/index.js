@@ -614,8 +614,8 @@ export default class extends React.PureComponent {
             style={{
               position: "absolute",
               zIndex: 14,
-              top: item.points[item.points.length - 1].y / 1.2,
-              left: item.points[item.points.length - 1].x / 2.8,
+              top: item.points[item.points.length - 1].y,
+              left: item.points[item.points.length - 1].x,
               cursor: "pointer",
             }}
           >
