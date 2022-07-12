@@ -1,6 +1,6 @@
 {
   "name": "react-image-annotate_ns_demo",
-  "version": "4.0.12",
+  "version": "4.0.14",
   "dependencies": {
     "@emotion/react": "^11.7.0",
     "@emotion/styled": "^11.6.0",
@@ -14,7 +14,6 @@
     "catenary-curve": "^1.0.1",
     "clamp": "^1.0.1",
     "color-alpha": "^1.0.4",
-    "get-image-data": "^3.0.1",
     "lazy-brush": "^1.0.1",
     "material-survey": "^2.1.0",
     "moment": "^2.23.0",

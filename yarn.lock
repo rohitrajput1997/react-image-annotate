@@ -7231,18 +7231,6 @@
   "resolved" "https://registry.npmjs.org/get-caller-file/-/get-caller-file-2.0.5.tgz"
   "version" "2.0.5"
 
-"get-image-data@^3.0.1":
-  "integrity" "sha1-teaULJDDH7uLk7IsBkL77SMbfPI="
-  "resolved" "https://registry.npmjs.org/get-image-data/-/get-image-data-3.0.1.tgz"
-  "version" "3.0.1"
-  dependencies:
-    "get-image" "~2.0.0"
-
-"get-image@~2.0.0":
-  "integrity" "sha1-0apR2tkDl3zTmzJdYtmVtM2zZbA="
-  "resolved" "https://registry.npmjs.org/get-image/-/get-image-2.0.0.tgz"
-  "version" "2.0.0"
-
 "get-intrinsic@^1.0.2", "get-intrinsic@^1.1.0", "get-intrinsic@^1.1.1":
   "integrity" "sha512-kWZrnVM42QCiEA2Ig1bG8zjoIMOgxWwYCEeNdwY6Tv/cOSeGpcoX4pXHfKUxNKVoArnrEr2e9srnAxxGIraS9Q=="
   "resolved" "https://registry.npmjs.org/get-intrinsic/-/get-intrinsic-1.1.1.tgz"

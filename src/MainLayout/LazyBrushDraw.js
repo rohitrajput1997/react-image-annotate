@@ -5,7 +5,7 @@ class LazyBrushDraw extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      color: "#ffc600",
+      color: "rgba(255, 195, 0,0.40)",
       brushRadius: 5,
       lazyRadius: 0,
     }
@@ -53,10 +53,10 @@ class LazyBrushDraw extends React.Component {
           xPosition={this.props.xPosition}
           originalClass={this.props.originalClass}
           canvasEl={this.props.canvasEl}
+          showTags={this.props.showTags}
         />
       </>
     )
   }
 }
 export default LazyBrushDraw
-

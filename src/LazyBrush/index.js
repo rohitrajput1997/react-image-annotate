@@ -11,6 +11,7 @@ import drawImage from "./DrwaImage"
 import CheckIcon from "@mui/icons-material/Check"
 import TrashIcon from "@mui/icons-material/Delete"
 import { asMutable } from "seamless-immutable"
+import colors from "../colors"
 // this.window.lazyX = 0
 // this.window.lazyY = 0
 window.lazyX = 60
@@ -66,13 +67,14 @@ export default class extends React.PureComponent {
     imgSrc: PropTypes.string,
     saveData: PropTypes.string,
     immediateLoading: PropTypes.bool,
+    showTags: PropTypes.bool,
   }
 
   static defaultProps = {
     loadTimeOffset: 5,
     lazyRadius: 12,
     brushRadius: 10,
-    brushColor: "#444",
+    brushColor: "rgba(255,0,0,0.25)",
     catenaryColor: "#0a0302",
     gridColor: "rgba(150,150,150,0.17)",
     backgroundColor: "#FFF",
@@ -139,8 +141,9 @@ export default class extends React.PureComponent {
       )
       this.mouseHasMoved = true
       this.valuesChanged = true
-      this.clear()
+      // this.clear()
 
+      // Load saveData from prop if it exists
       if (this.props.saveData) {
         this.loadSaveData(this.props.saveData)
       }
@@ -185,13 +188,8 @@ export default class extends React.PureComponent {
     this.image.onload = () => drawImage({ ctx: this.ctx.grid, img: this.image })
   }
 
-  undo = () => {
-    const lines = this.lines.slice(0, -1)
-    this.clear()
-    this.simulateDrawingLines({ lines, immediate: true })
-  }
-
   getSaveData = () => {
+    console.log(this.points)
     return JSON.stringify({
       lines: this.lines,
       width: this.state.canvasWidth,
@@ -219,6 +217,7 @@ export default class extends React.PureComponent {
         immediate,
       })
     } else {
+      // we need to rescale the lines based on saved & current dimensions
       const scaleX = this.state.canvasWidth / width
       const scaleY = this.state.canvasHeight / height
       const scaleAvg = (scaleX + scaleY) / 2
@@ -242,10 +241,8 @@ export default class extends React.PureComponent {
     // TODO use a generator
     let curTime = 0
     let timeoutGap = immediate ? 0 : this.props.loadTimeOffset
-
     lines.forEach((line) => {
       const { points, brushColor, brushRadius, popUp } = line
-
       for (let i = 1; i < points.length; i++) {
         curTime += timeoutGap
         window.setTimeout(() => {
@@ -257,7 +254,6 @@ export default class extends React.PureComponent {
           })
         }, curTime)
       }
-
       curTime += timeoutGap
       window.setTimeout(() => {
         // Save this line with its props instead of this.props
@@ -302,7 +298,13 @@ export default class extends React.PureComponent {
     e.preventDefault()
     this.isDrawing = false
     this.isPressing = false
-
+    if (this.points.length < 2) return
+    this.lines.push({
+      points: [...this.points],
+      brushColor: this.props.brushColor,
+      brushRadius: this.props.brushRadius,
+      popUp: { ...this.popUp },
+    })
     this.saveLine()
   }
 
@@ -431,14 +433,15 @@ export default class extends React.PureComponent {
   }
 
   saveLine = ({ brushColor, brushRadius } = {}) => {
+    // console.log(this.points)
     if (this.points.length < 2) return
 
-    this.lines.push({
-      points: [...this.points],
-      brushColor: brushColor || this.props.brushColor,
-      brushRadius: brushRadius || this.props.brushRadius,
-      popUp: { ...this.popUp },
-    })
+    // this.lines.push({
+    //   points: [...this.points],
+    //   brushColor: brushColor || this.props.brushColor,
+    //   brushRadius: brushRadius || this.props.brushRadius,
+    //   popUp: { ...this.popUp },
+    // })
 
     this.points.length = 0
 
@@ -609,154 +612,189 @@ export default class extends React.PureComponent {
           )
         })}
 
-        {this.lines?.map((item, index) => (
-          <Paper
-            style={{
-              position: "absolute",
-              zIndex: 14,
-              top: item.points[item.points.length - 1].y,
-              left: item.points[item.points.length - 1].x,
-              cursor: "pointer",
-            }}
-          >
-            {item.popUp.open ? (
-              <div style={{ width: 200, padding: 10 }}>
-                <div style={{ display: "flex", flexDirection: "row" }}>
-                  <div
-                    style={{
-                      display: "flex",
-                      backgroundColor: "red",
-                      color: "#fff",
-                      padding: 4,
-                      paddingLeft: 8,
-                      paddingRight: 8,
-                      borderRadius: 4,
-                      fontWeight: "bold",
-                      textShadow: "0px 0px 5px rgba(0,0,0,0.4)",
-                    }}
-                  >
-                    Brush
-                  </div>
-                  <div style={{ flexGrow: 1 }} />
-                  <IconButton
-                    onClick={(e) => {
-                      let linessave = [...this.lines]
-                      linessave.splice(index, 1)
-                      this.lines = linessave
-                      this.setState({ ...this.state, lines: linessave })
-                      this.clear()
-                      this.simulateDrawingLines({
-                        lines: linessave,
-                        immediate: true,
-                      })
-                    }}
-                    tabIndex={-1}
-                    style={{ width: 22, height: 22 }}
-                    size="small"
-                    variant="outlined"
-                  >
-                    <TrashIcon
-                      style={{ marginTop: -8, width: 16, height: 16 }}
-                    />
-                  </IconButton>
-                </div>
-                <div style={{ marginTop: 6 }}>
-                  <CreatableSelect
-                    placeholder="Classification"
-                    onChange={(o, actionMeta) => {
-                      let linessave = [...this.lines]
-                      this.lines[index].popUp.classification = o
-                      this.setState({ ...this.state, lines: linessave })
-                    }}
-                    value={this.lines[index].popUp.classification}
-                    options={asMutable(
-                      this.props.lazyBrushClassification.map((c) => ({
-                        value: c,
-                        label: c,
-                      }))
-                    )}
-                  />
-                </div>
-                <div style={{ marginTop: 4 }}>
-                  <CreatableSelect
-                    value={this.lines[index].popUp.tags}
-                    placeholder="Tags"
-                    onChange={(o, actionMeta) => {
-                      let linessave = [...this.lines]
-                      this.lines[index].popUp.tags = o
-                      this.setState({ ...this.state, lines: linessave })
-                    }}
-                    isMulti
-                    options={asMutable(
-                      this.props.lazyBrushTags.map((c) => ({
-                        value: c,
-                        label: c,
-                      }))
-                    )}
-                  />
-                </div>
-
-                <div style={{ marginTop: 4, display: "flex" }}>
-                  <div style={{ flexGrow: 1 }} />
-                  <Button
-                    onClick={() => {
-                      let linessave = [...this.lines]
-                      this.lines[index].popUp.open = false
-                      this.setState({ ...this.state, lines: linessave })
-                    }}
-                    size="small"
-                    variant="contained"
-                    color="primary"
-                  >
-                    <CheckIcon />
-                  </Button>
-                </div>
-              </div>
-            ) : (
-              <div
-                style={{ padding: 8 }}
-                onClick={() => {
-                  let linessave = [...this.lines]
-                  this.lines[index].popUp.open = true
-                  let i = 0
-                  for (i = 0; i < this.lines?.length; i++) {
-                    if (i !== index) {
-                      this.lines[i].popUp.open = false
-                    }
-                  }
-                  this.setState({ ...this.state, lines: linessave })
+        {this.props.showTags &&
+          this.lines?.map((item, index) => (
+            <div
+              style={{
+                top: `${top}`,
+                left: `${left}`,
+                position: "absolute",
+              }}
+            >
+              <Paper
+                style={{
+                  position: "absolute",
+                  zIndex: 14,
+                  top: item.points[item.points.length - 1].y,
+                  left: item.points[item.points.length - 1].x,
+                  cursor: "pointer",
                 }}
               >
-                {item?.popUp?.classification && (
-                  <div className="name">
-                    <div
-                      className="circle"
-                      // style={{ backgroundColor: region.color }}
-                    />
-                    {item?.popUp?.classification.label}
-                  </div>
-                )}
-
-                {item?.popUp.tags && (
-                  <div className="tags">
-                    {item?.popUp.tags?.map((t) => (
+                {item.popUp.open ? (
+                  <div style={{ width: 200, padding: 10 }}>
+                    <div style={{ display: "flex", flexDirection: "row" }}>
                       <div
-                        key={t.label}
-                        className="tag"
-                        style={{ fontSize: "12px" }}
+                        style={{
+                          display: "flex",
+                          backgroundColor:
+                            colors[
+                              this.props.lazyBrushClassification?.findIndex(
+                                (dropdown) =>
+                                  dropdown ===
+                                  item?.popUp?.classification?.label
+                              ) || 0 % colors.length
+                            ] || "red",
+                          color: "#fff",
+                          padding: 4,
+                          paddingLeft: 8,
+                          paddingRight: 8,
+                          borderRadius: 4,
+                          fontWeight: "bold",
+                          textShadow: "0px 0px 5px rgba(0,0,0,0.4)",
+                        }}
                       >
-                        <u>
-                          {" "}
-                          <b>{t.label}</b>
-                        </u>
+                        Brush
                       </div>
-                    ))}
+                      <div style={{ flexGrow: 1 }} />
+                      <IconButton
+                        onClick={(e) => {
+                          let linessave = [...this.lines]
+                          linessave.splice(index, 1)
+                          this.lines = linessave
+                          this.setState({ ...this.state, lines: linessave })
+                          this.clear()
+                          this.simulateDrawingLines({
+                            lines: linessave,
+                            immediate: true,
+                          })
+                        }}
+                        tabIndex={-1}
+                        style={{ width: 22, height: 22 }}
+                        size="small"
+                        variant="outlined"
+                      >
+                        <TrashIcon
+                          style={{ marginTop: -8, width: 16, height: 16 }}
+                        />
+                      </IconButton>
+                    </div>
+                    <div style={{ marginTop: 6 }}>
+                      <CreatableSelect
+                        placeholder="Classification"
+                        onChange={(o, actionMeta) => {
+                          let linessave = [...this.lines]
+                          this.lines[index].popUp.classification = o
+                          this.setState({ ...this.state, lines: linessave })
+                        }}
+                        value={this.lines[index].popUp.classification}
+                        options={asMutable(
+                          this.props.lazyBrushClassification.map((c) => ({
+                            value: c,
+                            label: c,
+                          }))
+                        )}
+                      />
+                    </div>
+                    <div style={{ marginTop: 4 }}>
+                      <CreatableSelect
+                        value={this.lines[index].popUp.tags}
+                        placeholder="Tags"
+                        onChange={(o, actionMeta) => {
+                          let linessave = [...this.lines]
+                          this.lines[index].popUp.tags = o
+                          this.setState({ ...this.state, lines: linessave })
+                        }}
+                        isMulti
+                        options={asMutable(
+                          this.props.lazyBrushTags.map((c) => ({
+                            value: c,
+                            label: c,
+                          }))
+                        )}
+                      />
+                    </div>
+
+                    <div style={{ marginTop: 4, display: "flex" }}>
+                      <div style={{ flexGrow: 1 }} />
+                      <Button
+                        onClick={() => {
+                          let linessave = [...this.lines]
+                          this.lines[index].popUp.open = false
+                          this.setState({ ...this.state, lines: linessave })
+                        }}
+                        size="small"
+                        variant="contained"
+                        color="primary"
+                      >
+                        <CheckIcon />
+                      </Button>
+                    </div>
+                  </div>
+                ) : (
+                  <div
+                    style={{ padding: 8 }}
+                    onClick={() => {
+                      let linessave = [...this.lines]
+                      this.lines[index].popUp.open = true
+                      let i = 0
+                      for (i = 0; i < this.lines?.length; i++) {
+                        if (i !== index) {
+                          this.lines[i].popUp.open = false
+                        }
+                      }
+                      this.setState({ ...this.state, lines: linessave })
+                    }}
+                  >
+                    {item?.popUp?.classification && (
+                      <div
+                        className="name"
+                        style={{
+                          display: "flex",
+                          justifyContent: "space-between",
+                          alignItems: "center",
+                        }}
+                      >
+                        <div
+                          style={{
+                            backgroundColor:
+                              colors[
+                                this.props.lazyBrushClassification?.findIndex(
+                                  (dropdown) =>
+                                    dropdown ===
+                                    item?.popUp?.classification.label
+                                ) % colors.length
+                              ],
+                            width: 12,
+                            height: 12,
+                            borderRadius: 12,
+                            marginRight: 8,
+                          }}
+                        />
+                        <span>{item?.popUp?.classification.label}</span>
+                      </div>
+                    )}
+
+                    <div>
+                      {item?.popUp?.tags?.map((t) => (
+                        <div
+                          key={t.label}
+                          style={{
+                            color: "gray",
+                            display: "inline-block",
+                            margin: 1,
+                            fontSize: 10,
+                            textDecoration: "underline",
+                          }}
+                        >
+                          {t.label}
+                        </div>
+                      ))}
+                    </div>
                   </div>
                 )}
-              </div>
-            )}
-          </Paper>
-        ))}
+              </Paper>
+            </div>
+          ))}
       </div>
     )
   }

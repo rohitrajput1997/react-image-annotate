@@ -6,8 +6,67 @@ export default () => {
   const [annotatorProps, changeAnnotatorProps] = React.useState({
     taskDescription:
       "Annotate each image according to this _markdown_ specification.",
-    regionTagList: ["has-bun"],
-    regionClsList: ["hotdog", "not-hotdog"],
+    regionTagList: [
+      "has-bun",
+      "hotdog",
+      "not-hotdog",
+      "box",
+      "not",
+      "data",
+      "specification",
+      "_markdown_",
+      "hotdog",
+      "not-hotdog",
+      "box",
+      "not",
+      "data",
+      "specification",
+      "_markdown_",
+      "hotdog",
+      "not-hotdog",
+      "box",
+      "not",
+      "data",
+      "specification",
+      "_markdown_",
+      "hotdog",
+      "not-hotdog",
+      "box",
+      "not",
+
+      "specification",
+      "_markdown_",
+    ],
+    regionClsList: [
+      "hotdog",
+      "not-hotdog",
+      "box",
+      "not",
+      "data",
+      "specification",
+      "_markdown_",
+      "hotdog",
+      "not-hotdog",
+      "box",
+      "not",
+      "data",
+      "specification",
+      "_markdown_",
+      "hotdog",
+      "not-hotdog",
+      "box",
+      "not",
+      "data",
+      "specification",
+      "_markdown_",
+      "hotdog",
+      "not-hotdog",
+      "box",
+      "not",
+
+      "specification",
+      "_markdown_",
+    ],
     enabledTools: ["select", "create-box"],
     images: [
       {
@@ -29,8 +88,8 @@ export default () => {
         onExit={(e) => console.log(e)}
         enabledTools={[
           "select",
-          // "zoom",
-          // "pan",
+          "zoom",
+          "pan",
           "create-point",
           "create-box",
           "create-polygon",
@@ -40,3 +99,4 @@ export default () => {
     </div>
   )
 }
+
