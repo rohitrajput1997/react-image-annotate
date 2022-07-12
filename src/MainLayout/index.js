@@ -5,7 +5,7 @@ import { makeStyles } from "@mui/styles"
 import classnames from "classnames"
 import Workspace from "ns_workflow_workspace/Workspace"
 import type { Node } from "react"
-import React, { useCallback, useRef } from "react"
+import React, { useCallback, useRef, useState } from "react"
 import { FullScreen, useFullScreenHandle } from "react-full-screen"
 import { withHotKeys } from "react-hotkeys"
 import useEventCallback from "use-event-callback"
@@ -17,6 +17,7 @@ import HistorySidebarBox from "../HistorySidebarBox"
 import ImageCanvas from "../ImageCanvas"
 import KeyframesSelector from "../KeyframesSelectorSidebarBox"
 import KeyframeTimeline from "../KeyframeTimeline"
+import BrushDialog from "../LazyBrush/BrushDialog"
 import RegionSelector from "../RegionSelectorSidebarBox"
 import SettingsDialog from "../SettingsDialog"
 import { useSettings } from "../SettingsProvider"
@@ -88,6 +89,8 @@ export const MainLayout = ({
   const classes = useStyles()
   const settings = useSettings()
   const fullScreenHandle = useFullScreenHandle()
+  const [openBrush, setBrushOpen] = useState(false)
+  const [brushRadius, setbrushRadius] = useState(5)
 
   const memoizedActionFns = React.useRef({})
   const action = (type: string, ...params: Array<string>) => {
@@ -210,6 +213,7 @@ export const MainLayout = ({
       lazyBrushTags={lazyBrushTags}
       yPosition={yPosition}
       xPosition={xPosition}
+      brushRadius={brushRadius}
     />
   )
 
@@ -222,7 +226,10 @@ export const MainLayout = ({
       fullScreenHandle.enter()
     } else if (item.name === "Window") {
       fullScreenHandle.exit()
+    } else if (item.name === "Brush Radius") {
+      setBrushOpen(true)
     }
+
     dispatch({ type: "HEADER_BUTTON_CLICKED", buttonName: item.name })
   })
 
@@ -303,11 +310,22 @@ export const MainLayout = ({
                   className: "settings",
                   iconName: "Settings",
                 },
+                state.selectedTool === "create-a-brush" && {
+                  name: "Brush Radius",
+                  className: "brushRadius",
+                  iconName: "brush radius",
+                },
                 {
                   name: "Add Query",
                   className: "query",
-                  iconName: "query",
+                  iconName: "add query",
                   disabled: isaddQueryDisabled,
+                },
+                {
+                  name: "Save & next",
+                  className: "savenext",
+                  iconName: "save & next",
+                  disabled: issavenextDisabled,
                 },
                 !hideSave && {
                   name: "Submit",
@@ -316,12 +334,6 @@ export const MainLayout = ({
                   disabled: isSubmitDisabled,
                 },
 
-                {
-                  name: "Save & next",
-                  className: "savenext",
-                  iconName: "submit",
-                  disabled: issavenextDisabled,
-                },
                 !hideFullScreen &&
                   (state.fullScreen
                     ? {
@@ -486,6 +498,14 @@ export const MainLayout = ({
             >
               {canvas}
             </Workspace>
+            <BrushDialog
+              open={openBrush}
+              onClose={() => {
+                setBrushOpen(false)
+              }}
+              brushRadius={brushRadius}
+              setbrushRadius={setbrushRadius}
+            />
             <SettingsDialog
               open={state.settingsOpen}
               onClose={() =>

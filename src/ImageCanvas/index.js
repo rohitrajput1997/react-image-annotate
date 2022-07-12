@@ -142,6 +142,7 @@ export const ImageCanvas = ({
   lazyBrushTags,
   yPosition,
   xPosition,
+  brushRadius,
 }: Props) => {
   const classes = useStyles()
 
@@ -485,6 +486,7 @@ export const ImageCanvas = ({
                   xPosition={xPosition}
                   originalClass={classes.canvas}
                   showTags={showTags}
+                  brushRadius={brushRadius}
                 />
               }
               <RegionShapes

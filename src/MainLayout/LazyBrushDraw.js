@@ -5,8 +5,8 @@ class LazyBrushDraw extends React.Component {
   constructor(props) {
     super(props)
     this.state = {
-      color: "rgba(255, 195, 0,0.40)",
-      brushRadius: 5,
+      color: "rgba(255,195,0,0.40)",
+      brushRadius: this.props.brushRadius,
       lazyRadius: 0,
     }
     this.intervalCode = 0
@@ -43,7 +43,7 @@ class LazyBrushDraw extends React.Component {
           setCanvasRef={this.props.setCanvasRef}
           brushColor={this.state.color}
           hideGrid
-          brushRadius={this.state.brushRadius}
+          brushRadius={this.props.brushRadius || 5}
           lazyRadius={this.state.lazyRadius}
           selectedTool={this.props.selectedTool}
           lazyBrush={this.props.lazyBrush}

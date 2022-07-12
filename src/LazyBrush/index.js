@@ -141,7 +141,7 @@ export default class extends React.PureComponent {
       )
       this.mouseHasMoved = true
       this.valuesChanged = true
-      // this.clear()
+      this.clear()
 
       // Load saveData from prop if it exists
       if (this.props.saveData) {
@@ -229,6 +229,8 @@ export default class extends React.PureComponent {
             x: p.x * scaleX,
             y: p.y * scaleY,
           })),
+
+          unique_id: lines?.length,
           brushRadius: line.brushRadius * scaleAvg,
         })),
         immediate,
@@ -248,6 +250,7 @@ export default class extends React.PureComponent {
         window.setTimeout(() => {
           this.drawPoints({
             points: points.slice(0, i + 1),
+            unique_id: lines?.length,
             brushColor,
             brushRadius,
             popUp,
@@ -298,13 +301,13 @@ export default class extends React.PureComponent {
     e.preventDefault()
     this.isDrawing = false
     this.isPressing = false
-    if (this.points.length < 2) return
-    this.lines.push({
-      points: [...this.points],
-      brushColor: this.props.brushColor,
-      brushRadius: this.props.brushRadius,
-      popUp: { ...this.popUp },
-    })
+    // if (this.points.length < 2) return
+    // this.lines.push({
+    //   points: [...this.points],
+    //   brushColor: this.props.brushColor,
+    //   brushRadius: this.props.brushRadius,
+    //   popUp: { ...this.popUp },
+    // })
     this.saveLine()
   }
 
@@ -390,6 +393,7 @@ export default class extends React.PureComponent {
       // Draw current points
       this.drawPoints({
         points: this.points,
+        unique_id: this.lines?.length,
         brushColor: this.props.brushColor,
         brushRadius: this.props.brushRadius,
       })
@@ -436,12 +440,13 @@ export default class extends React.PureComponent {
     // console.log(this.points)
     if (this.points.length < 2) return
 
-    // this.lines.push({
-    //   points: [...this.points],
-    //   brushColor: brushColor || this.props.brushColor,
-    //   brushRadius: brushRadius || this.props.brushRadius,
-    //   popUp: { ...this.popUp },
-    // })
+    this.lines.push({
+      points: [...this.points],
+      brushColor: brushColor || this.props.brushColor,
+      brushRadius: brushRadius || this.props.brushRadius,
+      unique_id: this.lines?.length,
+      popUp: { ...this.popUp },
+    })
 
     this.points.length = 0
 
