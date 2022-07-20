@@ -44,7 +44,7 @@ export default function VerticalSlider({ brushRadius, setbrushRadius }) {
           width: "20px",
           minHeight: "20px",
           height: "20px",
-          marginLeft: "4px",
+          marginTop: "1px",
           background: "rgb(0, 95, 134)",
         }}
         size="small"

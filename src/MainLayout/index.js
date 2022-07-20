@@ -496,14 +496,30 @@ export const MainLayout = ({
                 />,
               ].filter(Boolean)}
             >
-              <div style={{ display: "flex" }}>
+              <div
+                style={{
+                  display: "flex",
+
+                  justifyContent: "center",
+
+                  alignItems: "center",
+                }}
+              >
                 {state.selectedTool === "create-a-brush" && (
                   <div
                     style={{
-                      marginTop: "100px",
-                      marginLeft: "1px",
-                      padding: 2,
-                      marginBottom: "100px",
+                      maxHeight: "300px",
+                      display: "flex",
+                      flexDirection: "column",
+                      justifyContent: "center",
+
+                      alignItems: "center",
+
+                      height: "300px",
+                      padding: "8px 4px",
+                      backgroundColor: "white",
+                      boxShadow: "5px 5px 10px rgb(0 0 0 / 10%)",
+                      margin: "0px 8px",
                     }}
                   >
                     <VerticalSlider
@@ -540,3 +556,4 @@ export const MainLayout = ({
 }
 
 export default MainLayout
+
