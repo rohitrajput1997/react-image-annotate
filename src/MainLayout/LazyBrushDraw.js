@@ -41,10 +41,22 @@ class LazyBrushDraw extends React.Component {
       <>
         <CanvasDraw
           setCanvasRef={this.props.setCanvasRef}
-          brushColor={this.state.color}
+          brushColor={
+            this.props.selectedTool === "create-a-brush"
+              ? this.state.color
+              : "transparent"
+          }
           hideGrid
-          brushRadius={this.props.brushRadius || 5}
-          lazyRadius={this.state.lazyRadius}
+          brushRadius={
+            this.props.selectedTool === "create-a-brush"
+              ? this.props.brushRadius || 5
+              : ""
+          }
+          lazyRadius={
+            this.props.selectedTool === "create-a-brush"
+              ? this.state.lazyRadius
+              : ""
+          }
           selectedTool={this.props.selectedTool}
           lazyBrush={this.props.lazyBrush}
           lazyBrushClassification={this.props.lazyBrushClassification}
@@ -54,6 +66,7 @@ class LazyBrushDraw extends React.Component {
           originalClass={this.props.originalClass}
           canvasEl={this.props.canvasEl}
           showTags={this.props.showTags}
+          disabled={this.props.selectedTool !== "create-a-brush"}
         />
       </>
     )

@@ -3,3 +3,9 @@ body {
   padding: 0;
   margin: 0;
 }
+.MuiSlider-root{
+  color: #005f86 !important;
+}
+.MuiSlider-track{
+box-shadow: 4px 0px 7px 0px #005f86 !important;
+}

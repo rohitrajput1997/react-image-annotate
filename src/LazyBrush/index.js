@@ -119,10 +119,15 @@ export default class extends React.PureComponent {
       },
     })
     this.chainLength = this.props.lazyRadius * window.devicePixelRatio
+    var executed = false
 
-    this.canvasObserver = new ResizeObserver((entries, observer) =>
-      this.handleCanvasResize(entries, observer)
-    )
+    this.canvasObserver = new ResizeObserver((entries, observer) => {
+      if (!executed) {
+        executed = true
+
+        return this.handleCanvasResize(entries, observer)
+      }
+    })
     this.canvasObserver.observe(this.canvasContainer)
 
     this.drawImage()
@@ -148,20 +153,11 @@ export default class extends React.PureComponent {
         this.loadSaveData(this.props.saveData)
       }
     }, 100)
-    const imageElement = document.querySelector(
-      "#main-container-lazy-brush > svg"
-    )
-    const width = imageElement && imageElement.getBoundingClientRect().width
-    const height = imageElement && imageElement.getBoundingClientRect().height
-
-    this.setState({
-      canvasWidth: width,
-      canvasHeight: height,
-    })
   }
 
   componentDidUpdate(prevProps) {
     if (prevProps.lazyRadius !== this.props.lazyRadius) {
+      // Set new lazyRadius values
       this.chainLength = this.props.lazyRadius * window.devicePixelRatio
       this.lazy.setRadius(this.props.lazyRadius * window.devicePixelRatio)
     }
@@ -171,6 +167,7 @@ export default class extends React.PureComponent {
     }
 
     if (JSON.stringify(prevProps) !== JSON.stringify(this.props)) {
+      // Signal this.loop function that values changed
       this.valuesChanged = true
     }
   }
@@ -182,18 +179,20 @@ export default class extends React.PureComponent {
   drawImage = () => {
     if (!this.props.imgSrc) return
 
+    // Load the image
     this.image = new Image()
     this.image.src = this.props.imgSrc
 
+    // Draw the image once loaded
     this.image.onload = () => drawImage({ ctx: this.ctx.grid, img: this.image })
   }
 
   getSaveData = () => {
-    console.log(this.points)
+    // Construct and return the stringified saveData object
     return JSON.stringify({
       lines: this.lines,
-      width: this.state.canvasWidth,
-      height: this.state.canvasHeight,
+      width: this.props.canvasWidth,
+      height: this.props.canvasHeight,
     })
   }
 
@@ -209,8 +208,8 @@ export default class extends React.PureComponent {
     }
 
     if (
-      width === this.state.canvasWidth &&
-      height === this.state.canvasHeight
+      width === this.props.canvasWidth &&
+      height === this.props.canvasHeight
     ) {
       this.simulateDrawingLines({
         lines,
@@ -218,8 +217,8 @@ export default class extends React.PureComponent {
       })
     } else {
       // we need to rescale the lines based on saved & current dimensions
-      const scaleX = this.state.canvasWidth / width
-      const scaleY = this.state.canvasHeight / height
+      const scaleX = this.props.canvasWidth / width
+      const scaleY = this.props.canvasHeight / height
       const scaleAvg = (scaleX + scaleY) / 2
 
       this.simulateDrawingLines({
@@ -229,8 +228,6 @@ export default class extends React.PureComponent {
             x: p.x * scaleX,
             y: p.y * scaleY,
           })),
-
-          unique_id: lines?.length,
           brushRadius: line.brushRadius * scaleAvg,
         })),
         immediate,
@@ -241,22 +238,25 @@ export default class extends React.PureComponent {
   simulateDrawingLines = ({ lines, immediate }) => {
     // Simulate live-drawing of the loaded lines
     // TODO use a generator
+
     let curTime = 0
     let timeoutGap = immediate ? 0 : this.props.loadTimeOffset
+
     lines.forEach((line) => {
       const { points, brushColor, brushRadius, popUp } = line
+
       for (let i = 1; i < points.length; i++) {
         curTime += timeoutGap
         window.setTimeout(() => {
           this.drawPoints({
             points: points.slice(0, i + 1),
-            unique_id: lines?.length,
             brushColor,
             brushRadius,
             popUp,
           })
         }, curTime)
       }
+
       curTime += timeoutGap
       window.setTimeout(() => {
         // Save this line with its props instead of this.props
@@ -289,6 +289,7 @@ export default class extends React.PureComponent {
   }
 
   handleMouseDown = (e) => {
+    e.preventDefault()
     this.isPressing = true
   }
 
@@ -301,13 +302,7 @@ export default class extends React.PureComponent {
     e.preventDefault()
     this.isDrawing = false
     this.isPressing = false
-    // if (this.points.length < 2) return
-    // this.lines.push({
-    //   points: [...this.points],
-    //   brushColor: this.props.brushColor,
-    //   brushRadius: this.props.brushRadius,
-    //   popUp: { ...this.popUp },
-    // })
+
     this.saveLine()
   }
 
@@ -320,6 +315,7 @@ export default class extends React.PureComponent {
       this.setCanvasSize(this.canvas.temp, width, height)
       this.loop({ once: true })
     }
+
     this.loadSaveData(saveData, true)
   }
 
@@ -329,29 +325,8 @@ export default class extends React.PureComponent {
     canvas.style.width = width
     canvas.style.height = height
   }
-  lastPoint = { x: null, y: null }
+
   getPointerPos = (e) => {
-    // e.preventDefault()
-    // const rect = this.canvas.interface.getBoundingClientRect()
-
-    // let yPosition = e.clientY * this.props.yPosition
-    // let xPosition = e.clientX * this.props.xPosition
-
-    // let clientX = e.clientX + xPosition
-    // let clientY = e.clientY + yPosition
-
-    // if (e.changedTouches && e.changedTouches.length > 0) {
-    //   clientX = e.changedTouches[0].clientX + xPosition
-    //   clientY = e.changedTouches[0].clientY + yPosition
-    // }
-
-    // // console.log("1", window.event.clientX, window.event.clienty)
-
-    // return {
-    //   x: window.event.clientX - window.lazyX,
-    //   y: window.event.clientY - window.lazyY,
-    // }
-
     const rect = this.canvas.interface.getBoundingClientRect()
 
     // use cursor pos as default
@@ -393,7 +368,6 @@ export default class extends React.PureComponent {
       // Draw current points
       this.drawPoints({
         points: this.points,
-        unique_id: this.lines?.length,
         brushColor: this.props.brushColor,
         brushRadius: this.props.brushRadius,
       })
@@ -437,24 +411,26 @@ export default class extends React.PureComponent {
   }
 
   saveLine = ({ brushColor, brushRadius } = {}) => {
-    // console.log(this.points)
     if (this.points.length < 2) return
 
+    // Save as new line
     this.lines.push({
       points: [...this.points],
       brushColor: brushColor || this.props.brushColor,
       brushRadius: brushRadius || this.props.brushRadius,
-      unique_id: this.lines?.length,
       popUp: { ...this.popUp },
     })
 
+    // Reset points array
     this.points.length = 0
 
     const width = this.canvas.temp.width
     const height = this.canvas.temp.height
 
+    // Copy the line to the drawing canvas
     this.ctx.drawing.drawImage(this.canvas.temp, 0, 0, width, height)
 
+    // Clear the temporary line-drawing canvas
     this.ctx.temp.clearRect(0, 0, width, height)
   }
 
@@ -503,17 +479,24 @@ export default class extends React.PureComponent {
 
     // Draw mouse point (the one directly at the cursor)
     ctx.beginPath()
-    ctx.fillStyle = this.props.catenaryColor
+    ctx.fillStyle =
+      this.props.selectedTool === "create-a-brush"
+        ? this.props.catenaryColor
+        : ""
     ctx.arc(pointer.x, pointer.y, 4, 0, Math.PI * 2, true)
     ctx.fill()
 
     // Draw catenary
+
     if (this.lazy.isEnabled()) {
       ctx.beginPath()
       ctx.lineWidth = 2
       ctx.lineCap = "round"
       ctx.setLineDash([2, 4])
-      ctx.strokeStyle = this.props.catenaryColor
+      ctx.strokeStyle =
+        this.props.selectedTool === "create-a-brush"
+          ? this.props.catenaryColor
+          : ""
       this.catenary.drawToCanvas(
         this.ctx.interface,
         brush,
@@ -525,7 +508,10 @@ export default class extends React.PureComponent {
 
     // Draw brush point (the one in the middle of the brush preview)
     ctx.beginPath()
-    ctx.fillStyle = this.props.catenaryColor
+    ctx.fillStyle =
+      this.props.selectedTool === "create-a-brush"
+        ? this.props.catenaryColor
+        : ""
     ctx.arc(brush.x, brush.y, 2, 0, Math.PI * 2, true)
     ctx.fill()
   }

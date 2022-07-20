@@ -17,7 +17,7 @@ import HistorySidebarBox from "../HistorySidebarBox"
 import ImageCanvas from "../ImageCanvas"
 import KeyframesSelector from "../KeyframesSelectorSidebarBox"
 import KeyframeTimeline from "../KeyframeTimeline"
-import BrushDialog from "../LazyBrush/BrushDialog"
+import VerticalSlider from "../LazyBrush/BrushSlider"
 import RegionSelector from "../RegionSelectorSidebarBox"
 import SettingsDialog from "../SettingsDialog"
 import { useSettings } from "../SettingsProvider"
@@ -310,11 +310,11 @@ export const MainLayout = ({
                   className: "settings",
                   iconName: "Settings",
                 },
-                state.selectedTool === "create-a-brush" && {
-                  name: "Brush Radius",
-                  className: "brushRadius",
-                  iconName: "brush radius",
-                },
+                // state.selectedTool === "create-a-brush" && {
+                //   name: "Brush Radius",
+                //   className: "brushRadius",
+                //   iconName: "brush radius",
+                // },
                 {
                   name: "Add Query",
                   className: "query",
@@ -496,16 +496,33 @@ export const MainLayout = ({
                 />,
               ].filter(Boolean)}
             >
-              {canvas}
+              <div style={{ display: "flex" }}>
+                {state.selectedTool === "create-a-brush" && (
+                  <div
+                    style={{
+                      marginTop: "100px",
+                      marginLeft: "1px",
+                      padding: 2,
+                      marginBottom: "100px",
+                    }}
+                  >
+                    <VerticalSlider
+                      brushRadius={brushRadius}
+                      setbrushRadius={setbrushRadius}
+                    />
+                  </div>
+                )}
+                {canvas}
+              </div>
             </Workspace>
-            <BrushDialog
+            {/* <BrushDialog
               open={openBrush}
               onClose={() => {
                 setBrushOpen(false)
               }}
               brushRadius={brushRadius}
               setbrushRadius={setbrushRadius}
-            />
+            /> */}
             <SettingsDialog
               open={state.settingsOpen}
               onClose={() =>
@@ -523,4 +540,3 @@ export const MainLayout = ({
 }
 
 export default MainLayout
-
