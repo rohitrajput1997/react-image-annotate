@@ -1,6 +1,7 @@
 // @flow
 import React from "react"
 import Annotator from "../Annotator"
+window.undoArray = []
 
 export default (props) => {
   return (

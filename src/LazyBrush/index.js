@@ -109,6 +109,24 @@ export default class extends React.PureComponent {
     }
   }
 
+  handleKeydown = (key) => {
+    if (window.undoArray.length) {
+      if (key.ctrlKey && key.code === "KeyZ") {
+        let lastElement = window.undoArray[window.undoArray.length - 1]
+        if (lastElement === "brush") {
+          window.undo()
+
+          let newArr = [...window.undoArray]
+          let popped = newArr.slice(0, -1)
+
+          window.undoArray = newArr
+        }
+      }
+    } else {
+      console.log("cant undo anymore")
+    }
+  }
+
   componentDidMount() {
     this.lazy = new LazyBrush({
       radius: this.props.lazyRadius * window.devicePixelRatio,
@@ -153,6 +171,8 @@ export default class extends React.PureComponent {
         this.loadSaveData(this.props.saveData)
       }
     }, 100)
+
+    window.addEventListener("keydown", this.handleKeydown)
   }
 
   componentDidUpdate(prevProps) {
@@ -174,6 +194,7 @@ export default class extends React.PureComponent {
 
   componentWillUnmount = () => {
     this.canvasObserver.unobserve(this.canvasContainer)
+    window.removeEventListener("keydown", this.handleKeydown)
   }
 
   drawImage = () => {
@@ -189,6 +210,7 @@ export default class extends React.PureComponent {
 
   getSaveData = () => {
     // Construct and return the stringified saveData object
+
     return JSON.stringify({
       lines: this.lines,
       width: this.props.canvasWidth,
@@ -412,7 +434,7 @@ export default class extends React.PureComponent {
 
   saveLine = ({ brushColor, brushRadius } = {}) => {
     if (this.points.length < 2) return
-
+    window.undoArray = [...window.undoArray, "brush"]
     // Save as new line
     this.lines.push({
       points: [...this.points],
@@ -526,6 +548,11 @@ export default class extends React.PureComponent {
     const left = imageElement && imageElement.style.left
     window.lazyCords = () => {
       return this.lines || []
+    }
+    window.undo = () => {
+      const lines = this.lines.slice(0, -1)
+      this.clear()
+      this.simulateDrawingLines({ lines, immediate: true })
     }
 
     return (

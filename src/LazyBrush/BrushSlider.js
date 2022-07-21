@@ -1,4 +1,5 @@
 import BrushIcon from "@mui/icons-material/Brush"
+import UndoIcon from "@mui/icons-material/Undo"
 import { createTheme, Fab } from "@mui/material"
 import Slider from "@mui/material/Slider"
 import * as React from "react"
@@ -37,6 +38,13 @@ export default function VerticalSlider({ brushRadius, setbrushRadius }) {
         max={20}
         min={1}
         size="small"
+        // classes={{
+        //   thumb: classes.thumb,
+        //   rail: classes.rail,
+        //   track: classes.track,
+        //   valueLabel: classes.valueLabel,
+        //   mark: classes.mark,
+        // }}
       />
 
       <Fab
@@ -55,7 +63,20 @@ export default function VerticalSlider({ brushRadius, setbrushRadius }) {
       >
         <BrushIcon style={{ width: "0.7rem", height: "0.7rem" }} />
       </Fab>
+      <Fab
+        style={{
+          width: "20px",
+          minHeight: "20px",
+          height: "20px",
+          marginTop: "1px",
+          background: "rgb(0, 95, 134)",
+        }}
+        size="small"
+        color="primary"
+        onClick={() => window.undo()}
+      >
+        <UndoIcon style={{ width: "0.7rem", height: "0.7rem" }} />
+      </Fab>
     </>
   )
 }
-

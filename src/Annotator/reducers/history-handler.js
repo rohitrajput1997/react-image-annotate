@@ -1,8 +1,8 @@
 // @flow
 
-import type { MainLayoutState, Action } from "../../MainLayout/types"
-import { setIn, updateIn, asMutable, without } from "seamless-immutable"
 import moment from "moment"
+import { setIn, updateIn, without } from "seamless-immutable"
+import type { Action, MainLayoutState } from "../../MainLayout/types"
 
 const typesToSaveWithHistory = {
   BEGIN_BOX_TRANSFORM: "Transform/Move Box",
@@ -10,16 +10,17 @@ const typesToSaveWithHistory = {
   DELETE_REGION: "Delete Region",
 }
 
-export const saveToHistory = (state: MainLayoutState, name: string) =>
-  updateIn(state, ["history"], (h) =>
-    [
+export const saveToHistory = (state: MainLayoutState, name: string) => {
+  return updateIn(state, ["history"], (h) => {
+    return [
       {
         time: moment().toDate(),
         state: without(state, "history"),
         name,
       },
     ].concat((h || []).slice(0, 9))
-  )
+  })
+}
 
 export default (reducer) => {
   return (state: MainLayoutState, action: Action) => {
@@ -58,3 +59,4 @@ export default (reducer) => {
     return nextState
   }
 }
+

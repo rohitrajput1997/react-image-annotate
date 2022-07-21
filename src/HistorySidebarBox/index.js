@@ -1,20 +1,19 @@
 // @flow
 
-import React, { setState, memo } from "react"
-import { makeStyles } from "@mui/styles"
-import { createTheme, ThemeProvider } from "@mui/material/styles"
-import SidebarBoxContainer from "../SidebarBoxContainer"
 import HistoryIcon from "@mui/icons-material/History"
+import UndoIcon from "@mui/icons-material/Undo"
+import { grey } from "@mui/material/colors"
+import IconButton from "@mui/material/IconButton"
 import List from "@mui/material/List"
 import ListItem from "@mui/material/ListItem"
-import ListItemText from "@mui/material/ListItemText"
-import IconButton from "@mui/material/IconButton"
 import ListItemSecondaryAction from "@mui/material/ListItemSecondaryAction"
-import UndoIcon from "@mui/icons-material/Undo"
-import moment from "moment"
-import { grey } from "@mui/material/colors"
+import ListItemText from "@mui/material/ListItemText"
+import { createTheme, ThemeProvider } from "@mui/material/styles"
+import { makeStyles } from "@mui/styles"
 import isEqual from "lodash/isEqual"
-import Box from "@mui/material/Box"
+import moment from "moment"
+import React, { memo, useEffect } from "react"
+import SidebarBoxContainer from "../SidebarBoxContainer"
 
 const theme = createTheme()
 const useStyles = makeStyles((theme) => ({
@@ -37,6 +36,33 @@ export const HistorySidebarBox = ({
 }) => {
   const classes = useStyles()
 
+  const handleKeydown = (key) => {
+    if (window.undoArray.length) {
+      if (key.ctrlKey && key.code === "KeyZ") {
+        let lastElement = window.undoArray[window.undoArray.length - 1]
+        if (lastElement === "annotation") {
+          onRestoreHistory()
+          let newArr = [...window.undoArray]
+          let popped = newArr.slice(0, -1)
+
+          window.undoArray = newArr
+        }
+      }
+    } else {
+      console.log("cant undo anymore")
+    }
+  }
+  useEffect(() => {
+    window.addEventListener("keydown", handleKeydown)
+    return () => {
+      window.removeEventListener("keydown", handleKeydown)
+    }
+  }, [])
+  React.useEffect(() => {
+    if (history.length) {
+      window.undoArray = [...window.undoArray, "annotation"]
+    }
+  }, [history.length])
   return (
     <ThemeProvider theme={theme}>
       <SidebarBoxContainer

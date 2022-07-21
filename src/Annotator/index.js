@@ -48,6 +48,7 @@ type Props = {
   hideFullScreen?: boolean,
   hideSave?: boolean,
 }
+window.undoArray = []
 
 export const Annotator = ({
   images,
@@ -231,3 +232,4 @@ export const Annotator = ({
 }
 
 export default Annotator
+

@@ -1,16 +1,15 @@
 // @flow
 
-import React from "react"
-import { styled } from "@mui/styles"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
-import TaskDescription from "../TaskDescriptionSidebarBox"
-import ImageSelector from "../ImageSelectorSidebarBox"
-import RegionSelector from "../RegionSelectorSidebarBox"
-import History from "../HistorySidebarBox"
+import { styled } from "@mui/styles"
+import React from "react"
 import DebugBox from "../DebugSidebarBox"
-import TagsSidebarBox from "../TagsSidebarBox"
-import KeyframesSelector from "../KeyframesSelectorSidebarBox"
+import History from "../HistorySidebarBox"
 import type { Region } from "../ImageCanvas/region-tools.js"
+import KeyframesSelector from "../KeyframesSelectorSidebarBox"
+import RegionSelector from "../RegionSelectorSidebarBox"
+import TagsSidebarBox from "../TagsSidebarBox"
+import TaskDescription from "../TaskDescriptionSidebarBox"
 
 const theme = createTheme()
 const Container = styled("div")(({ theme }) => ({}))
@@ -104,6 +103,7 @@ export const Sidebar = ({
             onDeleteKeyframe={onDeleteKeyframe}
           />
         )}
+
         <History
           history={history}
           onRestoreHistory={() => onRestoreHistory()}
@@ -115,3 +115,4 @@ export const Sidebar = ({
 }
 
 export default Sidebar
+
