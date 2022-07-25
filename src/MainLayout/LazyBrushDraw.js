@@ -67,9 +67,11 @@ class LazyBrushDraw extends React.Component {
           canvasEl={this.props.canvasEl}
           showTags={this.props.showTags}
           disabled={this.props.selectedTool !== "create-a-brush"}
+          imagePosition={this.props.customStyle}
         />
       </>
     )
   }
 }
 export default LazyBrushDraw
+

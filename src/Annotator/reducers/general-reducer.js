@@ -865,7 +865,25 @@ export default (state: MainLayoutState, action: Action) => {
         return setIn(state, ["showTags"], !state.showTags)
       } else if (action.selectedTool === "show-mask") {
         return setIn(state, ["showMask"], !state.showMask)
+      } else if (action.selectedTool === "undo_anntation") {
+        if (window.undoArray.length) {
+          //   let lastElement = window.undoArray[window.undoArray.length - 1]
+          //   if (lastElement === "annotation") {
+          //     let newArr = [...window.undoArray]
+          //     newArr.splice(window.undoArray.length - 1, 1)
+          //     window.undoArray = newArr
+          //   } else if (lastElement === "brush") {
+          //     window.undo()
+          //     let newArr = [...window.undoArray]
+          //     newArr.splice(window.undoArray.length - 1, 1)
+          //     window.undoArray = newArr
+          //   }
+          // } else {
+          //   console.log("cant undo anymoreed")
+          // }
+        }
       }
+
       if (action.selectedTool === "modify-allowed-area" && !state.allowedArea) {
         state = setIn(state, ["allowedArea"], { x: 0, y: 0, w: 1, h: 1 })
       }
@@ -919,4 +937,3 @@ export default (state: MainLayoutState, action: Action) => {
   }
   return state
 }
-

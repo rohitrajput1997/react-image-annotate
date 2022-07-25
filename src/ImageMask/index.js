@@ -92,6 +92,7 @@ export const ImageMask = ({
   const style = useMemo(() => {
     let width = imagePosition.bottomRight.x - imagePosition.topLeft.x
     let height = imagePosition.bottomRight.y - imagePosition.topLeft.y
+    window.lazyHeight = height
     return {
       display: hide ? "none" : undefined,
       imageRendering: "pixelated",
@@ -111,6 +112,7 @@ export const ImageMask = ({
     imagePosition.bottomRight.y,
     zIndex,
     hide,
+    // window.lazyHeight,
   ])
 
   return (
@@ -125,4 +127,3 @@ export const ImageMask = ({
 }
 
 export default ImageMask
-

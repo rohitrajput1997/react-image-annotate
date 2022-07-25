@@ -1,0 +1,17 @@
+{
+    project_id:'',
+    rule: {
+        "project_rule": "Numbers",
+        "system_rule": "alphanumric",
+        "flag": "general",
+        "rule_defination": ""
+    }
+}
+
+{
+    project_id:'',
+    "project_rule": "Numbers",
+    "system_rule": "alphanumric",
+    "flag": "general",
+    "rule_defination": ""
+}

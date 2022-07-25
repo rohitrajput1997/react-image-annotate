@@ -362,6 +362,10 @@ export default class extends React.PureComponent {
     }
 
     // return mouse/touch position inside canvas
+    console.log({
+      x: clientX - rect.left,
+      y: clientY - rect.top,
+    })
     return {
       x: clientX - rect.left,
       y: clientY - rect.top,
@@ -564,8 +568,9 @@ export default class extends React.PureComponent {
           }
         }}
         style={{
-          width: "100%",
-          height: "100%",
+          // width: "100%",
+          height: window.brushHeight,
+          width: window.brushWidth,
           position: "absolute",
           top: 0,
           left: 0,
@@ -580,6 +585,8 @@ export default class extends React.PureComponent {
             left: `${left}`,
             position: "absolute",
             zIndex: zIndex - 7,
+            height: window.brushHeight,
+            width: window.brushWidth,
           }
 
           if (id === "myPics") {

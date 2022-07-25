@@ -13,6 +13,7 @@ export type ToolEnum =
   | "create-pixel"
   | "create-expanding-line"
   | "create-keypoints"
+  | "undo_anntation"
 
 export type Image = {
   src: string,

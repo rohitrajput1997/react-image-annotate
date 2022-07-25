@@ -12,6 +12,7 @@ import {
   faMousePointer,
   faSearch,
   faTag,
+  faUndo,
   faVectorSquare,
 } from "@fortawesome/free-solid-svg-icons"
 import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
@@ -53,6 +54,15 @@ export const iconDictionary = {
   "create-a-brush": () => (
     <FontAwesomeIcon style={faStyle} size="xs" fixedWidth icon={faBrush} />
   ),
+  undo_anntation: () => (
+    <FontAwesomeIcon
+      id="undo"
+      style={faStyle}
+      size="xs"
+      fixedWidth
+      icon={faUndo}
+    />
+  ),
   "create-polygon": () => (
     <FontAwesomeIcon
       style={faStyle}
@@ -78,4 +88,3 @@ export const iconDictionary = {
 }
 
 export default iconDictionary
-

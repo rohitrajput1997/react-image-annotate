@@ -124,7 +124,14 @@ export default ({
   const stylePosition = useMemo(() => {
     let width = imagePosition.bottomRight.x - imagePosition.topLeft.x
     let height = imagePosition.bottomRight.y - imagePosition.topLeft.y
+    // if (height > 0) {
+    //   window.lazyHeight = height
+    //   console.log(height)
+    // }
 
+    window.brushHeight = height
+
+    window.brushWidth = width
     return {
       imageRendering: "pixelated",
       left: imagePosition.topLeft.x,

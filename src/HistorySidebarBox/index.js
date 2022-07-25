@@ -35,34 +35,56 @@ export const HistorySidebarBox = ({
   history: Array<{ name: string, time: Date }>,
 }) => {
   const classes = useStyles()
+  const undoAnnotation = () => {
+    let lastElement = window.undoArray[window.undoArray.length - 1]
+    if (lastElement === "annotation") {
+      onRestoreHistory()
+      let newArr = [...window.undoArray]
+      newArr.splice(window.undoArray.length - 1, 1)
 
+      window.undoArray = newArr
+    } else if (lastElement === "brush") {
+      window.undo()
+
+      let newArr = [...window.undoArray]
+      newArr.splice(window.undoArray.length - 1, 1)
+
+      window.undoArray = newArr
+    }
+  }
   const handleKeydown = (key) => {
     if (window.undoArray.length) {
+      console.log(key.target.id)
       if (key.ctrlKey && key.code === "KeyZ") {
-        let lastElement = window.undoArray[window.undoArray.length - 1]
-        if (lastElement === "annotation") {
-          onRestoreHistory()
-          let newArr = [...window.undoArray]
-          let popped = newArr.slice(0, -1)
-
-          window.undoArray = newArr
-        }
+        undoAnnotation()
+      } else if (key.target.id === "undo") {
+        undoAnnotation()
       }
     } else {
       console.log("cant undo anymore")
     }
   }
+  React.useEffect(() => {
+    window.addEventListener("click", handleKeydown)
+    return () => {
+      window.removeEventListener("click", handleKeydown)
+    }
+  }, [])
   useEffect(() => {
     window.addEventListener("keydown", handleKeydown)
     return () => {
       window.removeEventListener("keydown", handleKeydown)
     }
   }, [])
+
   React.useEffect(() => {
-    if (history.length) {
+    if (
+      history.length > window.undoArray.filter((d) => d === "annotation").length
+    ) {
       window.undoArray = [...window.undoArray, "annotation"]
     }
   }, [history.length])
+
   return (
     <ThemeProvider theme={theme}>
       <SidebarBoxContainer
@@ -102,3 +124,4 @@ export default memo(HistorySidebarBox, (prevProps, nextProps) =>
     nextProps.history.map((a) => [a.name, a.time])
   )
 )
+

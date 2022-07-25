@@ -409,6 +409,11 @@ export const MainLayout = ({
                   className: "create-a-brush",
                 },
                 {
+                  name: "undo_anntation",
+                  helperText: "undo annotation",
+                  alwaysShowing: true,
+                },
+                {
                   name: "create-polygon",
                   helperText:
                     "Add Polygon" + getHotkeyHelpText("create_polygon"),

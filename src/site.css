@@ -9,3 +9,8 @@ body {
 .MuiSlider-track{
 box-shadow: 4px 0px 7px 0px #005f86 !important;
 }
+
+.konvajs-content{
+z-index: 1000 !important;
+/* position: absolute !important; */
+}
