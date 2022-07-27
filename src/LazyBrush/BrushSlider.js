@@ -63,7 +63,7 @@ export default function VerticalSlider({
           color="primary"
           aria-label="add"
           marks
-          onClick={() => setTool("pan")}
+          onClick={() => setTool("pen")}
           // components={{ Thumb: AirbnbThumbComponent }}
         >
           <BrushIcon style={{ width: "0.7rem", height: "0.7rem" }} />
