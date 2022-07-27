@@ -10,6 +10,7 @@ import React, {
   useRef,
   useState,
 } from "react"
+import { Layer, Line, Stage } from "react-konva"
 import { useRafState } from "react-use"
 import { Matrix } from "transformation-matrix-js"
 import useEventCallback from "use-event-callback"
@@ -17,10 +18,9 @@ import Crosshairs from "../Crosshairs"
 import useExcludePattern from "../hooks/use-exclude-pattern"
 import useWindowSize from "../hooks/use-window-size.js"
 import ImageMask from "../ImageMask"
-import LazyBrushDraw from "../MainLayout/LazyBrushDraw"
+import BrushPopup from "../LazyBrush/BrushPopup"
 import PointDistances from "../PointDistances"
 import PreventScrollToParents from "../PreventScrollToParents"
-import RegionLabel from "../RegionLabel"
 import RegionSelectAndTransformBoxes from "../RegionSelectAndTransformBoxes"
 import RegionShapes from "../RegionShapes"
 import RegionTags from "../RegionTags"
@@ -32,8 +32,16 @@ import useProjectRegionBox from "./use-project-box"
 import useWasdMode from "./use-wasd-mode"
 
 const theme = createTheme()
+let newStyles = {
+  ...styles,
+  ["konvajs-content"]: {
+    left: window.brushLeft,
+    top: window.brushTop,
+    zIndex: "1000 !important",
+    position: "absolute !important",
+  },
+}
 const useStyles = makeStyles((theme) => styles)
-
 type Props = {
   regions: Array<Region>,
   imageSrc?: string,
@@ -143,10 +151,14 @@ export const ImageCanvas = ({
   yPosition,
   xPosition,
   brushRadius,
+  tool,
+  setLines,
+  lines,
 }: Props) => {
   const classes = useStyles()
 
   const canvasEl = React.useRef(null)
+  // console.log(canvasEl.current.clientHeight,canvasEl.current.clientWidth)
   const layoutParams = useRef({})
   const [dragging, changeDragging] = useRafState(false)
   const [maskImagesLoaded, changeMaskImagesLoaded] = useRafState(0)
@@ -156,6 +168,56 @@ export const ImageCanvas = ({
   const maskImages = useRef({})
   const windowSize = useWindowSize()
 
+  const isDrawing = React.useRef(false)
+
+  const handleMouseDown = (e) => {
+    isDrawing.current = true
+    const pos = e.target.getStage().getPointerPosition()
+
+    if (tool === "pen") {
+      setLines([
+        ...lines,
+        {
+          tool,
+          points: [pos.x, pos.y],
+          brushRadius,
+          popUp: {
+            open: false,
+          },
+        },
+      ])
+    } else {
+      setLines([
+        ...lines,
+        {
+          tool,
+          points: [pos.x, pos.y],
+          brushRadius,
+        },
+      ])
+    }
+    window.undoArray = [...window.undoArray, "brush"]
+  }
+
+  const handleMouseMove = (e) => {
+    // no drawing - skipping
+    if (!isDrawing.current) {
+      return
+    }
+    const stage = e.target.getStage()
+    const point = stage.getPointerPosition()
+    let lastLine = lines[lines.length - 1]
+    // add point
+    lastLine.points = lastLine.points.concat([point.x, point.y])
+
+    // replace last
+    lines.splice(lines.length - 1, 1, lastLine)
+    setLines(lines.concat())
+  }
+
+  const handleMouseUp = () => {
+    isDrawing.current = false
+  }
   const getLatestMat = useEventCallback(() => mat)
   useWasdMode({ getLatestMat, changeMat })
 
@@ -383,6 +445,12 @@ export const ImageCanvas = ({
             showHighlightBox={showHighlightBox}
           />
         )}
+        <div
+          className={classes.zoomIndicator}
+          style={{ zIndex: 10000000, right: "320px" }}
+        >
+          {((1 / mat.a) * 100).toFixed(0)}%
+        </div>
         {imageLoaded && showTags && !dragging && (
           <PreventScrollToParents key="regionTags">
             <RegionTags
@@ -403,7 +471,8 @@ export const ImageCanvas = ({
             />
           </PreventScrollToParents>
         )}
-        {!showTags && highlightedRegion && (
+
+        {/* {!showTags && highlightedRegion && (
           <div key="topLeftTag" className={classes.fixedRegionLabel}>
             <RegionLabel
               disableClose
@@ -417,7 +486,7 @@ export const ImageCanvas = ({
               allowComments={allowComments}
             />
           </div>
-        )}
+        )} */}
 
         {zoomWithPrimary && zoomBox !== null && (
           <div
@@ -448,9 +517,6 @@ export const ImageCanvas = ({
           {...mouseEvents}
         >
           <>
-            <div className={classes.zoomIndicator}>
-              {((1 / mat.a) * 100).toFixed(0)}%
-            </div>
             {fullImageSegmentationMode && (
               <ImageMask
                 hide={!showMask}
@@ -461,54 +527,94 @@ export const ImageCanvas = ({
                 regions={regions}
               />
             )}
-            <div
-              id="main-container-lazy-brush"
-              className={classes.mainContainer}
-            >
-              {
-                <LazyBrushDraw
-                  {...{
-                    setCanvasRef,
-                  }}
-                  selectedTool={selectedTool}
-                  lazyBrush={lazyBrush}
-                  width={iw}
-                  height={ih}
-                  customStyle={{
-                    left: imagePosition.topLeft.x,
-                    top: imagePosition.topLeft.y,
-                    pointerEvents: "none",
-                  }}
-                  lazyBrushClassification={lazyBrushClassification || []}
-                  lazyBrushTags={lazyBrushTags || []}
-                  canvasClass={classes.canvas}
-                  yPosition={yPosition}
-                  xPosition={xPosition}
-                  originalClass={classes.canvas}
-                  showTags={showTags}
-                  brushRadius={brushRadius}
-                />
+            <Stage
+              width={
+                window.brushWidth > 0 ? window.brushWidth : window.innerWidth
               }
-              <RegionShapes
-                mat={mat}
-                keypointDefinitions={keypointDefinitions}
-                imagePosition={imagePosition}
-                regions={regions}
-                fullSegmentationMode={fullImageSegmentationMode}
-              />
-              <VideoOrImageCanvasBackground
-                videoPlaying={videoPlaying}
-                imagePosition={imagePosition}
-                mouseEvents={mouseEvents}
-                onLoad={onVideoOrImageLoaded}
-                videoTime={videoTime}
-                videoSrc={videoSrc}
-                imageSrc={imageSrc}
-                useCrossOrigin={fullImageSegmentationMode}
-                onChangeVideoTime={onChangeVideoTime}
-                onChangeVideoPlaying={onChangeVideoPlaying}
+              height={
+                window.brushHeight > 0 ? window.brushHeight : window.innerHeight
+              }
+              onMouseDown={selectedTool === "create-a-brush" && handleMouseDown}
+              onMousemove={selectedTool === "create-a-brush" && handleMouseMove}
+              onMouseup={selectedTool === "create-a-brush" && handleMouseUp}
+              style={{
+                left: window.brushLeft,
+                top: window.brushTop,
+                position: "absolute",
+              }}
+            >
+              <Layer>
+                {lines.map((line, i) => (
+                  <>
+                    <Line
+                      key={i}
+                      points={line.points}
+                      stroke={
+                        line.tool === "eraser"
+                          ? "#df4b26"
+                          : "rgba(223, 75, 38,0.55)"
+                      }
+                      strokeWidth={line.brushRadius}
+                      tension={0.5}
+                      lineCap="round"
+                      globalCompositeOperation={
+                        line.tool === "eraser"
+                          ? "destination-out"
+                          : "source-over"
+                      }
+                      scale={{
+                        x: ((1 / mat.a) * 100) / 100,
+                        y: ((1 / mat.a) * 100) / 100,
+                      }}
+                    />
+                  </>
+                ))}
+              </Layer>
+            </Stage>
+            <div
+              style={{
+                left: window.brushLeft,
+                top: window.brushTop,
+                position: "absolute",
+              }}
+            >
+              <BrushPopup
+                top={window.brushTop}
+                left={window.brushLeft}
+                showTags={showTags}
+                lines={lines}
+                lazyBrushClassification={lazyBrushClassification}
+                lazyBrushTags={lazyBrushTags}
+                setLines={setLines}
+                scale={((1 / mat.a) * 100) / 100}
               />
             </div>
+
+            <canvas
+              style={{ opacity: 0.25 }}
+              className={classes.canvas}
+              ref={canvasEl}
+            />
+            <RegionShapes
+              mat={mat}
+              keypointDefinitions={keypointDefinitions}
+              imagePosition={imagePosition}
+              regions={regions}
+              fullSegmentationMode={fullImageSegmentationMode}
+            />
+            <VideoOrImageCanvasBackground
+              videoPlaying={videoPlaying}
+              imagePosition={imagePosition}
+              mouseEvents={mouseEvents}
+              onLoad={onVideoOrImageLoaded}
+              videoTime={videoTime}
+              videoSrc={videoSrc}
+              imageSrc={imageSrc}
+              useCrossOrigin={fullImageSegmentationMode}
+              onChangeVideoTime={onChangeVideoTime}
+              onChangeVideoPlaying={onChangeVideoPlaying}
+            />
+            {/* </div> */}
           </>
         </PreventScrollToParents>
       </div>
@@ -517,3 +623,4 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
+

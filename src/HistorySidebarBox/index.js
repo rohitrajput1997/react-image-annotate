@@ -12,7 +12,7 @@ import { createTheme, ThemeProvider } from "@mui/material/styles"
 import { makeStyles } from "@mui/styles"
 import isEqual from "lodash/isEqual"
 import moment from "moment"
-import React, { memo, useEffect } from "react"
+import React, { memo } from "react"
 import SidebarBoxContainer from "../SidebarBoxContainer"
 
 const theme = createTheme()
@@ -44,17 +44,14 @@ export const HistorySidebarBox = ({
 
       window.undoArray = newArr
     } else if (lastElement === "brush") {
-      window.undo()
-
+      window.undoBrush()
       let newArr = [...window.undoArray]
       newArr.splice(window.undoArray.length - 1, 1)
-
       window.undoArray = newArr
     }
   }
   const handleKeydown = (key) => {
     if (window.undoArray.length) {
-      console.log(key.target.id)
       if (key.ctrlKey && key.code === "KeyZ") {
         undoAnnotation()
       } else if (key.target.id === "undo") {
@@ -64,16 +61,16 @@ export const HistorySidebarBox = ({
       console.log("cant undo anymore")
     }
   }
+  const clearWindow = () => {
+    window.removeEventListener("keydown", handleKeydown)
+
+    window.removeEventListener("click", handleKeydown)
+  }
   React.useEffect(() => {
     window.addEventListener("click", handleKeydown)
-    return () => {
-      window.removeEventListener("click", handleKeydown)
-    }
-  }, [])
-  useEffect(() => {
     window.addEventListener("keydown", handleKeydown)
     return () => {
-      window.removeEventListener("keydown", handleKeydown)
+      clearWindow()
     }
   }, [])
 
@@ -118,10 +115,10 @@ export const HistorySidebarBox = ({
   )
 }
 
-export default memo(HistorySidebarBox, (prevProps, nextProps) =>
-  isEqual(
+export default memo(HistorySidebarBox, (prevProps, nextProps) => {
+  return isEqual(
     prevProps.history.map((a) => [a.name, a.time]),
     nextProps.history.map((a) => [a.name, a.time])
   )
-)
+})
 

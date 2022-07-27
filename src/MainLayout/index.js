@@ -85,12 +85,15 @@ export const MainLayout = ({
   lazyBrushTags,
   xPosition,
   yPosition,
+  lines,
+  setLines,
 }: Props) => {
   const classes = useStyles()
   const settings = useSettings()
   const fullScreenHandle = useFullScreenHandle()
   const [openBrush, setBrushOpen] = useState(false)
   const [brushRadius, setbrushRadius] = useState(5)
+  const [tool, setTool] = React.useState("pen")
 
   const memoizedActionFns = React.useRef({})
   const action = (type: string, ...params: Array<string>) => {
@@ -214,6 +217,9 @@ export const MainLayout = ({
       yPosition={yPosition}
       xPosition={xPosition}
       brushRadius={brushRadius}
+      tool={tool}
+      lines={lines}
+      setLines={setLines}
     />
   )
 
@@ -236,6 +242,8 @@ export const MainLayout = ({
   const debugModeOn = Boolean(window.localStorage.$ANNOTATE_DEBUG_MODE && state)
   const nextImageHasRegions =
     !nextImage || (nextImage.regions && nextImage.regions.length > 0)
+
+  const removeBrush = () => {}
 
   return (
     <ThemeProvider theme={theme}>
@@ -498,6 +506,8 @@ export const MainLayout = ({
                 <HistorySidebarBox
                   history={state.history}
                   onRestoreHistory={action("RESTORE_HISTORY")}
+                  line={lines}
+                  setLines={setLines}
                 />,
               ].filter(Boolean)}
             >
@@ -530,6 +540,7 @@ export const MainLayout = ({
                     <VerticalSlider
                       brushRadius={brushRadius}
                       setbrushRadius={setbrushRadius}
+                      setTool={setTool}
                     />
                   </div>
                 )}
@@ -561,4 +572,3 @@ export const MainLayout = ({
 }
 
 export default MainLayout
-

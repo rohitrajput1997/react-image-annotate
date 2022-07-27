@@ -132,6 +132,8 @@ export default ({
     window.brushHeight = height
 
     window.brushWidth = width
+    window.brushLeft = imagePosition.topLeft.x
+    window.brushTop = imagePosition.topLeft.y
     return {
       imageRendering: "pixelated",
       left: imagePosition.topLeft.x,

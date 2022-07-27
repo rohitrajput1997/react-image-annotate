@@ -30,4 +30,9 @@ export default {
     height: "600px",
     width: "100%",
   },
+  "konvajs-content": {
+    zIndex: "1 !important",
+    position: "absolute !important",
+  },
 }
+

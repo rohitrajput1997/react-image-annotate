@@ -40,6 +40,9 @@ const useStyles = makeStyles((theme) => ({
       transition: "500ms transform",
       "&.expanded": {
         transform: "rotate(180deg)",
+        position: "fixed !important",
+        right: "0px !important",
+        zIndex: "100 !important",
       },
     },
   },
@@ -86,3 +89,4 @@ export default memo(
   SidebarBoxContainer,
   (prev, next) => prev.title === next.title && prev.children === next.children
 )
+

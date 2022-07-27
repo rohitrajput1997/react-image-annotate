@@ -150,7 +150,7 @@ export const Annotator = ({
           } || {}),
     })
   )
-
+  const [lines, setLines] = React.useState([])
   const dispatch = useEventCallback((action: Action) => {
     if (action.type === "HEADER_BUTTON_CLICKED") {
       if (
@@ -159,10 +159,7 @@ export const Annotator = ({
         )
       ) {
         return onExit(
-          without(
-            { annotation: state, lazyBrush: window.lazyCords() || [] },
-            "history"
-          )
+          without({ annotation: state, lazyBrush: lines }, "history")
         )
       } else if (action.buttonName === "Next" && onNextImage) {
         return onNextImage(without(state, "history"))
@@ -172,10 +169,7 @@ export const Annotator = ({
         return onAddQuery(without(state, "history"))
       } else if (action.buttonName === "Save & next" && saveandnext) {
         return saveandnext(
-          without(
-            { annotation: state, lazyBrush: window.lazyCords() || [] },
-            "history"
-          )
+          without({ annotation: state, lazyBrush: lines }, "history")
         )
       }
     }
@@ -188,6 +182,14 @@ export const Annotator = ({
       cls: cls,
     })
   })
+  React.useEffect(() => {
+    setLines(lazyBrush)
+  }, [])
+  window.undoBrush = () => {
+    const intial_lines = lines.slice(0, -1)
+
+    return setLines(intial_lines)
+  }
 
   useEffect(() => {
     if (selectedImage === undefined) return
@@ -226,6 +228,8 @@ export const Annotator = ({
         lazyBrushClassification={regionClsList}
         xPosition={xPosition}
         yPosition={yPosition}
+        lines={lines}
+        setLines={setLines}
       />
     </SettingsProvider>
   )

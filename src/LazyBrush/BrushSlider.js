@@ -1,9 +1,14 @@
 import BrushIcon from "@mui/icons-material/Brush"
-import { createTheme, Fab } from "@mui/material"
+import ClearAllIcon from "@mui/icons-material/ClearAll"
+import { createTheme, Fab, Tooltip } from "@mui/material"
 import Slider from "@mui/material/Slider"
 import * as React from "react"
 
-export default function VerticalSlider({ brushRadius, setbrushRadius }) {
+export default function VerticalSlider({
+  setTool,
+  brushRadius,
+  setbrushRadius,
+}) {
   function preventHorizontalKeyboardNavigation(event) {
     if (event.key === "ArrowLeft" || event.key === "ArrowRight") {
       event.preventDefault()
@@ -45,37 +50,41 @@ export default function VerticalSlider({ brushRadius, setbrushRadius }) {
         //   mark: classes.mark,
         // }}
       />
-
-      <Fab
-        style={{
-          width: "20px",
-          minHeight: "20px",
-          height: "20px",
-          marginTop: "1px",
-          background: "rgb(0, 95, 134)",
-        }}
-        size="small"
-        color="primary"
-        aria-label="add"
-        marks
-        // components={{ Thumb: AirbnbThumbComponent }}
-      >
-        <BrushIcon style={{ width: "0.7rem", height: "0.7rem" }} />
-      </Fab>
-      {/* <Fab
-        style={{
-          width: "20px",
-          minHeight: "20px",
-          height: "20px",
-          marginTop: "1px",
-          background: "rgb(0, 95, 134)",
-        }}
-        size="small"
-        color="primary"
-        onClick={() => window.undo()}
-      >
-        <UndoIcon style={{ width: "0.7rem", height: "0.7rem" }} />
-      </Fab> */}
+      <Tooltip title="Brush">
+        <Fab
+          style={{
+            width: "20px",
+            minHeight: "20px",
+            height: "20px",
+            marginTop: "1px",
+            background: "rgb(0, 95, 134)",
+          }}
+          size="small"
+          color="primary"
+          aria-label="add"
+          marks
+          onClick={() => setTool("pan")}
+          // components={{ Thumb: AirbnbThumbComponent }}
+        >
+          <BrushIcon style={{ width: "0.7rem", height: "0.7rem" }} />
+        </Fab>
+      </Tooltip>
+      <Tooltip title="Eraser">
+        <Fab
+          style={{
+            width: "20px",
+            minHeight: "20px",
+            height: "20px",
+            marginTop: "1px",
+            background: "rgb(0, 95, 134)",
+          }}
+          size="small"
+          color="primary"
+          onClick={() => setTool("eraser")}
+        >
+          <ClearAllIcon style={{ width: "0.7rem", height: "0.7rem" }} />
+        </Fab>
+      </Tooltip>
     </>
   )
 }

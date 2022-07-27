@@ -1,9 +1,9 @@
 // @flow weak
 
-import React from "react"
-import Paper from "@mui/material/Paper"
-import DefaultRegionLabel from "../RegionLabel"
 import LockIcon from "@mui/icons-material/Lock"
+import Paper from "@mui/material/Paper"
+import React from "react"
+import DefaultRegionLabel from "../RegionLabel"
 
 const copyWithout = (obj, ...args) => {
   const newObj = { ...obj }
@@ -35,6 +35,7 @@ export const RegionTags = ({
     .filter((r) => r.visible || r.visible === undefined)
     .map((region) => {
       const pbox = projectRegionBox(region)
+      // console.log(pbox)
       const { iw, ih } = layoutParams.current
       let margin = 8
       if (region.highlighted && region.type === "box") margin += 6
