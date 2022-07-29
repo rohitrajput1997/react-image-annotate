@@ -168,12 +168,15 @@ export const ImageCanvas = ({
   const [mat, changeMat] = useRafState(getDefaultMat())
   const maskImages = useRef({})
   const windowSize = useWindowSize()
-
+  const getScaledPoint = (stage, scale) => {
+    const { x, y } = stage.getPointerPosition()
+    return { x: x / scale, y: y / scale }
+  }
   const isDrawing = React.useRef(false)
 
   const handleMouseDown = (e) => {
     isDrawing.current = true
-    const pos = e.target.getStage().getPointerPosition()
+    const pos = getScaledPoint(stage, ((1 / mat.a) * 100) / 100)
 
     if (tool === "pen") {
       setLines([
@@ -205,8 +208,8 @@ export const ImageCanvas = ({
     if (!isDrawing.current) {
       return
     }
-    const stage = e.target.getStage()
-    const point = stage.getPointerPosition()
+    // const stage = e.target.getStage()
+    const point = getScaledPoint(stage, ((1 / mat.a) * 100) / 100)
     let lastLine = lines[lines.length - 1]
     // add point
     lastLine.points = lastLine.points.concat([point.x, point.y])
@@ -218,6 +221,31 @@ export const ImageCanvas = ({
 
   const handleMouseUp = () => {
     isDrawing.current = false
+
+    const { x, y } = getScaledPoint(stage, ((1 / mat.a) * 100) / 100)
+
+    // if (tool === "pen") {
+    //   setLines([
+    //     ...lines,
+    //     {
+    //       tool,
+    //       points: [x, y],
+    //       brushRadius,
+    //       popUp: {
+    //         open: false,
+    //       },
+    //     },
+    //   ])
+    // } else {
+    //   setLines([
+    //     ...lines,
+    //     {
+    //       tool,
+    //       points: [x, y],
+    //       brushRadius,
+    //     },
+    //   ])
+    // }
   }
   const getLatestMat = useEventCallback(() => mat)
   useWasdMode({ getLatestMat, changeMat })
@@ -241,7 +269,12 @@ export const ImageCanvas = ({
   })
 
   useLayoutEffect(() => changeMat(mat.clone()), [changeMat, mat, windowSize])
-
+  let stage = null
+  const setStageRef = (ref) => {
+    if (ref) {
+      stage = ref
+    }
+  }
   const innerMousePos = mat.applyToPoint(
     mousePosition.current.x,
     mousePosition.current.y
@@ -528,6 +561,13 @@ export const ImageCanvas = ({
                 regions={regions}
               />
             )}
+            {/* <div
+              style={{
+                left: window.brushLeft,
+                top: window.brushTop,
+                position: "absolute",
+              }}
+            > */}
             <Stage
               width={
                 window.brushWidth > 0 ? window.brushWidth : window.innerWidth
@@ -543,6 +583,7 @@ export const ImageCanvas = ({
                 top: window.brushTop,
                 position: "absolute",
               }}
+              ref={setStageRef}
             >
               <Layer>
                 {lines.map((line, i) => (
@@ -572,6 +613,7 @@ export const ImageCanvas = ({
                 ))}
               </Layer>
             </Stage>
+            {/* </div> */}
             <div
               style={{
                 left: window.brushLeft,
