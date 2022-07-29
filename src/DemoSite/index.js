@@ -70,11 +70,11 @@ export default () => {
     enabledTools: ["select", "create-box"],
     images: [
       {
-        src: "https://www.bianchi.com/wp-content/uploads/2019/07/YPB17I555K.jpg",
+        src: "https://upload.wikimedia.org/wikipedia/mediawiki/a/a9/Example.jpg",
         name: "hot-dogs-1",
       },
       {
-        src: "https://www.bianchi.com/wp-content/uploads/2019/07/YPB17I555K.jpg",
+        src: "https://upload.wikimedia.org/wikipedia/mediawiki/a/a9/Example.jpg",
         name: "bianchi-oltre-xr4",
       },
     ],

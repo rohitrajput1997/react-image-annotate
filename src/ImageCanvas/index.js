@@ -221,6 +221,8 @@ export const ImageCanvas = ({
 
   const handleMouseUp = () => {
     isDrawing.current = false
+    const line = [...lines]
+    setLines(line)
 
     const { x, y } = getScaledPoint(stage, ((1 / mat.a) * 100) / 100)
 
@@ -666,4 +668,3 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
-

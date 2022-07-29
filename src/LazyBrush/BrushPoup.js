@@ -25,7 +25,7 @@ function BrushPopup({
               <div
                 style={{
                   left: `${item.points[0] * scale}px`,
-                  top: `${item.points[item.points.length - 1] * scale}px`,
+                  top: `${item.points[1] * scale}px`,
                   position: "absolute",
                 }}
               >
