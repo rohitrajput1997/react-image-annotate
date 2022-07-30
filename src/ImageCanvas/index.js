@@ -570,6 +570,7 @@ export const ImageCanvas = ({
                 position: "absolute",
               }}
             > */}
+
             <Stage
               width={
                 window.brushWidth > 0 ? window.brushWidth : window.innerWidth
@@ -584,6 +585,12 @@ export const ImageCanvas = ({
                 left: window.brushLeft,
                 top: window.brushTop,
                 position: "absolute",
+                height:
+                  window.brushHeight > 0
+                    ? window.brushHeight
+                    : window.innerHeight,
+                width:
+                  window.brushWidth > 0 ? window.brushWidth : window.innerWidth,
               }}
               ref={setStageRef}
             >
@@ -668,3 +675,4 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
+

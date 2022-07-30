@@ -54,7 +54,11 @@ export const HistorySidebarBox = ({
     if (window.undoArray.length) {
       if (key.ctrlKey && key.code === "KeyZ") {
         undoAnnotation()
-      } else if (key.target.id === "undo") {
+      } else if (
+        key.target.id === "undo" ||
+        key.target.ariaLabel === "undo annotation" ||
+        [...(key.target.parentNode.classList || [])].indexOf("fa-undo") !== -1
+      ) {
         undoAnnotation()
       }
     } else {
@@ -121,4 +125,3 @@ export default memo(HistorySidebarBox, (prevProps, nextProps) => {
     nextProps.history.map((a) => [a.name, a.time])
   )
 })
-

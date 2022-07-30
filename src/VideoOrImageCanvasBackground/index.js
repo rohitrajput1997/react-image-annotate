@@ -136,6 +136,8 @@ export default ({
     window.brushTop = imagePosition.topLeft.y
     return {
       imageRendering: "pixelated",
+      maxWidth: "max-content",
+
       left: imagePosition.topLeft.x,
       top: imagePosition.topLeft.y,
       width: isNaN(width) ? 0 : width,
@@ -177,3 +179,4 @@ export default ({
     </ThemeProvider>
   )
 }
+
