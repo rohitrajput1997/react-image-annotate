@@ -94,7 +94,13 @@ export const MainLayout = ({
   const [openBrush, setBrushOpen] = useState(false)
   const [brushRadius, setbrushRadius] = useState(5)
   const [tool, setTool] = React.useState("pen")
-
+  React.useEffect(() => {
+    if (state.selectedTool === "create-a-brush") {
+      setTool("pen")
+    } else if (state.selectedTool === "eraser") {
+      setTool("eraser")
+    }
+  }, [state.selectedTool])
   const memoizedActionFns = React.useRef({})
   const action = (type: string, ...params: Array<string>) => {
     const fnKey = `${type}(${params.join(",")})`
@@ -416,11 +422,7 @@ export const MainLayout = ({
                   alwaysShowing: true,
                   className: "create-a-brush",
                 },
-                {
-                  name: "undo_anntation",
-                  helperText: "undo annotation",
-                  alwaysShowing: true,
-                },
+
                 {
                   name: "create-polygon",
                   helperText:
@@ -452,6 +454,16 @@ export const MainLayout = ({
                   name: "modify-allowed-area",
                   helperText: "Modify Allowed Area",
                   className: "modify_allow_area",
+                },
+                {
+                  name: "undo_anntation",
+                  helperText: "undo annotation",
+                  alwaysShowing: true,
+                },
+                {
+                  name: "eraser",
+                  helperText: "Eraser",
+                  alwaysShowing: true,
                 },
               ]
                 .filter(Boolean)
@@ -520,7 +532,8 @@ export const MainLayout = ({
                   alignItems: "center",
                 }}
               >
-                {state.selectedTool === "create-a-brush" && (
+                {state.selectedTool === "create-a-brush" ||
+                state.selectedTool === "eraser" ? (
                   <div
                     style={{
                       maxHeight: "300px",
@@ -543,7 +556,7 @@ export const MainLayout = ({
                       setTool={setTool}
                     />
                   </div>
-                )}
+                ) : null}
                 {canvas}
               </div>
             </Workspace>
@@ -572,3 +585,4 @@ export const MainLayout = ({
 }
 
 export default MainLayout
+

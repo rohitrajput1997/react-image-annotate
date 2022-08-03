@@ -578,9 +578,21 @@ export const ImageCanvas = ({
               height={
                 window.brushHeight > 0 ? window.brushHeight : window.innerHeight
               }
-              onMouseDown={selectedTool === "create-a-brush" && handleMouseDown}
-              onMousemove={selectedTool === "create-a-brush" && handleMouseMove}
-              onMouseup={selectedTool === "create-a-brush" && handleMouseUp}
+              onMouseDown={
+                selectedTool === "create-a-brush" || selectedTool === "eraser"
+                  ? handleMouseDown
+                  : () => {}
+              }
+              onMousemove={
+                selectedTool === "create-a-brush" || selectedTool === "eraser"
+                  ? handleMouseMove
+                  : () => {}
+              }
+              onMouseup={
+                selectedTool === "create-a-brush" || selectedTool === "eraser"
+                  ? handleMouseUp
+                  : () => {}
+              }
               style={{
                 left: window.brushLeft,
                 top: window.brushTop,
@@ -603,7 +615,7 @@ export const ImageCanvas = ({
                       stroke={
                         line.tool === "eraser"
                           ? "#df4b26"
-                          : "rgba(223, 75, 38,0.55)"
+                          : line.color || "rgba(223, 75, 38,0.55)"
                       }
                       strokeWidth={line.brushRadius}
                       tension={0.5}

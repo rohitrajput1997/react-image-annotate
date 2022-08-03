@@ -5,7 +5,28 @@ import React from "react"
 import CreatableSelect from "react-select/creatable"
 import { asMutable } from "seamless-immutable"
 import colors from "../colors"
-
+const convertHextoRgb = (color) => {
+  try {
+    let hashRemove = color.replace("#", "")
+    console.log(hashRemove, color)
+    var aRgbHex = hashRemove.match(/.{1,2}/g)
+    var aRgb = [
+      parseInt(aRgbHex[0], 16),
+      parseInt(aRgbHex[1], 16),
+      parseInt(aRgbHex[2], 16),
+    ]
+    console.log(aRgb)
+    return aRgb.toString()
+  } catch (err) {
+    var aRgbHex = "FF0000".match(/.{1,2}/g)
+    var aRgb = [
+      parseInt(aRgbHex[0], 16),
+      parseInt(aRgbHex[1], 16),
+      parseInt(aRgbHex[2], 16),
+    ]
+    return aRgb.toString()
+  }
+}
 function BrushPopup({
   top,
   left,
@@ -87,6 +108,16 @@ function BrushPopup({
                           onChange={(o, actionMeta) => {
                             let linessave = [...lines]
                             lines[index].popUp.classification = o
+                            lines[index].color = `rgba(${convertHextoRgb(
+                              colors[
+                                lazyBrushClassification?.findIndex(
+                                  (dropdown) =>
+                                    dropdown ===
+                                    item?.popUp?.classification?.label
+                                ) || 0 % colors.length
+                              ] || "#FF0000"
+                            )},0.5)`
+                     
                             setLines(linessave)
                           }}
                           value={lines[index].popUp.classification}
@@ -204,4 +235,3 @@ function BrushPopup({
 }
 
 export default BrushPopup
-

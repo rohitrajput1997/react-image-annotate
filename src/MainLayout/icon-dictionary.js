@@ -6,6 +6,7 @@ import {
   faCrosshairs,
   faDrawPolygon,
   faEdit,
+  faEraser,
   faGripLines,
   faHandPaper,
   faMask,
@@ -83,8 +84,12 @@ export const iconDictionary = {
   "modify-allowed-area": () => (
     <FontAwesomeIcon style={faStyle} size="xs" fixedWidth icon={faEdit} />
   ),
+  eraser: () => (
+    <FontAwesomeIcon style={faStyle} size="xs" fixedWidth icon={faEraser} />
+  ),
   "create-keypoints": AccessibilityNewIcon,
   window: FullscreenIcon,
 }
 
 export default iconDictionary
+
