@@ -155,6 +155,7 @@ export const ImageCanvas = ({
   tool,
   setLines,
   lines,
+  invalidShow,
 }: Props) => {
   const classes = useStyles()
 
@@ -504,6 +505,7 @@ export const ImageCanvas = ({
               RegionEditLabel={RegionEditLabel}
               onRegionClassAdded={onRegionClassAdded}
               allowComments={allowComments}
+              invalidShow={invalidShow}
             />
           </PreventScrollToParents>
         )}
@@ -588,11 +590,12 @@ export const ImageCanvas = ({
                   ? handleMouseMove
                   : () => {}
               }
-              onMouseup={
-                selectedTool === "create-a-brush" || selectedTool === "eraser"
-                  ? handleMouseUp
-                  : () => {}
-              }
+              onMouseup={handleMouseUp}
+              // selectedTool === "create-a-brush" || selectedTool === "eraser"
+              //   ? handleMouseUp
+              //   : () => {}
+              // handleMouseUp
+              // }
               style={{
                 left: window.brushLeft,
                 top: window.brushTop,
@@ -651,6 +654,7 @@ export const ImageCanvas = ({
                 lazyBrushTags={lazyBrushTags}
                 setLines={setLines}
                 scale={((1 / mat.a) * 100) / 100}
+                invalidShow={invalidShow}
               />
             </div>
 

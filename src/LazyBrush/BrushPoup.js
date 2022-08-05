@@ -1,5 +1,6 @@
 import CheckIcon from "@mui/icons-material/Check"
 import TrashIcon from "@mui/icons-material/Delete"
+import WarningAmberIcon from "@mui/icons-material/WarningAmber"
 import { Button, IconButton, Paper } from "@mui/material"
 import React from "react"
 import CreatableSelect from "react-select/creatable"
@@ -36,6 +37,7 @@ function BrushPopup({
   lazyBrushTags,
   setLines,
   scale,
+  invalidShow,
 }) {
   return (
     <div>
@@ -57,6 +59,10 @@ function BrushPopup({
                     // left: `${197.90878098221688}px`,
                     position: "absolute",
                     cursor: "pointer",
+                    border:
+                      !invalidShow && lines[index].invaild
+                        ? "2px solid red"
+                        : null,
                   }}
                 >
                   {item?.popUp?.open ? (
@@ -101,6 +107,21 @@ function BrushPopup({
                             style={{ marginTop: -8, width: 16, height: 16 }}
                           />
                         </IconButton>
+                        {invalidShow && (
+                          <WarningAmberIcon
+                            onClick={() => {
+                              let linessave = [...lines]
+                              lines[index].invaild = lines[index].invaild
+                                ? false
+                                : true
+
+                              setLines(linessave)
+                            }}
+                            color={
+                              lines[index].invaild ? "primary" : "secondary"
+                            }
+                          />
+                        )}
                       </div>
                       <div style={{ marginTop: 6 }}>
                         <CreatableSelect
@@ -117,7 +138,7 @@ function BrushPopup({
                                 ) || 0 % colors.length
                               ] || "#FF0000"
                             )},0.5)`
-                     
+
                             setLines(linessave)
                           }}
                           value={lines[index].popUp.classification}
@@ -136,6 +157,8 @@ function BrushPopup({
                           onChange={(o, actionMeta) => {
                             let linessave = [...lines]
                             lines[index].popUp.tags = o
+                            lines[index].tag_count =
+                              lines?.[index]?.popUp?.tags?.length
                             setLines(linessave)
                           }}
                           isMulti
@@ -235,3 +258,4 @@ function BrushPopup({
 }
 
 export default BrushPopup
+

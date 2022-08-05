@@ -72,6 +72,36 @@ export default () => {
       {
         src: "https://upload.wikimedia.org/wikipedia/mediawiki/a/a9/Example.jpg",
         name: "hot-dogs-1",
+        regions: [
+          {
+            h: 0.16114285714285714,
+            w: 0.10285714285714284,
+            x: 0.08283333333333334,
+            y: 0.11362301478310236,
+            id: "7642512129200276",
+            cls: "specification",
+            tags: ["not-hotdog", "box", "not"],
+            type: "box",
+            color: "#f44336",
+            highlighted: false,
+            editingLabels: false,
+            invaild: true,
+          },
+          {
+            h: 0.15360000000000004,
+            w: 0.17485714285714277,
+            x: 0.3826619047619048,
+            y: 0.15956586865621905,
+            id: "6151961109630444",
+            cls: "specification",
+            tags: ["not-hotdog", "box", "not"],
+            type: "box",
+            color: "#f44336",
+            highlighted: false,
+            editingLabels: false,
+            invaild: true,
+          },
+        ],
       },
       {
         src: "https://upload.wikimedia.org/wikipedia/mediawiki/a/a9/Example.jpg",
@@ -113,6 +143,7 @@ export default () => {
               19.166664123535156,
             ],
             brushRadius: 5,
+            invaild: false,
             popUp: {
               open: false,
               classification: {
@@ -128,7 +159,9 @@ export default () => {
             },
           },
         ]}
+        invalidShow={false}
       />
     </div>
   )
 }
+

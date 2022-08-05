@@ -87,6 +87,7 @@ export const MainLayout = ({
   yPosition,
   lines,
   setLines,
+  invalidShow,
 }: Props) => {
   const classes = useStyles()
   const settings = useSettings()
@@ -226,6 +227,7 @@ export const MainLayout = ({
       tool={tool}
       lines={lines}
       setLines={setLines}
+      invalidShow={invalidShow}
     />
   )
 
@@ -554,6 +556,7 @@ export const MainLayout = ({
                       brushRadius={brushRadius}
                       setbrushRadius={setbrushRadius}
                       setTool={setTool}
+                      selectTool={state.selectedTool}
                     />
                   </div>
                 ) : null}
@@ -585,4 +588,3 @@ export const MainLayout = ({
 }
 
 export default MainLayout
-

@@ -101,6 +101,7 @@ export const Annotator = ({
   lazyBrush = [],
   xPosition,
   yPosition,
+  invalidShow,
 }: Props) => {
   if (typeof selectedImage === "string") {
     selectedImage = (images || []).findIndex((img) => img.src === selectedImage)
@@ -230,6 +231,7 @@ export const Annotator = ({
         yPosition={yPosition}
         lines={lines}
         setLines={setLines}
+        invalidShow={invalidShow}
       />
     </SettingsProvider>
   )

@@ -2,6 +2,7 @@
 
 import CheckIcon from "@mui/icons-material/Check"
 import TrashIcon from "@mui/icons-material/Delete"
+import WarningAmberIcon from "@mui/icons-material/WarningAmber"
 import Button from "@mui/material/Button"
 import IconButton from "@mui/material/IconButton"
 import Paper from "@mui/material/Paper"
@@ -46,6 +47,7 @@ export const RegionLabel = ({
   onOpen,
   onRegionClassAdded,
   allowComments,
+  invalidShow,
 }: Props) => {
   const classes = useStyles()
   const commentInputRef = useRef(null)
@@ -63,6 +65,9 @@ export const RegionLabel = ({
         className={classnames(classes.regionInfo, {
           highlighted: region.highlighted,
         })}
+        style={{
+          border: !invalidShow && region?.invaild ? "2px solid red" : null,
+        }}
       >
         {!editing ? (
           <div id="image_annotation">
@@ -113,6 +118,17 @@ export const RegionLabel = ({
               >
                 <TrashIcon style={{ marginTop: -8, width: 16, height: 16 }} />
               </IconButton>
+              {invalidShow && (
+                <WarningAmberIcon
+                  color={region?.invaild ? "primary" : "secondary"}
+                  onClick={() => {
+                    onChange({
+                      ...(region: any),
+                      invaild: !region?.invaild,
+                    })
+                  }}
+                />
+              )}
             </div>
             {(allowedClasses || []).length > 0 && (
               <div style={{ marginTop: 6 }}>
@@ -143,6 +159,7 @@ export const RegionLabel = ({
                     onChange({
                       ...(region: any),
                       tags: newTags.map((t) => t.value),
+                      tag_count: newTags.map((t) => t.value)?.length,
                     })
                   }
                   placeholder="Tags"
