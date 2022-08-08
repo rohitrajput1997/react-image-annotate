@@ -29,6 +29,8 @@ export const RegionTags = ({
   onRegionClassAdded,
   allowComments,
   invalidShow,
+  delete_annotation,
+  setdelete_annotation,
 }) => {
   const RegionLabel =
     RegionEditLabel != null ? RegionEditLabel : DefaultRegionLabel
@@ -123,6 +125,8 @@ export const RegionTags = ({
               onRegionClassAdded={onRegionClassAdded}
               allowComments={allowComments}
               invalidShow={invalidShow}
+              delete_annotation={delete_annotation}
+              setdelete_annotation={setdelete_annotation}
             />
           </div>
         </div>
@@ -131,4 +135,3 @@ export const RegionTags = ({
 }
 
 export default RegionTags
-

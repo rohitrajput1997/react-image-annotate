@@ -48,6 +48,8 @@ export const RegionLabel = ({
   onRegionClassAdded,
   allowComments,
   invalidShow,
+  delete_annotation,
+  setdelete_annotation,
 }: Props) => {
   const classes = useStyles()
   const commentInputRef = useRef(null)
@@ -110,7 +112,13 @@ export const RegionLabel = ({
               </div>
               <div style={{ flexGrow: 1 }} />
               <IconButton
-                onClick={() => onDelete(region)}
+                onClick={() => {
+                  let arr = [...delete_annotation]
+                  arr.push(region)
+
+                  setdelete_annotation(arr)
+                  onDelete(region)
+                }}
                 tabIndex={-1}
                 style={{ width: 22, height: 22 }}
                 size="small"
@@ -120,7 +128,9 @@ export const RegionLabel = ({
               </IconButton>
               {invalidShow && (
                 <WarningAmberIcon
-                  color={region?.invaild ? "primary" : "secondary"}
+                  style={{
+                    color: region?.invaild ? "#faad14" : "grey",
+                  }}
                   onClick={() => {
                     onChange({
                       ...(region: any),
@@ -216,4 +226,3 @@ export default memo(
     prevProps.editing === nextProps.editing &&
     prevProps.region === nextProps.region
 )
-

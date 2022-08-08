@@ -1,6 +1,6 @@
 // @flow
 
-import React, { useEffect, useReducer } from "react"
+import React, { useEffect, useReducer, useState } from "react"
 import makeImmutable, { without } from "seamless-immutable"
 import useEventCallback from "use-event-callback"
 import type { KeypointsDefinition } from "../ImageCanvas/region-tools"
@@ -149,9 +149,11 @@ export const Annotator = ({
             videoSrc,
             keyframes,
           } || {}),
+      qc_add: invalidShow,
     })
   )
   const [lines, setLines] = React.useState([])
+  const [delete_annotation, setdelete_annotation] = useState([])
   const dispatch = useEventCallback((action: Action) => {
     if (action.type === "HEADER_BUTTON_CLICKED") {
       if (
@@ -160,7 +162,14 @@ export const Annotator = ({
         )
       ) {
         return onExit(
-          without({ annotation: state, lazyBrush: lines }, "history")
+          without(
+            {
+              annotation: state,
+              lazyBrush: lines,
+              delete_annotation: delete_annotation,
+            },
+            "history"
+          )
         )
       } else if (action.buttonName === "Next" && onNextImage) {
         return onNextImage(without(state, "history"))
@@ -170,7 +179,14 @@ export const Annotator = ({
         return onAddQuery(without(state, "history"))
       } else if (action.buttonName === "Save & next" && saveandnext) {
         return saveandnext(
-          without({ annotation: state, lazyBrush: lines }, "history")
+          without(
+            {
+              annotation: state,
+              lazyBrush: lines,
+              delete_annotation: delete_annotation,
+            },
+            "history"
+          )
         )
       }
     }
@@ -232,10 +248,11 @@ export const Annotator = ({
         lines={lines}
         setLines={setLines}
         invalidShow={invalidShow}
+        setdelete_annotation={setdelete_annotation}
+        delete_annotation={delete_annotation}
       />
     </SettingsProvider>
   )
 }
 
 export default Annotator
-

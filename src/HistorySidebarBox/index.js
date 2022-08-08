@@ -57,7 +57,8 @@ export const HistorySidebarBox = ({
       } else if (
         key.target.id === "undo" ||
         key.target.ariaLabel === "undo annotation" ||
-        [...(key.target.parentNode.classList || [])].indexOf("fa-undo") !== -1
+        [...(key?.target?.parentNode?.classList || [])].indexOf("fa-undo") !==
+          -1
       ) {
         undoAnnotation()
       }

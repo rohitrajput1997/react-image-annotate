@@ -38,6 +38,8 @@ function BrushPopup({
   setLines,
   scale,
   invalidShow,
+  delete_annotation,
+  setdelete_annotation,
 }) {
   return (
     <div>
@@ -97,6 +99,10 @@ function BrushPopup({
                             linessave.splice(index, 1)
                             lines = linessave
                             setLines(linessave)
+                            let arr = [...delete_annotation]
+                            arr.push(item)
+
+                            setdelete_annotation(arr)
                           }}
                           tabIndex={-1}
                           style={{ width: 22, height: 22 }}
@@ -117,9 +123,12 @@ function BrushPopup({
 
                               setLines(linessave)
                             }}
-                            color={
-                              lines[index].invaild ? "primary" : "secondary"
-                            }
+                            style={{
+                              color: lines[index].invaild ? "#faad14" : "grey",
+                            }}
+                            // color={
+                            //   lines[index].invaild ? "primary" : "secondary"
+                            // }
                           />
                         )}
                       </div>

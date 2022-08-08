@@ -70,7 +70,7 @@ export default () => {
     enabledTools: ["select", "create-box"],
     images: [
       {
-        src: "https://upload.wikimedia.org/wikipedia/mediawiki/a/a9/Example.jpg",
+        src: "https://www.bianchi.com/wp-content/uploads/2019/07/YPB17I555K.jpg",
         name: "hot-dogs-1",
         regions: [
           {
@@ -104,7 +104,7 @@ export default () => {
         ],
       },
       {
-        src: "https://upload.wikimedia.org/wikipedia/mediawiki/a/a9/Example.jpg",
+        src: "https://www.bianchi.com/wp-content/uploads/2019/07/YPB17I555K.jpg",
         name: "bianchi-oltre-xr4",
       },
     ],
@@ -159,9 +159,8 @@ export default () => {
             },
           },
         ]}
-        invalidShow={false}
+        invalidShow={true}
       />
     </div>
   )
 }
-

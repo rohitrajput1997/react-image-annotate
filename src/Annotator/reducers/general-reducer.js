@@ -547,6 +547,7 @@ export default (state: MainLayoutState, action: Action) => {
             color: defaultRegionColor,
             id: getRandomId(),
             cls: defaultRegionCls,
+            qc_add: state.qc_add,
           }
           break
         }
@@ -563,6 +564,7 @@ export default (state: MainLayoutState, action: Action) => {
             color: defaultRegionColor,
             cls: defaultRegionCls,
             id: getRandomId(),
+            qc_add: state.qc_add,
           }
           state = setIn(state, ["mode"], {
             mode: "RESIZE_BOX",
@@ -588,6 +590,7 @@ export default (state: MainLayoutState, action: Action) => {
             color: defaultRegionColor,
             cls: defaultRegionCls,
             id: getRandomId(),
+            qc_add: state.qc_add,
           }
           state = setIn(state, ["mode"], {
             mode: "DRAW_POLYGON",
@@ -606,6 +609,7 @@ export default (state: MainLayoutState, action: Action) => {
             color: defaultRegionColor,
             cls: defaultRegionCls,
             id: getRandomId(),
+            qc_add: state.qc_add,
           }
           state = setIn(state, ["mode"], {
             mode: "DRAW_EXPANDING_LINE",
@@ -627,6 +631,7 @@ export default (state: MainLayoutState, action: Action) => {
             color: defaultRegionColor,
             cls: defaultRegionCls,
             id: getRandomId(),
+            qc_add: state.qc_add,
           }
           state = setIn(state, ["mode"], {
             mode: "DRAW_LINE",
@@ -937,3 +942,4 @@ export default (state: MainLayoutState, action: Action) => {
   }
   return state
 }
+

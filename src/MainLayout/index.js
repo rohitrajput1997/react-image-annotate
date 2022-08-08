@@ -88,6 +88,8 @@ export const MainLayout = ({
   lines,
   setLines,
   invalidShow,
+  delete_annotation,
+  setdelete_annotation,
 }: Props) => {
   const classes = useStyles()
   const settings = useSettings()
@@ -228,6 +230,8 @@ export const MainLayout = ({
       lines={lines}
       setLines={setLines}
       invalidShow={invalidShow}
+      setdelete_annotation={setdelete_annotation}
+      delete_annotation={delete_annotation}
     />
   )
 
@@ -588,3 +592,4 @@ export const MainLayout = ({
 }
 
 export default MainLayout
+
