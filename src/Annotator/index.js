@@ -149,7 +149,7 @@ export const Annotator = ({
             videoSrc,
             keyframes,
           } || {}),
-      qc_add: invalidShow,
+      qc_label: invalidShow,
     })
   )
   const [lines, setLines] = React.useState([])

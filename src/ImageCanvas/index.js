@@ -186,7 +186,7 @@ export const ImageCanvas = ({
         ...lines,
         {
           id: getRandomId(),
-          qc_add: invalidShow,
+          qc_label: invalidShow,
           tool,
           points: [pos.x, pos.y],
           brushRadius,
@@ -200,7 +200,7 @@ export const ImageCanvas = ({
         ...lines,
         {
           id: getRandomId(),
-          qc_add: invalidShow,
+          qc_label: invalidShow,
           tool,
           points: [pos.x, pos.y],
           brushRadius,
