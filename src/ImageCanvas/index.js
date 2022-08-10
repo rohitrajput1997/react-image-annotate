@@ -717,4 +717,3 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
-

@@ -31,6 +31,8 @@ const listItemTextStyle = { paddingLeft: 16 }
 export const HistorySidebarBox = ({
   history,
   onRestoreHistory,
+  delete_annotation,
+  setdelete_annotation,
 }: {
   history: Array<{ name: string, time: Date }>,
 }) => {
@@ -106,7 +108,14 @@ export const HistorySidebarBox = ({
                 secondary={moment(time).format("LT")}
               />
               {i === 0 && (
-                <ListItemSecondaryAction onClick={() => onRestoreHistory()}>
+                <ListItemSecondaryAction
+                  onClick={() => {
+                    if (name === "Delete Region") {
+                      console.log(history)
+                    }
+                    onRestoreHistory()
+                  }}
+                >
                   <IconButton>
                     <UndoIcon />
                   </IconButton>
@@ -126,3 +135,4 @@ export default memo(HistorySidebarBox, (prevProps, nextProps) => {
     nextProps.history.map((a) => [a.name, a.time])
   )
 })
+

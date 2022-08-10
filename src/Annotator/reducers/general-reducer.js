@@ -942,4 +942,3 @@ export default (state: MainLayoutState, action: Action) => {
   }
   return state
 }
-

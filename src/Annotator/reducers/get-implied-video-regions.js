@@ -12,6 +12,7 @@ export default (
     return keyframes[time || 0].regions
   }
   // Get surrounding video keyframes
+
   const keyframeTimes = Object.keys(keyframes)
     .map((a) => parseInt(a))
     .filter((a) => !isNaN(a))
@@ -25,7 +26,6 @@ export default (
   } else if (nextKeyframeTimeIndex === 0) {
     return emptyArr
   }
-
   const t1 = keyframeTimes[nextKeyframeTimeIndex - 1]
   const prevKeyframe = keyframes[t1]
   const t2 = keyframeTimes[nextKeyframeTimeIndex]
@@ -48,6 +48,7 @@ export default (
         ...prev,
         highlighted: false,
         editingLabels: false,
+        keyframes: 0,
       })
       continue
     }
@@ -59,6 +60,7 @@ export default (
           editingLabels: false,
           x: prev.x * w1 + next.x * w2,
           y: prev.y * w1 + next.y * w2,
+          keyframes: 0,
         })
         break
       }
@@ -71,6 +73,7 @@ export default (
           y: prev.y * w1 + next.y * w2,
           w: prev.w * w1 + next.w * w2,
           h: prev.h * w1 + next.h * w2,
+          keyframes: 0,
         })
         break
       }
@@ -84,6 +87,7 @@ export default (
               pp[0] * w1 + next.points[i][0] * w2,
               pp[1] * w1 + next.points[i][1] * w2,
             ]),
+            keyframes: 0,
           })
         } else {
           impliedRegions.push(prev)
@@ -103,6 +107,7 @@ export default (
           highlighted: false,
           editingLabels: false,
           points: newPoints,
+          rohit: "as",
         })
         break
       }
@@ -113,3 +118,4 @@ export default (
 
   return impliedRegions
 }
+

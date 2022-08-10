@@ -113,10 +113,19 @@ export const RegionLabel = ({
               <div style={{ flexGrow: 1 }} />
               <IconButton
                 onClick={() => {
-                  let arr = [...delete_annotation]
-                  arr.push(region)
+                  let delet_arr = [...delete_annotation]
+                  delet_arr.push(region)
+                  let filterArr =
+                    delet_arr &&
+                    delet_arr
+                      .filter(
+                        (arr, index, self) =>
+                          index ===
+                          self.findIndex((t) => t.id === arr.id && arr.id)
+                      )
+                      .map((item) => item)
 
-                  setdelete_annotation(arr)
+                  setdelete_annotation(filterArr)
                   onDelete(region)
                 }}
                 tabIndex={-1}

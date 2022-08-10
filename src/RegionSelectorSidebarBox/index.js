@@ -110,6 +110,8 @@ const Row = ({
   color,
   cls,
   index,
+  delete_annotation,
+  setdelete_annotation,
 }) => {
   return (
     <RowLayout
@@ -119,7 +121,25 @@ const Row = ({
       order={`#${index + 1}`}
       classification={<Chip text={cls || ""} color={color || "#ddd"} />}
       area=""
-      trash={<TrashIcon onClick={() => onDeleteRegion(r)} className="icon2" />}
+      trash={
+        <TrashIcon
+          onClick={() => {
+            onDeleteRegion(r)
+            let delet_arr = [...delete_annotation]
+            delet_arr.push(r)
+            let filterArr =
+              delet_arr &&
+              delet_arr
+                .filter(
+                  (arr, index, self) =>
+                    index === self.findIndex((t) => t.id === arr.id && arr.id)
+                )
+                .map((item) => item)
+            setdelete_annotation(filterArr)
+          }}
+          className="icon2"
+        />
+      }
       lock={
         r.locked ? (
           <LockIcon
@@ -169,6 +189,8 @@ export const RegionSelectorSidebarBox = ({
   onDeleteRegion,
   onChangeRegion,
   onSelectRegion,
+  delete_annotation,
+  setdelete_annotation,
 }) => {
   const classes = useStyles()
   return (
@@ -191,6 +213,8 @@ export const RegionSelectorSidebarBox = ({
               onSelectRegion={onSelectRegion}
               onDeleteRegion={onDeleteRegion}
               onChangeRegion={onChangeRegion}
+              delete_annotation={delete_annotation}
+              setdelete_annotation={setdelete_annotation}
             />
           ))}
         </div>
@@ -213,3 +237,4 @@ export default memo(RegionSelectorSidebarBox, (prevProps, nextProps) =>
     (nextProps.regions || emptyArr).map(mapUsedRegionProperties)
   )
 )
+

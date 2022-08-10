@@ -67,6 +67,8 @@ export const Sidebar = ({
   onChangeVideoTime,
   onDeleteKeyframe,
   onShortcutActionDispatched,
+  delete_annotation,
+  setdelete_annotation,
 }: Props) => {
   if (!regions) regions = emptyArr
 
@@ -94,6 +96,8 @@ export const Sidebar = ({
           onSelectRegion={onSelectRegion}
           onChangeRegion={onChangeRegion}
           onDeleteRegion={onDeleteRegion}
+          delete_annotation={delete_annotation}
+          setdelete_annotation={setdelete_annotation}
         />
         {keyframes && (
           <KeyframesSelector

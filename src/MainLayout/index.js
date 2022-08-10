@@ -510,6 +510,8 @@ export const MainLayout = ({
                   onSelectRegion={action("SELECT_REGION", "region")}
                   onDeleteRegion={action("DELETE_REGION", "region")}
                   onChangeRegion={action("CHANGE_REGION", "region")}
+                  delete_annotation={delete_annotation}
+                  setdelete_annotation={setdelete_annotation}
                 />,
                 state.keyframes && (
                   <KeyframesSelector
@@ -526,6 +528,8 @@ export const MainLayout = ({
                   onRestoreHistory={action("RESTORE_HISTORY")}
                   line={lines}
                   setLines={setLines}
+                  delete_annotation={delete_annotation}
+                  setdelete_annotation={setdelete_annotation}
                 />,
               ].filter(Boolean)}
             >
