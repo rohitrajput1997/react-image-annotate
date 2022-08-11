@@ -158,6 +158,7 @@ export const ImageCanvas = ({
   invalidShow,
   delete_annotation,
   setdelete_annotation,
+  annotationType,
 }: Props) => {
   const classes = useStyles()
 
@@ -193,6 +194,7 @@ export const ImageCanvas = ({
           popUp: {
             open: false,
           },
+          keyframes: videoTime,
         },
       ])
     } else {
@@ -204,6 +206,7 @@ export const ImageCanvas = ({
           tool,
           points: [pos.x, pos.y],
           brushRadius,
+          keyframes: videoTime,
         },
       ])
     }
@@ -638,7 +641,11 @@ export const ImageCanvas = ({
                     <>
                       <Line
                         key={i}
-                        points={line.points}
+                        points={
+                          annotationType === "video"
+                            ? line.keyframes === videoTime && line.points
+                            : line.points
+                        }
                         stroke={
                           line.tool === "eraser"
                             ? "#df4b26"
@@ -681,6 +688,8 @@ export const ImageCanvas = ({
                 invalidShow={invalidShow}
                 delete_annotation={delete_annotation}
                 setdelete_annotation={setdelete_annotation}
+                annotationType={annotationType}
+                videoTime={videoTime}
               />
             </div>
 
@@ -717,3 +726,4 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
+

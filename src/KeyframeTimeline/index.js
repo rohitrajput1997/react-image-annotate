@@ -1,13 +1,12 @@
 // @flow weak
 
-import React, { useMemo, useState, useEffect } from "react"
-import { styled } from "@mui/material/styles"
-import { createTheme, ThemeProvider } from "@mui/material/styles"
-import range from "lodash/range"
 import * as colors from "@mui/material/colors"
+import { createTheme, styled, ThemeProvider } from "@mui/material/styles"
+import range from "lodash/range"
+import React, { useEffect, useMemo, useState } from "react"
+import { useRafState } from "react-use"
 import useMeasure from "react-use-measure"
 import useEventCallback from "use-event-callback"
-import { useRafState } from "react-use"
 import getTimeString from "./get-time-string"
 
 const theme = createTheme()
@@ -101,6 +100,38 @@ const KeyframeMarker = styled("div")(({ theme }) => ({
   },
 }))
 
+const BrushframeMarker = styled("div")(({ theme }) => ({
+  position: "absolute",
+  bottom: 8,
+  cursor: "pointer",
+  opacity: 0.75,
+  fontSize: 10,
+  fontWeight: "bold",
+  color: "#fff",
+  display: "grid",
+  placeItems: "center",
+  width: 16,
+  marginLeft: 0,
+  borderTopLeftRadius: 2,
+  borderTopRightRadius: 2,
+  height: 12,
+  marginLeft: -8,
+  backgroundColor: colors.green[500],
+  userSelect: "none",
+  fontVariantNumeric: "tabular-nums",
+
+  "&::before": {
+    position: "absolute",
+    bottom: -8,
+    left: 0,
+    content: '""',
+    width: 0,
+    height: 0,
+    borderTop: `8px solid ${colors.green[500]}`,
+    borderLeft: "8px solid transparent",
+    borderRight: "8px solid transparent",
+  },
+}))
 const min = 60000
 const displayIntervalPairs = [
   [50, 250],
@@ -131,6 +162,7 @@ export default ({
   duration,
   onChangeCurrentTime,
   keyframes,
+  brushLines,
 }) => {
   const [ref, bounds] = useMeasure()
   const [instantCurrentTime, changeInstantCurrentTime] = useState(currentTime)
@@ -201,6 +233,7 @@ export default ({
               }}
             />
           ))}
+
         {keyframeTimes.map((kt) => (
           <KeyframeMarker
             onClick={() => onChangeCurrentTime(kt)}
@@ -208,6 +241,16 @@ export default ({
             style={{ left: (kt / duration) * bounds.width }}
           />
         ))}
+        {brushLines?.map((item, index) => {
+          return (
+            <BrushframeMarker
+              key={index}
+              onClick={() => onChangeCurrentTime(item.keyframes)}
+              style={{ left: (item.keyframes / duration) * bounds.width }}
+            />
+          )
+        })}
+
         <PositionCursor
           onMouseDown={(e) => changeDraggingTime(true)}
           style={{
@@ -221,3 +264,4 @@ export default ({
     </ThemeProvider>
   )
 }
+

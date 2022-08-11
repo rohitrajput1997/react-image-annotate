@@ -548,6 +548,7 @@ export default (state: MainLayoutState, action: Action) => {
             id: getRandomId(),
             cls: defaultRegionCls,
             qc_label: state.qc_label,
+            keyframes: state.currentVideoTime || 0,
           }
           break
         }
@@ -565,6 +566,7 @@ export default (state: MainLayoutState, action: Action) => {
             cls: defaultRegionCls,
             id: getRandomId(),
             qc_label: state.qc_label,
+            keyframes: state.currentVideoTime || 0,
           }
           state = setIn(state, ["mode"], {
             mode: "RESIZE_BOX",
@@ -591,6 +593,7 @@ export default (state: MainLayoutState, action: Action) => {
             cls: defaultRegionCls,
             id: getRandomId(),
             qc_label: state.qc_label,
+            keyframes: state.currentVideoTime || 0,
           }
           state = setIn(state, ["mode"], {
             mode: "DRAW_POLYGON",
@@ -610,6 +613,7 @@ export default (state: MainLayoutState, action: Action) => {
             cls: defaultRegionCls,
             id: getRandomId(),
             qc_label: state.qc_label,
+            keyframes: state.currentVideoTime || 0,
           }
           state = setIn(state, ["mode"], {
             mode: "DRAW_EXPANDING_LINE",
@@ -632,6 +636,7 @@ export default (state: MainLayoutState, action: Action) => {
             cls: defaultRegionCls,
             id: getRandomId(),
             qc_label: state.qc_label,
+            keyframes: state.currentVideoTime || 0,
           }
           state = setIn(state, ["mode"], {
             mode: "DRAW_LINE",
@@ -942,3 +947,4 @@ export default (state: MainLayoutState, action: Action) => {
   }
   return state
 }
+

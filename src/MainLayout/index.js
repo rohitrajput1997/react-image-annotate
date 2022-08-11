@@ -17,6 +17,7 @@ import HistorySidebarBox from "../HistorySidebarBox"
 import ImageCanvas from "../ImageCanvas"
 import KeyframesSelector from "../KeyframesSelectorSidebarBox"
 import KeyframeTimeline from "../KeyframeTimeline"
+import BrushKeyFrame from "../LazyBrush/BrushKeyFrame"
 import VerticalSlider from "../LazyBrush/BrushSlider"
 import RegionSelector from "../RegionSelectorSidebarBox"
 import SettingsDialog from "../SettingsDialog"
@@ -232,6 +233,7 @@ export const MainLayout = ({
       invalidShow={invalidShow}
       setdelete_annotation={setdelete_annotation}
       delete_annotation={delete_annotation}
+      annotationType={state.annotationType}
     />
   )
 
@@ -293,6 +295,7 @@ export const MainLayout = ({
                     duration={state.videoDuration}
                     onChangeCurrentTime={action("CHANGE_VIDEO_TIME", "newTime")}
                     keyframes={state.keyframes}
+                    brushLines={lines}
                   />
                 ) : activeImage ? (
                   <div
@@ -523,6 +526,18 @@ export const MainLayout = ({
                     keyframes={state.keyframes}
                   />
                 ),
+
+                state.keyframes && (
+                  <BrushKeyFrame
+                    onChangeVideoTime={action("CHANGE_VIDEO_TIME", "newTime")}
+                    currentTime={state.currentVideoTime}
+                    duration={state.videoDuration}
+                    brushLines={lines}
+                    delete_annotation={delete_annotation}
+                    setdelete_annotation={setdelete_annotation}
+                    setLines={setLines}
+                  />
+                ),
                 <HistorySidebarBox
                   history={state.history}
                   onRestoreHistory={action("RESTORE_HISTORY")}
@@ -596,4 +611,3 @@ export const MainLayout = ({
 }
 
 export default MainLayout
-

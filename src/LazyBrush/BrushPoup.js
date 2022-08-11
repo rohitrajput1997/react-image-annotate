@@ -9,14 +9,12 @@ import colors from "../colors"
 const convertHextoRgb = (color) => {
   try {
     let hashRemove = color.replace("#", "")
-    console.log(hashRemove, color)
     var aRgbHex = hashRemove.match(/.{1,2}/g)
     var aRgb = [
       parseInt(aRgbHex[0], 16),
       parseInt(aRgbHex[1], 16),
       parseInt(aRgbHex[2], 16),
     ]
-    console.log(aRgb)
     return aRgb.toString()
   } catch (err) {
     var aRgbHex = "FF0000".match(/.{1,2}/g)
@@ -40,6 +38,8 @@ function BrushPopup({
   invalidShow,
   delete_annotation,
   setdelete_annotation,
+  annotationType,
+  videoTime,
 }) {
   return (
     <div>
@@ -52,6 +52,12 @@ function BrushPopup({
                   left: `${item.points[0] * scale}px`,
                   top: `${item.points[1] * scale}px`,
                   position: "absolute",
+                  display:
+                    annotationType === "video"
+                      ? item.keyframes === videoTime
+                        ? "block"
+                        : "none"
+                      : "block",
                 }}
               >
                 <Paper
