@@ -66,13 +66,11 @@ const BrushKeyFrame = ({
           <KeyframeRow
             fullWidth
             key={t}
-            className={
-              currentVideoTime === t.keyframes.keyframes ? "current" : ""
-            }
-            onClick={() => onChangeVideoTime(t.keyframes)}
+            className={currentVideoTime === t?.keyframes ? "current" : ""}
+            onClick={() => onChangeVideoTime(t?.keyframes)}
           >
             <div className="time">
-              {getTimeString(t.keyframes, 2)}
+              {getTimeString(t?.keyframes, 2)}
               <span className="regionCount">({t.tool})</span>
             </div>
             <div className="trash">
@@ -99,3 +97,4 @@ const BrushKeyFrame = ({
 }
 
 export default BrushKeyFrame
+

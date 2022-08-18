@@ -67,6 +67,7 @@ type Props = {
   allowedArea?: { x: number, y: number, w: number, h: number },
   RegionEditLabel?: Node,
   videoPlaying?: boolean,
+  isMuted?: boolean,
   zoomOnAllowedArea?: boolean,
   fullImageSegmentationMode?: boolean,
   autoSegmentationOptions?: Object,
@@ -124,6 +125,7 @@ export const ImageCanvas = ({
   allowedArea,
   RegionEditLabel = null,
   videoPlaying = false,
+  isMuted = false,
   showMask = true,
   fullImageSegmentationMode,
   autoSegmentationOptions,
@@ -155,7 +157,7 @@ export const ImageCanvas = ({
   tool,
   setLines,
   lines,
-  invalidShow,
+  invaild_show,
   delete_annotation,
   setdelete_annotation,
   annotationType,
@@ -187,7 +189,7 @@ export const ImageCanvas = ({
         ...lines,
         {
           id: getRandomId(),
-          qc_label: invalidShow,
+          qc_label: invaild_show,
           tool,
           points: [pos.x, pos.y],
           brushRadius,
@@ -202,7 +204,7 @@ export const ImageCanvas = ({
         ...lines,
         {
           id: getRandomId(),
-          qc_label: invalidShow,
+          qc_label: invaild_show,
           tool,
           points: [pos.x, pos.y],
           brushRadius,
@@ -439,9 +441,9 @@ export const ImageCanvas = ({
           overflow: "hidden",
           cursor:
             selectedTool === "create-a-brush"
-              ? `url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAKqNIzIAAAAHdElNRQfmCAgEOQdu5IHUAAABRUlEQVRIx+3UPy8DYRzA8W9TqSIRf4KKqw5iERKJ9ToYDF4DMbh4CQaLQQidvAgWUyM0on0HQmJ1HQjadJCGiEg18TOUy/Uqnue5rn775/u7u+fuophNnEWGuTdU3nSxzSuPLIXlGeoIQpVVIqY87nFBeGbNNNHNoccbCUcfd7LCFIMcNSWqLOvxGJvUuGC6JVFiQWf7FjUE4ZKZQOKTdfWj2+HDA8FEllHVwe36uCBc+RI5LBXf8x1cMHFKMgxvJGbpZygsF4R91Uv0N8+Rao+Hvvd/ruA97XFw2uFR+pigEH77AAekGSf/C1d+MgCTVChik+S8hVtqDvO8IbikA4kTPQ7ONyg2JbQ5ZLydLjYWZwjHjOnyGFnfZbvYpNjQ3w4jXPv+su/kTTB0kKCXCiXucLnhljJPJoEICeZ4oMwLdRP4M1+kYE6CEwYFiAAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMi0wOC0wOFQwNDo1Njo1OSswMDowMDn20JwAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjItMDgtMDhUMDQ6NTY6NTkrMDA6MDBIq2ggAAAAL3RFWHRzdmc6Y29tbWVudAA/eG1sIHZlcnNpb249IjEuMCIgc3RhbmRhbG9uZT0ibm8iP+TB92sAAAAASUVORK5CYII=) 0 50, auto`
+              ? `url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAQAAAAngNWGAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QAAKqNIzIAAAAHdElNRQfmCAwJNiDLzCx0AAAA90lEQVQoz43PPyvEcRwH8Nfd6cRgUBZdSixHOvNt/g4KgzJ4BCZWj4CFRR4BMtgNGDAoJXeD4ZLFIFlEDovc1+Ck636/O+/51fvz/qQ0yrAlH+41ybBDn87lG7O0TUEQXMqTimEDJpX0yqBb1k00HLRh0YMd/TLIqESxIUcqgrJVUy4EVybqWc5xdVvwZs2sbeMS9W1/LAjeLeuQjGqr1MCikahttW1B0Wjzoz+s4Qu/bOx/LGJbu3VfzdtaTZt31mwbXQ7smXNaZYWoo5B1rWK3SgvRbbTI6JSwIGlLyb6TONinzbMXPdJWvIpJwoycW3cePSmLzTfl9n00bWsN+AAAACV0RVh0ZGF0ZTpjcmVhdGUAMjAyMi0wOC0xMlQwOTo1NDoyNiswMDowMPW3aEAAAAAldEVYdGRhdGU6bW9kaWZ5ADIwMjItMDgtMTJUMDk6NTQ6MjYrMDA6MDCE6tD8AAAAL3RFWHRzdmc6Y29tbWVudAA/eG1sIHZlcnNpb249IjEuMCIgc3RhbmRhbG9uZT0ibm8iP+TB92sAAAAASUVORK5CYII=) 0 50, auto`
               : selectedTool === "eraser"
-              ? `url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAACAAAAAgCAQAAADZc7J/AAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAADOIAAAziARMbrlMAAAAHdElNRQfmCAgFABIMf4KyAAABhUlEQVRIx6XVO2sUURiA4Wc0CXhrvKAEk99gwCIaOwsbRURrEcS/ECy8lRKwsLVUESuNiQg2ooVVGlER00oiAUG8EEyyxi/F7sjuZmbOjH7bHeZ557IzHP5zshrH7HLCUUPee2qh+SmGPdQSQpgz3pxPC2temPZV+OBIc77qup22Oudzs0TOrxnsrJxpkhj2pMOHulZrJ4p57UTOr/69+EaJNg/fnS05Ik+Ml/MVX4QFpyoTb42VXfwVx31MJJaEx2WPbhDHzFcmbgg/qp98deKS0Er9ceWJUa+Ed9W8PDHimfDTxRQvTrT5L5MG0nxzIueX2/yARwnenThptJdzW1hJ8O7EXC9nSbhT+M73z4R50c9ZF87X4Bz0ejNnUbhrW5KP9N97Pjf90TKVSJRy9rgn/K5MVHDY60FlIsFTiRocdrvfSWzvWW+/NssmbSmGmQsOyazb77QdWmZ96trwDpvAohmrfdtgJrw0w3Jn2/qX3xv7BtwyVmuLLZrnvmUkv4LyWWMDajr1R3mTa4EAAAAldEVYdGRhdGU6Y3JlYXRlADIwMjItMDgtMDhUMDU6MDA6MDgrMDA6MDB2vtDMAAAAJXRFWHRkYXRlOm1vZGlmeQAyMDIyLTA4LTA4VDA1OjAwOjA4KzAwOjAwB+NocAAAABl0RVh0U29mdHdhcmUAd3d3Lmlua3NjYXBlLm9yZ5vuPBoAAAAASUVORK5CYII=) 0 50, auto`
+              ? `url(data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAABQAAAAUCAQAAAAngNWGAAAABGdBTUEAALGPC/xhBQAAACBjSFJNAAB6JgAAgIQAAPoAAACA6AAAdTAAAOpgAAA6mAAAF3CculE8AAAAAmJLR0QA/4ePzL8AAAAJcEhZcwAADOIAAAziARMbrlMAAAAHdElNRQfmCAwJOQPuM0HJAAABbklEQVQoz33Sv0tVYRwG8M97rnQ1JQjDQRps6JcNLQ1JFASt2pVukzU5FS5OtjYIDeFwHRv0b/AH2VZTJljSkJ0ul0C8OGRcKCtE4jack/dcO/RM7/vwvM/z/fEW5CEYcFmXhqb/oGDYS5+sGdfZIo8iMuKpb57pdd+e937nuUVGxVZcwmlztjxUzAst2bRiML33m8+TRkZ9FruS4frNqXugWMi43Tat0zFfbDhI2e/WDRiz33IrqXrumoodU463uS6o/9tCn4p6m7TDTOJYUBJ7cdjCKbPqpnSnJZVVLSZu1UyniTQpoEtQVrNokLs+pKFZ9Jm17ZF7YssuQOyVizmj71Wx66sl5xLiwBMh92OMa/x1g1Ubrufs6I7YkvMt6oZVb49II2U1y1kZXPXaWkYaKdu04Gx7JTf1GDKhpmJX0HTGpKIZH0Wp5pd3wRsnBT067KUbLuq270cmoeFxcMsJNDXT98k5ZCYR/LT+B8sFZXXqS1fMAAAAJXRFWHRkYXRlOmNyZWF0ZQAyMDIyLTA4LTEyVDA5OjU2OjU3KzAwOjAwXfC60AAAACV0RVh0ZGF0ZTptb2RpZnkAMjAyMi0wOC0xMlQwOTo1Njo1NyswMDowMCytAmwAAAAZdEVYdFNvZnR3YXJlAHd3dy5pbmtzY2FwZS5vcmeb7jwaAAAAAElFTkSuQmCC) 0 50, auto`
               : createWithPrimary
               ? "crosshair"
               : dragging
@@ -519,7 +521,7 @@ export const ImageCanvas = ({
               RegionEditLabel={RegionEditLabel}
               onRegionClassAdded={onRegionClassAdded}
               allowComments={allowComments}
-              invalidShow={invalidShow}
+              invaild_show={invaild_show}
               delete_annotation={delete_annotation}
               setdelete_annotation={setdelete_annotation}
             />
@@ -641,11 +643,7 @@ export const ImageCanvas = ({
                     <>
                       <Line
                         key={i}
-                        points={
-                          annotationType === "video"
-                            ? line.keyframes === videoTime && line.points
-                            : line.points
-                        }
+                        points={line.points}
                         stroke={
                           line.tool === "eraser"
                             ? "#df4b26"
@@ -685,7 +683,7 @@ export const ImageCanvas = ({
                 lazyBrushTags={lazyBrushTags}
                 setLines={setLines}
                 scale={((1 / mat.a) * 100) / 100}
-                invalidShow={invalidShow}
+                invaild_show={invaild_show}
                 delete_annotation={delete_annotation}
                 setdelete_annotation={setdelete_annotation}
                 annotationType={annotationType}
@@ -716,6 +714,7 @@ export const ImageCanvas = ({
               useCrossOrigin={fullImageSegmentationMode}
               onChangeVideoTime={onChangeVideoTime}
               onChangeVideoPlaying={onChangeVideoPlaying}
+              isMuted={isMuted}
             />
             {/* </div> */}
           </>

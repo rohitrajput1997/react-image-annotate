@@ -1,10 +1,10 @@
 // @flow
 
-import type {
-  MainLayoutVideoAnnotationState,
-  Action,
-} from "../../MainLayout/types"
 import { setIn, without } from "seamless-immutable"
+import type {
+  Action,
+  MainLayoutVideoAnnotationState,
+} from "../../MainLayout/types"
 import getImpliedVideoRegions from "./get-implied-video-regions"
 import { saveToHistory } from "./history-handler.js"
 
@@ -35,6 +35,10 @@ export default (state: MainLayoutVideoAnnotationState, action: Action) => {
           return setIn(state, ["videoPlaying"], true)
         case "pause":
           return setIn(state, ["videoPlaying"], false)
+        case "mute":
+          return setIn(state, ["isMuted"], true)
+        case "unmute":
+          return setIn(state, ["isMuted"], false)
       }
     }
     case "CHANGE_VIDEO_TIME": {

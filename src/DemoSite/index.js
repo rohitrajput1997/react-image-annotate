@@ -89,7 +89,7 @@ export default () => {
     //         color: "#f44336",
     //         highlighted: false,
     //         editingLabels: false,
-    //         invaild: true,
+    //         invalid: true,
     //       },
     //       {
     //         h: 0.15360000000000004,
@@ -103,7 +103,7 @@ export default () => {
     //         color: "#f44336",
     //         highlighted: false,
     //         editingLabels: false,
-    //         invaild: true,
+    //         invalid: true,
     //       },
     //     ],
     //   },
@@ -147,7 +147,8 @@ export default () => {
               19.166664123535156,
             ],
             brushRadius: 5,
-            invaild: false,
+            invalid: false,
+            keyframes: 32312,
             popUp: {
               open: false,
               classification: {
@@ -162,8 +163,23 @@ export default () => {
               ],
             },
           },
+          {
+            id: "2832329017640485",
+            qc_label: true,
+            tool: "pen",
+            points: [
+              189.08368185638682, 213, 215.0951936461543, 197,
+              317.1403552829345, 162, 395.17489065223697, 166, 416.18418863628,
+              223, 414.1833031139902, 236,
+            ],
+            brushRadius: 5,
+            popUp: {
+              open: false,
+            },
+            keyframes: 32312,
+          },
         ]}
-        invalidShow={true}
+        invaild_show={true}
       />
     </div>
   )

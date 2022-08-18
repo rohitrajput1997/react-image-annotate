@@ -41,6 +41,7 @@ export default ({
   videoPlaying,
   onChangeVideoTime,
   onChangeVideoPlaying,
+  isMuted = false,
 }) => {
   const settings = useSettings()
   const videoRef = useRef()
@@ -174,6 +175,7 @@ export default ({
           style={stylePosition}
           onLoadedMetadata={onLoadedVideoMetadata}
           src={videoSrc || imageSrc}
+          muted={isMuted}
         />
       )}
     </ThemeProvider>

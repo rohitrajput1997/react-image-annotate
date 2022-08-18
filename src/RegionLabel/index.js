@@ -47,7 +47,7 @@ export const RegionLabel = ({
   onOpen,
   onRegionClassAdded,
   allowComments,
-  invalidShow,
+  invaild_show,
   delete_annotation,
   setdelete_annotation,
 }: Props) => {
@@ -68,7 +68,7 @@ export const RegionLabel = ({
           highlighted: region.highlighted,
         })}
         style={{
-          border: !invalidShow && region?.invaild ? "2px solid red" : null,
+          border: !invaild_show && region?.invalid ? "2px solid red" : null,
         }}
       >
         {!editing ? (
@@ -135,18 +135,28 @@ export const RegionLabel = ({
               >
                 <TrashIcon style={{ marginTop: -8, width: 16, height: 16 }} />
               </IconButton>
-              {invalidShow && (
-                <WarningAmberIcon
-                  style={{
-                    color: region?.invaild ? "#faad14" : "grey",
-                  }}
-                  onClick={() => {
-                    onChange({
-                      ...(region: any),
-                      invaild: !region?.invaild,
-                    })
-                  }}
-                />
+              {invaild_show && (
+                <IconButton
+                  tabIndex={-1}
+                  style={{ width: 22, height: 22 }}
+                  size="small"
+                  variant="outlined"
+                >
+                  <WarningAmberIcon
+                    style={{
+                      color: region?.invalid ? "#faad14" : "grey",
+                      marginTop: -8,
+                      width: 16,
+                      height: 16,
+                    }}
+                    onClick={() => {
+                      onChange({
+                        ...(region: any),
+                        invalid: !region?.invalid,
+                      })
+                    }}
+                  />
+                </IconButton>
               )}
             </div>
             {(allowedClasses || []).length > 0 && (
@@ -235,3 +245,4 @@ export default memo(
     prevProps.editing === nextProps.editing &&
     prevProps.region === nextProps.region
 )
+

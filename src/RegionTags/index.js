@@ -28,7 +28,7 @@ export const RegionTags = ({
   RegionEditLabel,
   onRegionClassAdded,
   allowComments,
-  invalidShow,
+  invaild_show,
   delete_annotation,
   setdelete_annotation,
 }) => {
@@ -124,7 +124,7 @@ export const RegionTags = ({
               imageSrc={imageSrc}
               onRegionClassAdded={onRegionClassAdded}
               allowComments={allowComments}
-              invalidShow={invalidShow}
+              invaild_show={invaild_show}
               delete_annotation={delete_annotation}
               setdelete_annotation={setdelete_annotation}
             />
@@ -135,3 +135,4 @@ export const RegionTags = ({
 }
 
 export default RegionTags
+

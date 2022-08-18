@@ -35,7 +35,7 @@ function BrushPopup({
   lazyBrushTags,
   setLines,
   scale,
-  invalidShow,
+  invaild_show,
   delete_annotation,
   setdelete_annotation,
   annotationType,
@@ -52,12 +52,12 @@ function BrushPopup({
                   left: `${item.points[0] * scale}px`,
                   top: `${item.points[1] * scale}px`,
                   position: "absolute",
-                  display:
-                    annotationType === "video"
-                      ? item.keyframes === videoTime
-                        ? "block"
-                        : "none"
-                      : "block",
+                  // display:
+                  //   annotationType === "video"
+                  //     ? item.keyframes === videoTime
+                  //       ? "block"
+                  //       : "none"
+                  //     : "block",
                 }}
               >
                 <Paper
@@ -68,14 +68,20 @@ function BrushPopup({
                     position: "absolute",
                     cursor: "pointer",
                     border:
-                      !invalidShow && lines[index].invaild
+                      !invaild_show && lines[index].invalid
                         ? "2px solid red"
                         : null,
                   }}
                 >
                   {item?.popUp?.open ? (
                     <div style={{ width: 200, padding: 10 }}>
-                      <div style={{ display: "flex", flexDirection: "row" }}>
+                      <div
+                        style={{
+                          display: "flex",
+                          flexDirection: "row",
+                          alignItems: "flex-end",
+                        }}
+                      >
                         <div
                           style={{
                             display: "flex",
@@ -119,23 +125,35 @@ function BrushPopup({
                             style={{ marginTop: -8, width: 16, height: 16 }}
                           />
                         </IconButton>
-                        {invalidShow && (
-                          <WarningAmberIcon
+                        {invaild_show && (
+                          <IconButton
                             onClick={() => {
                               let linessave = [...lines]
-                              lines[index].invaild = lines[index].invaild
+                              lines[index].invalid = lines[index].invalid
                                 ? false
                                 : true
 
                               setLines(linessave)
                             }}
-                            style={{
-                              color: lines[index].invaild ? "#faad14" : "grey",
-                            }}
-                            // color={
-                            //   lines[index].invaild ? "primary" : "secondary"
-                            // }
-                          />
+                            tabIndex={-1}
+                            style={{ width: 22, height: 22 }}
+                            size="small"
+                            variant="outlined"
+                          >
+                            <WarningAmberIcon
+                              style={{
+                                color: lines[index].invalid
+                                  ? "#faad14"
+                                  : "grey",
+                                marginTop: -8,
+                                width: 16,
+                                height: 16,
+                              }}
+                              // color={
+                              //   lines[index].invalid ? "primary" : "secondary"
+                              // }
+                            />
+                          </IconButton>
                         )}
                       </div>
                       <div style={{ marginTop: 6 }}>

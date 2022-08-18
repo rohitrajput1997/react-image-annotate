@@ -95,6 +95,7 @@ export type MainLayoutVideoAnnotationState = {|
   currentVideoTime: number,
   videoName?: string,
   videoPlaying: boolean,
+  isMuted: boolean,
   videoDuration?: number,
   keyframes: {
     [time: number]: {|

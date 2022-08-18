@@ -88,7 +88,7 @@ export const MainLayout = ({
   yPosition,
   lines,
   setLines,
-  invalidShow,
+  invaild_show,
   delete_annotation,
   setdelete_annotation,
 }: Props) => {
@@ -98,6 +98,7 @@ export const MainLayout = ({
   const [openBrush, setBrushOpen] = useState(false)
   const [brushRadius, setbrushRadius] = useState(5)
   const [tool, setTool] = React.useState("pen")
+  const [isMuted, setisMuted] = useState(false)
   React.useEffect(() => {
     if (state.selectedTool === "create-a-brush") {
       setTool("pen")
@@ -230,10 +231,11 @@ export const MainLayout = ({
       tool={tool}
       lines={lines}
       setLines={setLines}
-      invalidShow={invalidShow}
+      invaild_show={invaild_show}
       setdelete_annotation={setdelete_annotation}
       delete_annotation={delete_annotation}
       annotationType={state.annotationType}
+      isMuted={state.isMuted}
     />
   )
 
@@ -321,6 +323,19 @@ export const MainLayout = ({
                   : !state.videoPlaying
                   ? { name: "Play", className: "play", iconName: "Play" }
                   : { name: "Pause", className: "pause", iconName: "Pause" },
+                state.annotationType === "video"
+                  ? state.isMuted
+                    ? {
+                        name: "unmute",
+                        className: "isMuted",
+                        iconName: "unmute",
+                      }
+                    : {
+                        name: "mute",
+                        className: "isMuted",
+                        iconName: "mute",
+                      }
+                  : null,
                 !hideClone &&
                   !nextImageHasRegions &&
                   activeImage.regions && {

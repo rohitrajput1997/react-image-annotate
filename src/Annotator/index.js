@@ -101,7 +101,7 @@ export const Annotator = ({
   lazyBrush = [],
   xPosition,
   yPosition,
-  invalidShow,
+  invaild_show,
 }: Props) => {
   if (typeof selectedImage === "string") {
     selectedImage = (images || []).findIndex((img) => img.src === selectedImage)
@@ -138,6 +138,7 @@ export const Annotator = ({
       videoName,
       keypointDefinitions,
       allowComments,
+
       ...(annotationType === "image"
         ? {
             selectedImage,
@@ -149,7 +150,7 @@ export const Annotator = ({
             videoSrc,
             keyframes,
           } || {}),
-      qc_label: invalidShow,
+      qc_label: invaild_show,
     })
   )
   const [lines, setLines] = React.useState([])
@@ -247,7 +248,7 @@ export const Annotator = ({
         yPosition={yPosition}
         lines={lines}
         setLines={setLines}
-        invalidShow={invalidShow}
+        invaild_show={invaild_show}
         setdelete_annotation={setdelete_annotation}
         delete_annotation={delete_annotation}
       />
@@ -256,3 +257,4 @@ export const Annotator = ({
 }
 
 export default Annotator
+
