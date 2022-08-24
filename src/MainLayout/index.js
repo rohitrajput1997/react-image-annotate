@@ -91,6 +91,9 @@ export const MainLayout = ({
   invaild_show,
   delete_annotation,
   setdelete_annotation,
+  hideSaveNext,
+  hideQuery,
+  showUpdate = false,
 }: Props) => {
   const classes = useStyles()
   const settings = useSettings()
@@ -236,6 +239,7 @@ export const MainLayout = ({
       delete_annotation={delete_annotation}
       annotationType={state.annotationType}
       isMuted={state.isMuted}
+      selectedCls={state.selectedCls}
     />
   )
 
@@ -353,13 +357,13 @@ export const MainLayout = ({
                 //   className: "brushRadius",
                 //   iconName: "brush radius",
                 // },
-                {
+                !hideQuery && {
                   name: "Add Query",
                   className: "query",
                   iconName: "add query",
                   disabled: isaddQueryDisabled,
                 },
-                {
+                !hideSaveNext && {
                   name: "Save & next",
                   className: "savenext",
                   iconName: "save & next",
@@ -367,6 +371,12 @@ export const MainLayout = ({
                 },
                 !hideSave && {
                   name: "Submit",
+                  className: "save",
+                  iconName: "submit",
+                  disabled: isSubmitDisabled,
+                },
+                showUpdate && {
+                  name: "Update",
                   className: "save",
                   iconName: "submit",
                   disabled: isSubmitDisabled,
@@ -626,3 +636,4 @@ export const MainLayout = ({
 }
 
 export default MainLayout
+

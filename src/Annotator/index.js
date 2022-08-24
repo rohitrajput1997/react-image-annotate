@@ -102,6 +102,9 @@ export const Annotator = ({
   xPosition,
   yPosition,
   invaild_show,
+  hideQuery,
+  hideSaveNext,
+  showUpdate = false,
 }: Props) => {
   if (typeof selectedImage === "string") {
     selectedImage = (images || []).findIndex((img) => img.src === selectedImage)
@@ -158,7 +161,7 @@ export const Annotator = ({
   const dispatch = useEventCallback((action: Action) => {
     if (action.type === "HEADER_BUTTON_CLICKED") {
       if (
-        ["Exit", "Done", "Save", "Complete", "Submit"].includes(
+        ["Exit", "Done", "Save", "Complete", "Submit", "Update"].includes(
           action.buttonName
         )
       ) {
@@ -251,6 +254,9 @@ export const Annotator = ({
         invaild_show={invaild_show}
         setdelete_annotation={setdelete_annotation}
         delete_annotation={delete_annotation}
+        hideSaveNext={hideSaveNext}
+        hideQuery={hideQuery}
+        showUpdate={showUpdate}
       />
     </SettingsProvider>
   )

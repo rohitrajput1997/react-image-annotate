@@ -161,6 +161,7 @@ export const ImageCanvas = ({
   delete_annotation,
   setdelete_annotation,
   annotationType,
+  selectedCls,
 }: Props) => {
   const classes = useStyles()
 
@@ -195,6 +196,10 @@ export const ImageCanvas = ({
           brushRadius,
           popUp: {
             open: false,
+            classification: {
+              value: selectedCls || "",
+              label: selectedCls || "",
+            },
           },
           keyframes: videoTime,
         },

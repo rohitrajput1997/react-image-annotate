@@ -180,8 +180,8 @@ export default () => {
           },
         ]}
         invaild_show={true}
+        showUpdate={true}
       />
     </div>
   )
 }
-
