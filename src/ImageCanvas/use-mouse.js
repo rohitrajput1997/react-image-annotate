@@ -21,6 +21,7 @@ export default ({
   onMouseUp,
   onMouseDown,
   dragging,
+  selectedTool,
 }) => {
   const mousePosition = useRef({ x: 0, y: 0 })
   const prevMousePosition = useRef({ x: 0, y: 0 })
@@ -158,8 +159,11 @@ export default ({
       }
     },
     onWheel: (e) => {
-      const direction = e.deltaY > 0 ? 1 : e.deltaY < 0 ? -1 : 0
-      zoomIn(direction, mousePosition.current)
+      if (selectedTool !== "zoom") {
+        const direction = e.deltaY > 0 ? 1 : e.deltaY < 0 ? -1 : 0
+        zoomIn(direction, mousePosition.current)
+      }
+
       // e.preventDefault()
     },
     onContextMenu: (e) => {

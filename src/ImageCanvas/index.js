@@ -196,7 +196,7 @@ export const ImageCanvas = ({
           brushRadius,
           popUp: {
             open: false,
-            classification: {
+            classification: selectedCls && {
               value: selectedCls || "",
               label: selectedCls || "",
             },
@@ -285,6 +285,7 @@ export const ImageCanvas = ({
     onMouseMove,
     onMouseDown,
     onMouseUp,
+    selectedTool,
   })
 
   useLayoutEffect(() => changeMat(mat.clone()), [changeMat, mat, windowSize])
@@ -730,4 +731,3 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
-

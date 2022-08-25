@@ -32,7 +32,22 @@ const RegionComponents = {
     </g>
   )),
   box: memo(({ region, iw, ih }) => (
+    // <>
     <g transform={`translate(${region.x * iw} ${region.y * ih})`}>
+      {/* <circle
+        cx={"50"}
+        cy={"50"}
+        r={
+          (Math.max(region.w * iw, 0) * Math.max(region.w * iw, 0)) /
+            (8 * Math.max(region.h * ih, 0)) +
+          Math.max(region.h * ih, 0) / 2
+        }
+        strokeWidth={2}
+        width={Math.max(region.w * iw, 0)}
+        height={Math.max(region.h * ih, 0)}
+        stroke={colorAlpha(region.color, 0.75)}
+        fill={colorAlpha(region.color, 0.25)}
+      /> */}
       <rect
         strokeWidth={2}
         x={0}
@@ -60,9 +75,7 @@ const RegionComponents = {
     )
   }),
   brushed: memo(({ region, iw, ih }) => {
-    return (
-      <></>
-    )
+    return <></>
   }),
   keypoints: ({ region, iw, ih, keypointDefinitions }) => {
     const { points, keypointsDefinitionId } = region
@@ -179,6 +192,25 @@ const RegionComponents = {
     )
   }),
   pixel: () => null,
+  circle: () =>
+    memo(({ region, iw, ih }) => (
+      <g transform={`translate(${region.x * iw} ${region.y * ih})`}>
+        <circle
+          cx={"50"}
+          cy={"50"}
+          r={
+            (Math.max(region.w * iw, 0) * Math.max(region.w * iw, 0)) /
+              (8 * Math.max(region.h * ih, 0)) +
+            Math.max(region.h * ih, 0) / 2
+          }
+          strokeWidth={2}
+          width={Math.max(region.w * iw, 0)}
+          height={Math.max(region.h * ih, 0)}
+          stroke={colorAlpha(region.color, 0.75)}
+          fill={colorAlpha(region.color, 0.25)}
+        />
+      </g>
+    )),
 }
 
 export const WrappedRegionList = memo(
