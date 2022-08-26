@@ -12,6 +12,7 @@ import {
 } from "@mui/material"
 // import { ThemeProvider } from "@mui/styles"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
+import classnames from "classnames"
 import React from "react"
 import CreatableSelect from "react-select/creatable"
 import { asMutable } from "seamless-immutable"
@@ -68,6 +69,7 @@ function BrushPopup({
                     left: `${item.points[0] * scale}px`,
                     top: `${item.points[1] * scale}px`,
                     position: "absolute",
+                    width: "200px",
                     // display:
                     //   annotationType === "video"
                     //     ? item.keyframes === videoTime
@@ -77,8 +79,9 @@ function BrushPopup({
                   }}
                 >
                   <Paper
+                    className={classnames(classes.regionInfo)}
                     style={{
-                      zIndex: 110,
+                      zIndex: 20,
                       // top: `${19.166664123535156}px`,
                       // left: `${197.90878098221688}px`,
                       position: "absolute",
@@ -87,6 +90,7 @@ function BrushPopup({
                         !invaild_show && lines[index].invalid
                           ? "2px solid red"
                           : null,
+                      padding: 0,
                     }}
                   >
                     {item?.popUp?.open ? (
@@ -174,6 +178,9 @@ function BrushPopup({
                         </div>
                         <div style={{ marginTop: 6 }}>
                           <CreatableSelect
+                            // menuShouldBlockScroll={true}
+                            menuPosition="fixed"
+                            menuPlacement={"auto"}
                             placeholder="Classification"
                             onChange={(o, actionMeta) => {
                               let linessave = [...lines]
@@ -201,6 +208,10 @@ function BrushPopup({
                         </div>
                         <div style={{ marginTop: 4 }}>
                           <CreatableSelect
+                            // menuShouldBlockScroll={true}
+                            menuPosition="fixed"
+                            menuPlacement={"auto"}
+                            // menuIsOpen={true}
                             value={lines[index].popUp.tags}
                             placeholder="Tags"
                             onChange={(o, actionMeta) => {
@@ -238,7 +249,7 @@ function BrushPopup({
                       </div>
                     ) : (
                       <div
-                        style={{ padding: 8, width: "max-content" }}
+                        style={{ padding: 8 }}
                         onClick={() => {
                           let linessave = [...lines]
                           lines[index].popUp.open = true
@@ -258,6 +269,7 @@ function BrushPopup({
                               display: "flex",
                               justifyContent: "flex-start",
                               alignItems: "center",
+                              width: "max-content",
                             }}
                           >
                             <div
@@ -277,63 +289,16 @@ function BrushPopup({
                                 borderRadius: "5px",
                               }}
                             />
-                            <span>{"Himalya oil control face wash"}</span>
+                            <span>{item?.popUp?.classification.label}</span>
                           </div>
                         )}
 
-                        <div className="tags" style={{ display: "flex" }}>
+                        <div className="tags">
                           {item?.popUp?.tags?.map((t) => (
-                            // <div
-                            //   key={t.label}
-
-                            // >
-                            <div
-                              key={t.label}
-                              className="tag"
-                              style={{
-                                color: "gray",
-                                // display: "inline-block",
-                                margin: 1,
-                                fontSize: 10,
-                                textDecoration: "underline",
-                                fontWeight: 600,
-                              }}
-                            >
-                              {t.label}
-                            </div>
-                            // </div>
+                            <div className="tag">{`${t.label}`}</div>
                           ))}
                         </div>
                       </div>
-                      // <div id="image_annotation">
-                      //   {item?.popUp?.classification && (
-                      //     <div className="name">
-                      //       <div
-                      //         className="circle"
-                      //         style={{
-                      //           backgroundColor:
-                      //             colors[
-                      //               lazyBrushClassification?.findIndex(
-                      //                 (dropdown) =>
-                      //                   dropdown ===
-                      //                   item?.popUp?.classification.label
-                      //               ) % colors.length
-                      //             ],
-                      //         }}
-                      //       />
-                      //       <span> {"Himalya oil control face wash"}</span>
-                      //     </div>
-                      //   )}
-                      //   {item?.popUp?.tags && (
-                      //     <div className="tags">
-                      //       {item?.popUp?.tags?.map((t) => (
-                      //         <div key={t.label} className="tag">
-                      //           {t.label}
-                      //         </div>
-                      //       ))}
-                      //     </div>
-                      //   )}
-                      // </div>
                     )}
                   </Paper>
                 </div>

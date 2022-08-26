@@ -286,6 +286,7 @@ export const ImageCanvas = ({
     onMouseDown,
     onMouseUp,
     selectedTool,
+    handleMouseUp,
   })
 
   useLayoutEffect(() => changeMat(mat.clone()), [changeMat, mat, windowSize])
@@ -575,7 +576,7 @@ export const ImageCanvas = ({
           />
         )}
         <PreventScrollToParents
-          style={{ width: "100%", height: "100%" }}
+          style={{ width: "100%", height: "100vh" }}
           {...mouseEvents}
         >
           <>
@@ -731,3 +732,4 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
+

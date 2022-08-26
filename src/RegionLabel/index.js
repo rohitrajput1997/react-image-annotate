@@ -11,7 +11,6 @@ import TextField from "@mui/material/TextField"
 import { makeStyles } from "@mui/styles"
 import classnames from "classnames"
 import React, { memo, useRef } from "react"
-import Select from "react-select"
 import CreatableSelect from "react-select/creatable"
 import type { Region } from "../ImageCanvas/region-tools.js"
 import styles from "./styles"
@@ -162,6 +161,9 @@ export const RegionLabel = ({
             {(allowedClasses || []).length > 0 && (
               <div style={{ marginTop: 6 }}>
                 <CreatableSelect
+                  // menuShouldBlockScroll={true}
+                  menuPosition="fixed"
+                  menuPlacement={"auto"}
                   placeholder="Classification"
                   onChange={(o, actionMeta) => {
                     if (actionMeta.action == "create-option") {
@@ -183,7 +185,10 @@ export const RegionLabel = ({
             )}
             {(allowedTags || []).length > 0 && (
               <div style={{ marginTop: 4 }}>
-                <Select
+                <CreatableSelect
+                  // menuShouldBlockScroll={true}
+                  menuPosition="fixed"
+                  menuPlacement={"auto"}
                   onChange={(newTags) =>
                     onChange({
                       ...(region: any),
@@ -245,4 +250,3 @@ export default memo(
     prevProps.editing === nextProps.editing &&
     prevProps.region === nextProps.region
 )
-

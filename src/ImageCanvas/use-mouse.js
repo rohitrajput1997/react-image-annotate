@@ -22,6 +22,7 @@ export default ({
   onMouseDown,
   dragging,
   selectedTool,
+  handleMouseUp
 }) => {
   const mousePosition = useRef({ x: 0, y: 0 })
   const prevMousePosition = useRef({ x: 0, y: 0 })
@@ -101,6 +102,7 @@ export default ({
       }
     },
     onMouseUp: (e) => {
+      handleMouseUp()
       e.preventDefault()
       const projMouse = mat.applyToPoint(
         mousePosition.current.x,
@@ -172,3 +174,4 @@ export default ({
   }
   return { mouseEvents, mousePosition }
 }
+
