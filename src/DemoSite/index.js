@@ -7,8 +7,8 @@ export default () => {
     taskDescription:
       "Annotate each image according to this _markdown_ specification.",
     regionTagList: [
-      "has-bun",
-      "hotdog",
+      "Front-right-Upper",
+      "Front-right-Upper",
       "not-hotdog",
       "box",
       "not",
@@ -38,12 +38,12 @@ export default () => {
       "_markdown_",
     ],
     regionClsList: [
-      "hotdog",
+      "Himalaya oil control face wash",
       "not-hotdog",
       "box",
       "not",
       "data",
-      "specification",
+      "Himalaya oil control face wash",
       "_markdown_",
       "hotdog",
       "not-hotdog",
@@ -70,48 +70,48 @@ export default () => {
     enabledTools: ["select", "create-box"],
     videoName: "",
     videoTime: "0",
-    videoSrc:
-      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
-    // images: [
-    //   {
-    //     src: "https://www.bianchi.com/wp-content/uploads/2019/07/YPB17I555K.jpg",
-    //     name: "hot-dogs-1",
-    //     regions: [
-    //       {
-    //         h: 0.16114285714285714,
-    //         w: 0.10285714285714284,
-    //         x: 0.08283333333333334,
-    //         y: 0.11362301478310236,
-    //         id: "7642512129200276",
-    //         cls: "specification",
-    //         tags: ["not-hotdog", "box", "not"],
-    //         type: "box",
-    //         color: "#f44336",
-    //         highlighted: false,
-    //         editingLabels: false,
-    //         invalid: true,
-    //       },
-    //       {
-    //         h: 0.15360000000000004,
-    //         w: 0.17485714285714277,
-    //         x: 0.3826619047619048,
-    //         y: 0.15956586865621905,
-    //         id: "6151961109630444",
-    //         cls: "specification",
-    //         tags: ["not-hotdog", "box", "not"],
-    //         type: "box",
-    //         color: "#f44336",
-    //         highlighted: false,
-    //         editingLabels: false,
-    //         invalid: true,
-    //       },
-    //     ],
-    //   },
-    //   {
-    //     src: "https://www.bianchi.com/wp-content/uploads/2019/07/YPB17I555K.jpg",
-    //     name: "bianchi-oltre-xr4",
-    //   },
-    // ],
+    // videoSrc:
+    //   "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    images: [
+      {
+        src: "https://www.bianchi.com/wp-content/uploads/2019/07/YPB17I555K.jpg",
+        name: "hot-dogs-1",
+        regions: [
+          {
+            h: 0.16114285714285714,
+            w: 0.10285714285714284,
+            x: 0.08283333333333334,
+            y: 0.11362301478310236,
+            id: "7642512129200276",
+            cls: "specification",
+            tags: ["not-hotdog", "box", "not"],
+            type: "box",
+            color: "#f44336",
+            highlighted: false,
+            editingLabels: false,
+            invalid: true,
+          },
+          {
+            h: 0.15360000000000004,
+            w: 0.17485714285714277,
+            x: 0.3826619047619048,
+            y: 0.15956586865621905,
+            id: "6151961109630444",
+            cls: "specification",
+            tags: ["not-hotdog", "box", "not"],
+            type: "box",
+            color: "#f44336",
+            highlighted: false,
+            editingLabels: false,
+            invalid: true,
+          },
+        ],
+      },
+      {
+        src: "https://www.bianchi.com/wp-content/uploads/2019/07/YPB17I555K.jpg",
+        name: "bianchi-oltre-xr4",
+      },
+    ],
     allowComments: true,
   })
 
@@ -160,8 +160,33 @@ export default () => {
                   value: "has-bun",
                   label: "has-bun",
                 },
+                {
+                  value: "has-bun",
+                  label: "has-bun",
+                },
+                {
+                  value: "Front-right-Upper",
+                  label: "Front-right-Upper",
+                },
+                {
+                  value: "Front-right-Upper",
+                  label: "Front-right-Upper",
+                },
+                {
+                  value: "not-hotdog",
+                  label: "not-hotdog",
+                },
+                {
+                  value: "box",
+                  label: "box",
+                },
+                {
+                  value: "not",
+                  label: "not",
+                },
               ],
             },
+            tag_count: 5,
           },
           {
             id: "2832329017640485",
