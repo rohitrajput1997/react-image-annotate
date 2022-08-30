@@ -64,6 +64,12 @@ function BrushPopup({
   const handleClickAway = () => {
     setOpen(-1)
   }
+  const popUpPos = ({ index, top }) => {
+    const labelBoxHeight = open === index ? 170 : 60
+    // console.log(pbox.y, labelBoxHeight)
+    const displayOnTop = top > labelBoxHeight
+    return displayOnTop
+  }
   return (
     <ThemeProvider theme={theme}>
       <ClickAwayListener onClickAway={handleClickAway}>
@@ -78,12 +84,6 @@ function BrushPopup({
                       top: `${item.points[1] * scale}px`,
                       position: "absolute",
                       width: "200px",
-                      // display:
-                      //   annotationType === "video"
-                      //     ? item.keyframes === videoTime
-                      //       ? "block"
-                      //       : "none"
-                      //     : "block",
                     }}
                     onMouseDown={(e) => e.preventDefault()}
                     onMouseUp={(e) => e.preventDefault()}
@@ -109,6 +109,9 @@ function BrushPopup({
                               ? "2px solid red"
                               : null,
                           padding: 0,
+                          ...(popUpPos({ index, top: item.points[1] * scale })
+                            ? { bottom: 0 }
+                            : { top: 0 }),
                         }}
                       >
                         {
@@ -351,4 +354,3 @@ function BrushPopup({
 }
 
 export default BrushPopup
-

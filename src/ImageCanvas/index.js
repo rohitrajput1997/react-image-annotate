@@ -602,7 +602,7 @@ export const ImageCanvas = ({
           </div>
         </PreventScrollToParents>
         <PreventScrollToParents
-          style={{ width: "100%", height: "100vh" }}
+          style={{ width: "100%", height: "100%" }}
           {...mouseEvents}
         >
           <>
