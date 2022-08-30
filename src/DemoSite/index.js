@@ -76,6 +76,22 @@ export default () => {
       {
         src: "https://www.bianchi.com/wp-content/uploads/2019/07/YPB17I555K.jpg",
         name: "hot-dogs-1",
+        regions: [
+          {
+            type: "polygon",
+            points: [
+              [0.24708333333333332, 0.5571428571428572],
+              [0.6000595238095238, 0.33174603174603173],
+              [0.6902645502645502, 0.5666666666666667],
+            ],
+            open: false,
+            highlighted: true,
+            color: "#ff0000",
+            id: "7948504643272676",
+            qc_label: true,
+            keyframes: "0",
+          },
+        ],
       },
       {
         src: "https://www.bianchi.com/wp-content/uploads/2019/07/YPB17I555K.jpg",

@@ -575,6 +575,32 @@ export const ImageCanvas = ({
             pointDistancePrecision={pointDistancePrecision}
           />
         )}
+        <PreventScrollToParents key="brushTags">
+          <div
+            style={{
+              left: window.brushLeft,
+              top: window.brushTop,
+              position: "absolute",
+            }}
+          >
+            <BrushPopup
+              top={window.brushTop}
+              left={window.brushLeft}
+              showTags={showTags}
+              lines={lines}
+              lazyBrushClassification={lazyBrushClassification}
+              lazyBrushTags={lazyBrushTags}
+              setLines={setLines}
+              scale={((1 / mat.a) * 100) / 100}
+              invaild_show={invaild_show}
+              delete_annotation={delete_annotation}
+              setdelete_annotation={setdelete_annotation}
+              annotationType={annotationType}
+              videoTime={videoTime}
+              mouseEvents={mouseEvents}
+            />
+          </div>
+        </PreventScrollToParents>
         <PreventScrollToParents
           style={{ width: "100%", height: "100vh" }}
           {...mouseEvents}
@@ -674,29 +700,6 @@ export const ImageCanvas = ({
                 </Layer>
               </Stage>
             </div>
-            <div
-              style={{
-                left: window.brushLeft,
-                top: window.brushTop,
-                position: "absolute",
-              }}
-            >
-              <BrushPopup
-                top={window.brushTop}
-                left={window.brushLeft}
-                showTags={showTags}
-                lines={lines}
-                lazyBrushClassification={lazyBrushClassification}
-                lazyBrushTags={lazyBrushTags}
-                setLines={setLines}
-                scale={((1 / mat.a) * 100) / 100}
-                invaild_show={invaild_show}
-                delete_annotation={delete_annotation}
-                setdelete_annotation={setdelete_annotation}
-                annotationType={annotationType}
-                videoTime={videoTime}
-              />
-            </div>
 
             <canvas
               style={{ opacity: 0.25 }}
@@ -732,4 +735,3 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
-

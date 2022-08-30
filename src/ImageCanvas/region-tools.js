@@ -110,12 +110,16 @@ export const getEnclosingBox = (region: Region) => {
     case "polygon": {
       const box = {
         x: Math.min(...region.points.map(([x, y]) => x)),
-        y: Math.min(...region.points.map(([x, y]) => y)),
+        y: region.points[0][1],
         w: 0,
         h: 0,
       }
       box.w = Math.max(...region.points.map(([x, y]) => x)) - box.x
-      box.h = Math.max(...region.points.map(([x, y]) => y)) - box.y
+      box.h =
+        Math.max(...region.points.map(([x, y]) => y)) -
+        Math.min(...region.points.map(([x, y]) => y))
+
+      //
       return box
     }
     case "brushed": {
@@ -179,3 +183,4 @@ export const moveRegion = (region: Region, x: number, y: number) => {
   }
   return region
 }
+
