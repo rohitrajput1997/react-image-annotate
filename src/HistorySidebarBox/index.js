@@ -52,6 +52,14 @@ export const HistorySidebarBox = ({
       window.undoArray = newArr
     }
   }
+  const handleUndoKeydown = () => {
+    if (
+      window.annotation_redo[window.annotation_redo.length - 1]?.brush?.points
+        ?.length
+    ) {
+      window.hendleBrush_redo()
+    }
+  }
   const handleKeydown = (key) => {
     if (window.undoArray.length) {
       if (key.ctrlKey && key.code === "KeyZ") {
@@ -66,6 +74,15 @@ export const HistorySidebarBox = ({
       }
     } else {
       console.log("cant undo anymore")
+    }
+    if (key.ctrlKey && key.code === "KeyY") {
+      handleUndoKeydown()
+    } else if (
+      key.target.id === "redo" ||
+      key.target.ariaLabel === "redo annotation" ||
+      [...(key?.target?.parentNode?.classList || [])].indexOf("fa-redo") !== -1
+    ) {
+      handleUndoKeydown()
     }
   }
   const clearWindow = () => {
@@ -135,4 +152,3 @@ export default memo(HistorySidebarBox, (prevProps, nextProps) => {
     nextProps.history.map((a) => [a.name, a.time])
   )
 })
-

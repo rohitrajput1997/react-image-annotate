@@ -49,7 +49,8 @@ type Props = {
   hideSave?: boolean,
 }
 window.undoArray = []
-
+window.annotation_redo = []
+window.AnnoationRedo = []
 export const Annotator = ({
   images,
   allowedArea,
@@ -208,8 +209,22 @@ export const Annotator = ({
   }, [])
   window.undoBrush = () => {
     const intial_lines = lines.slice(0, -1)
-
+    let obj = { brush: lines[lines.length - 1] }
+    let newArr = [...window.annotation_redo]
+    newArr.push(obj)
+    window.annotation_redo = newArr
     return setLines(intial_lines)
+  }
+
+  window.hendleBrush_redo = () => {
+    let newArr = [...window.annotation_redo] || []
+    if (newArr.length) {
+      let lastElement = newArr[newArr.length - 1].brush
+      const intial_lines = [...lines, lastElement]
+      newArr.splice(window.annotation_redo.length - 1, 1)
+      window.annotation_redo = newArr
+      return setLines(intial_lines)
+    }
   }
 
   useEffect(() => {

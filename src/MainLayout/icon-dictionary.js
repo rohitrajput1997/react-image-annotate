@@ -11,6 +11,7 @@ import {
   faHandPaper,
   faMask,
   faMousePointer,
+  faRedo,
   faSearch,
   faTag,
   faUndo,
@@ -64,6 +65,15 @@ export const iconDictionary = {
       icon={faUndo}
     />
   ),
+  redo_anntation: () => (
+    <FontAwesomeIcon
+      id="redo"
+      style={faStyle}
+      size="xs"
+      fixedWidth
+      icon={faRedo}
+    />
+  ),
   "create-polygon": () => (
     <FontAwesomeIcon
       style={faStyle}
@@ -92,4 +102,3 @@ export const iconDictionary = {
 }
 
 export default iconDictionary
-

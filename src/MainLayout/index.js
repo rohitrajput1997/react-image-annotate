@@ -448,14 +448,6 @@ export const MainLayout = ({
                     getHotkeyHelpText("create_bounding_box"),
                   className: "create_box",
                 },
-                {
-                  name: "create-a-brush",
-                  helperText:
-                    "Create By Paint Brush" +
-                    getHotkeyHelpText("create-a-brush"),
-                  alwaysShowing: true,
-                  className: "create-a-brush",
-                },
 
                 {
                   name: "create-polygon",
@@ -489,14 +481,28 @@ export const MainLayout = ({
                   helperText: "Modify Allowed Area",
                   className: "modify_allow_area",
                 },
+
+                {
+                  name: "create-a-brush",
+                  helperText:
+                    "Create By Paint Brush" +
+                    getHotkeyHelpText("create-a-brush"),
+                  alwaysShowing: true,
+                  className: "create-a-brush",
+                },
+                {
+                  name: "eraser",
+                  helperText: "Eraser",
+                  alwaysShowing: true,
+                },
                 {
                   name: "undo_anntation",
                   helperText: "undo annotation",
                   alwaysShowing: true,
                 },
                 {
-                  name: "eraser",
-                  helperText: "Eraser",
+                  name: "redo_anntation",
+                  helperText: "redo annotation",
                   alwaysShowing: true,
                 },
               ]
@@ -636,4 +642,3 @@ export const MainLayout = ({
 }
 
 export default MainLayout
-
