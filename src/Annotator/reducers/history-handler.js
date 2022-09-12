@@ -11,7 +11,17 @@ const typesToSaveWithHistory = {
 }
 
 export const saveToHistory = (state: MainLayoutState, name: string) => {
+  console.log(state, name)
   return updateIn(state, ["history"], (h) => {
+    console.log(
+      [
+        {
+          time: moment().toDate(),
+          state: without(state, "history"),
+          name,
+        },
+      ].concat((h || []).slice(0, 9))
+    )
     return [
       {
         time: moment().toDate(),
@@ -29,11 +39,38 @@ export default (reducer) => {
 
     if (action.type === "RESTORE_HISTORY") {
       if (state.history.length > 0) {
-        return setIn(
-          nextState.history[0].state,
-          ["history"],
-          nextState.history.slice(1)
-        )
+        let history_return = () => {
+          let obj = {
+            annotation: {
+              ...nextState.history[0].state,
+              history_type: nextState.history[0].name,
+            },
+          }
+          let newArr = [...window.annotation_redo]
+          newArr.push(obj)
+
+          let final = newArr.filter((item, index, self) => {
+            if (
+              index ===
+              self.findIndex(
+                (t) =>
+                  t?.annotation?.lastMouseMoveCall ===
+                  item?.annotation?.lastMouseMoveCall
+              )
+            ) {
+              return item
+            }
+          })
+          window.annotation_redo = final
+
+          return setIn(
+            nextState.history[0].state,
+            ["history"],
+            nextState.history.slice(1)
+          )
+        }
+
+        return history_return()
       }
     } else {
       if (
@@ -59,4 +96,3 @@ export default (reducer) => {
     return nextState
   }
 }
-

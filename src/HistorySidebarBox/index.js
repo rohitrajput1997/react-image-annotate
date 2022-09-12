@@ -13,8 +13,8 @@ import { makeStyles } from "@mui/styles"
 import isEqual from "lodash/isEqual"
 import moment from "moment"
 import React, { memo } from "react"
+import { setIn } from "seamless-immutable"
 import SidebarBoxContainer from "../SidebarBoxContainer"
-
 const theme = createTheme()
 const useStyles = makeStyles((theme) => ({
   emptyText: {
@@ -58,6 +58,18 @@ export const HistorySidebarBox = ({
         ?.length
     ) {
       window.hendleBrush_redo()
+    } else if (
+      window.annotation_redo[window.annotation_redo.length - 1]?.annotation
+    ) {
+      let newArr = [...window.annotation_redo] || []
+      if (newArr.length) {
+        let lastElement = newArr[newArr.length - 1].annotation
+        newArr.splice(window.annotation_redo.length - 1, 1)
+        window.annotation_redo = newArr
+        console.log(lastElement)
+        return setIn(lastElement, ["history"], [lastElement])
+        // return saveToHistory(lastElement, lastElement.history_type)
+      }
     }
   }
   const handleKeydown = (key) => {
