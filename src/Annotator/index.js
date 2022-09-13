@@ -225,6 +225,7 @@ export const Annotator = ({
       const intial_lines = [...lines, lastElement]
       newArr.splice(window.annotation_redo.length - 1, 1)
       window.annotation_redo = newArr
+      window.undoArray = [...window.undoArray, "brush"]
       return setLines(intial_lines)
     }
   }
