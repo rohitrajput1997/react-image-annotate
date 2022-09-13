@@ -49,6 +49,7 @@ export const RegionLabel = ({
   invaild_show,
   delete_annotation,
   setdelete_annotation,
+  isReadingMode,
 }: Props) => {
   const classes = useStyles()
   const commentInputRef = useRef(null)
@@ -62,7 +63,7 @@ export const RegionLabel = ({
   return (
     <ThemeProvider theme={theme}>
       <Paper
-        onClick={() => (!editing ? onOpen(region) : null)}
+        onClick={() => !isReadingMode && (!editing ? onOpen(region) : null)}
         className={classnames(classes.regionInfo, {
           highlighted: region.highlighted,
         })}
@@ -250,3 +251,4 @@ export default memo(
     prevProps.editing === nextProps.editing &&
     prevProps.region === nextProps.region
 )
+

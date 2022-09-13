@@ -106,6 +106,8 @@ export const Annotator = ({
   hideQuery,
   hideSaveNext,
   showUpdate = false,
+  rightMenu = true,
+  isReadingMode = false,
 }: Props) => {
   if (typeof selectedImage === "string") {
     selectedImage = (images || []).findIndex((img) => img.src === selectedImage)
@@ -227,6 +229,12 @@ export const Annotator = ({
     }
   }
 
+  window.hendleAnnotation_redo = () => {
+    dispatch({
+      type: "REDO_HISTORY",
+    })
+  }
+
   useEffect(() => {
     if (selectedImage === undefined) return
     dispatchToReducer({
@@ -272,6 +280,8 @@ export const Annotator = ({
         hideSaveNext={hideSaveNext}
         hideQuery={hideQuery}
         showUpdate={showUpdate}
+        rightMenu={rightMenu}
+        isReadingMode={isReadingMode}
       />
     </SettingsProvider>
   )

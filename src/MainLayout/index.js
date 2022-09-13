@@ -94,6 +94,8 @@ export const MainLayout = ({
   hideSaveNext,
   hideQuery,
   showUpdate = false,
+  rightMenu = true,
+  isReadingMode = false,
 }: Props) => {
   const classes = useStyles()
   const settings = useSettings()
@@ -162,6 +164,7 @@ export const MainLayout = ({
           state.selectedTool
         )
       }
+      isReadingMode={isReadingMode}
       key={state.selectedImage}
       showMask={state.showMask}
       fullImageSegmentationMode={state.fullImageSegmentationMode}
@@ -407,6 +410,7 @@ export const MainLayout = ({
                   ? ["show-tags", state.selectedTool]
                   : [state.selectedTool]
               }
+              rightMenu={rightMenu}
               iconSidebarItems={[
                 {
                   name: "select",
@@ -487,97 +491,106 @@ export const MainLayout = ({
                   helperText:
                     "Create By Paint Brush" +
                     getHotkeyHelpText("create-a-brush"),
-                  alwaysShowing: true,
+                  // alwaysShowing: true,
                   className: "create-a-brush",
                 },
                 {
                   name: "eraser",
                   helperText: "Eraser",
-                  alwaysShowing: true,
+                  // alwaysShowing: true,
                 },
                 {
                   name: "undo_anntation",
                   helperText: "undo annotation",
-                  alwaysShowing: true,
+                  // alwaysShowing: true,
                 },
                 {
                   name: "redo_anntation",
                   helperText: "redo annotation",
-                  alwaysShowing: true,
+                  // alwaysShowing: true,
                 },
               ]
                 .filter(Boolean)
                 .filter(
                   (a) => a.alwaysShowing || state.enabledTools.includes(a.name)
                 )}
-              rightSidebarItems={[
-                debugModeOn && (
-                  <DebugBox state={debugModeOn} lastAction={state.lastAction} />
-                ),
-                state.taskDescription && (
-                  <TaskDescription description={state.taskDescription} />
-                ),
-                state.regionClsList && (
-                  <ClassSelectionMenu
-                    selectedCls={state.selectedCls}
-                    regionClsList={state.regionClsList}
-                    onSelectCls={action("SELECT_CLASSIFICATION", "cls")}
-                  />
-                ),
-                state.labelImages && (
-                  <TagsSidebarBox
-                    currentImage={activeImage}
-                    imageClsList={state.imageClsList}
-                    imageTagList={state.imageTagList}
-                    onChangeImage={action("CHANGE_IMAGE", "delta")}
-                    expandedByDefault
-                  />
-                ),
-                // (state.images?.length || 0) > 1 && (
-                //   <ImageSelector
-                //     onSelect={action("SELECT_REGION", "region")}
-                //     images={state.images}
-                //   />
-                // ),
-                <RegionSelector
-                  regions={activeImage ? activeImage.regions : emptyArr}
-                  onSelectRegion={action("SELECT_REGION", "region")}
-                  onDeleteRegion={action("DELETE_REGION", "region")}
-                  onChangeRegion={action("CHANGE_REGION", "region")}
-                  delete_annotation={delete_annotation}
-                  setdelete_annotation={setdelete_annotation}
-                />,
-                state.keyframes && (
-                  <KeyframesSelector
-                    onChangeVideoTime={action("CHANGE_VIDEO_TIME", "newTime")}
-                    onDeleteKeyframe={action("DELETE_KEYFRAME", "time")}
-                    onChangeCurrentTime={action("CHANGE_VIDEO_TIME", "newTime")}
-                    currentTime={state.currentVideoTime}
-                    duration={state.videoDuration}
-                    keyframes={state.keyframes}
-                  />
-                ),
-
-                state.keyframes && (
-                  <BrushKeyFrame
-                    onChangeVideoTime={action("CHANGE_VIDEO_TIME", "newTime")}
-                    currentTime={state.currentVideoTime}
-                    duration={state.videoDuration}
-                    brushLines={lines}
+              rightSidebarItems={
+                rightMenu &&
+                [
+                  debugModeOn && (
+                    <DebugBox
+                      state={debugModeOn}
+                      lastAction={state.lastAction}
+                    />
+                  ),
+                  state.taskDescription && (
+                    <TaskDescription description={state.taskDescription} />
+                  ),
+                  state.regionClsList && (
+                    <ClassSelectionMenu
+                      selectedCls={state.selectedCls}
+                      regionClsList={state.regionClsList}
+                      onSelectCls={action("SELECT_CLASSIFICATION", "cls")}
+                    />
+                  ),
+                  state.labelImages && (
+                    <TagsSidebarBox
+                      currentImage={activeImage}
+                      imageClsList={state.imageClsList}
+                      imageTagList={state.imageTagList}
+                      onChangeImage={action("CHANGE_IMAGE", "delta")}
+                      expandedByDefault
+                    />
+                  ),
+                  // (state.images?.length || 0) > 1 && (
+                  //   <ImageSelector
+                  //     onSelect={action("SELECT_REGION", "region")}
+                  //     images={state.images}
+                  //   />
+                  // ),
+                  <RegionSelector
+                    regions={activeImage ? activeImage.regions : emptyArr}
+                    onSelectRegion={action("SELECT_REGION", "region")}
+                    onDeleteRegion={action("DELETE_REGION", "region")}
+                    onChangeRegion={action("CHANGE_REGION", "region")}
                     delete_annotation={delete_annotation}
                     setdelete_annotation={setdelete_annotation}
+                  />,
+                  state.keyframes && (
+                    <KeyframesSelector
+                      onChangeVideoTime={action("CHANGE_VIDEO_TIME", "newTime")}
+                      onDeleteKeyframe={action("DELETE_KEYFRAME", "time")}
+                      onChangeCurrentTime={action(
+                        "CHANGE_VIDEO_TIME",
+                        "newTime"
+                      )}
+                      currentTime={state.currentVideoTime}
+                      duration={state.videoDuration}
+                      keyframes={state.keyframes}
+                    />
+                  ),
+
+                  state.keyframes && (
+                    <BrushKeyFrame
+                      onChangeVideoTime={action("CHANGE_VIDEO_TIME", "newTime")}
+                      currentTime={state.currentVideoTime}
+                      duration={state.videoDuration}
+                      brushLines={lines}
+                      delete_annotation={delete_annotation}
+                      setdelete_annotation={setdelete_annotation}
+                      setLines={setLines}
+                    />
+                  ),
+                  <HistorySidebarBox
+                    history={state.history}
+                    onRestoreHistory={action("RESTORE_HISTORY")}
+                    line={lines}
                     setLines={setLines}
-                  />
-                ),
-                <HistorySidebarBox
-                  history={state.history}
-                  onRestoreHistory={action("RESTORE_HISTORY")}
-                  line={lines}
-                  setLines={setLines}
-                  delete_annotation={delete_annotation}
-                  setdelete_annotation={setdelete_annotation}
-                />,
-              ].filter(Boolean)}
+                    delete_annotation={delete_annotation}
+                    setdelete_annotation={setdelete_annotation}
+                  />,
+                ].filter(Boolean)
+              }
             >
               <div
                 style={{
@@ -642,3 +655,4 @@ export const MainLayout = ({
 }
 
 export default MainLayout
+

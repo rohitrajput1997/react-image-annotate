@@ -162,6 +162,7 @@ export const ImageCanvas = ({
   setdelete_annotation,
   annotationType,
   selectedCls,
+  isReadingMode,
 }: Props) => {
   const classes = useStyles()
 
@@ -531,6 +532,7 @@ export const ImageCanvas = ({
               invaild_show={invaild_show}
               delete_annotation={delete_annotation}
               setdelete_annotation={setdelete_annotation}
+              isReadingMode={isReadingMode}
             />
           </PreventScrollToParents>
         )}
@@ -598,6 +600,7 @@ export const ImageCanvas = ({
               annotationType={annotationType}
               videoTime={videoTime}
               mouseEvents={mouseEvents}
+              isReadingMode={isReadingMode}
             />
           </div>
         </PreventScrollToParents>
@@ -712,6 +715,7 @@ export const ImageCanvas = ({
               imagePosition={imagePosition}
               regions={regions}
               fullSegmentationMode={fullImageSegmentationMode}
+              isReadingMode={isReadingMode}
             />
             <VideoOrImageCanvasBackground
               videoPlaying={videoPlaying}

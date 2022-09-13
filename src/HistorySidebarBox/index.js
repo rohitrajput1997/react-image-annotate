@@ -61,15 +61,7 @@ export const HistorySidebarBox = ({
     } else if (
       window.annotation_redo[window.annotation_redo.length - 1]?.annotation
     ) {
-      let newArr = [...window.annotation_redo] || []
-      if (newArr.length) {
-        let lastElement = newArr[newArr.length - 1].annotation
-        newArr.splice(window.annotation_redo.length - 1, 1)
-        window.annotation_redo = newArr
-        console.log(lastElement)
-        return setIn(lastElement, ["history"], [lastElement])
-        // return saveToHistory(lastElement, lastElement.history_type)
-      }
+      window.hendleAnnotation_redo()
     }
   }
   const handleKeydown = (key) => {

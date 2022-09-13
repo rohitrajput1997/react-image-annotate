@@ -58,6 +58,7 @@ function BrushPopup({
   annotationType,
   videoTime,
   mouseEvents,
+  isReadingMode,
 }) {
   const classes = useStyles()
   const [open, setOpen] = useState(-1)
@@ -298,7 +299,7 @@ function BrushPopup({
                                 //   }
                                 // }
                                 // setLines(linessave)
-                                setOpen(index)
+                                !isReadingMode && setOpen(index)
                               }}
                             >
                               {item?.popUp?.classification && (
@@ -354,3 +355,4 @@ function BrushPopup({
 }
 
 export default BrushPopup
+

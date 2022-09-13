@@ -31,6 +31,7 @@ export const RegionTags = ({
   invaild_show,
   delete_annotation,
   setdelete_annotation,
+  isReadingMode,
 }) => {
   const RegionLabel =
     RegionEditLabel != null ? RegionEditLabel : DefaultRegionLabel
@@ -128,6 +129,7 @@ export const RegionTags = ({
               invaild_show={invaild_show}
               delete_annotation={delete_annotation}
               setdelete_annotation={setdelete_annotation}
+              isReadingMode={isReadingMode}
             />
           </div>
         </div>
@@ -136,3 +138,4 @@ export const RegionTags = ({
 }
 
 export default RegionTags
+

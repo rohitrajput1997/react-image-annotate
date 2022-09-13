@@ -114,11 +114,16 @@ export default () => {
           "create-box",
           "create-polygon",
           "show-mask",
+          "undo_anntation",
+          "redo_anntation",
+          "create-a-brush",
+          "eraser",
         ]}
         invaild_show={true}
         showUpdate={true}
+        rightMenu={true}
+        isReadingMode={false}
       />
     </div>
   )
 }
-

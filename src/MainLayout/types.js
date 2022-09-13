@@ -124,6 +124,7 @@ export type Action =
     |}
   | {| type: "CHANGE_REGION", region: Region |}
   | {| type: "RESTORE_HISTORY" |}
+  | {| type: "REDO_HISTORY" |}
   | {| type: "CLOSE_POLYGON", polygon: Polygon |}
   | {| type: "SELECT_REGION", region: Region |}
   | {| type: "BEGIN_MOVE_POINT", point: Point |}
