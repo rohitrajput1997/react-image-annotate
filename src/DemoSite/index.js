@@ -70,8 +70,8 @@ export default () => {
     enabledTools: ["select", "create-box"],
     videoName: "",
     videoTime: "0",
-    // videoSrc:
-    //   "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
+    videoSrc:
+      "http://commondatastorage.googleapis.com/gtv-videos-bucket/sample/BigBuckBunny.mp4",
     images: [
       {
         src: "https://www.bianchi.com/wp-content/uploads/2019/07/YPB17I555K.jpg",
@@ -127,3 +127,4 @@ export default () => {
     </div>
   )
 }
+

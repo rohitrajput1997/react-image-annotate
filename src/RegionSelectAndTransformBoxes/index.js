@@ -1,9 +1,8 @@
+import { createTheme, styled, ThemeProvider } from "@mui/material/styles"
+import Tooltip from "@mui/material/Tooltip"
 import React, { Fragment, memo } from "react"
 import HighlightBox from "../HighlightBox"
-import { styled } from "@mui/material/styles"
-import { createTheme, ThemeProvider } from "@mui/material/styles"
 import PreventScrollToParents from "../PreventScrollToParents"
-import Tooltip from "@mui/material/Tooltip"
 
 const theme = createTheme()
 const TransformGrabber = styled("div")(({ theme }) => ({
@@ -110,6 +109,7 @@ export const RegionSelectAndTransformBox = memo(
                   .clone()
                   .inverse()
                   .applyToPoint(px * iw, py * ih)
+                // console.log({ left: proj.x - 4, top: proj.y - 4 }, mat)
                 return (
                   <TransformGrabber
                     key={i}
@@ -133,6 +133,7 @@ export const RegionSelectAndTransformBox = memo(
                       left: proj.x - 4,
                       top: proj.y - 4,
                     }}
+                    id={`${r.id}~${i}`}
                   />
                 )
               })}
@@ -168,6 +169,7 @@ export const RegionSelectAndTransformBox = memo(
                         border: "2px dotted #fff",
                         opacity: 0.5,
                       }}
+                      id={`${r.id}~${i}`}
                     />
                   )
                 })}

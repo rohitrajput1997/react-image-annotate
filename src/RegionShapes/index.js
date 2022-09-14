@@ -71,6 +71,7 @@ const RegionComponents = {
         strokeWidth={2}
         stroke={colorAlpha(region.color, 0.75)}
         fill={colorAlpha(region.color, 0.25)}
+        id={region.id}
       />
     )
   }),
@@ -144,6 +145,7 @@ const RegionComponents = {
       ]
     })
     const firstSection = pointPairs.map(([p1, p2]) => p1)
+
     const secondSection = pointPairs.map(([p1, p2]) => p2).asMutable()
     secondSection.reverse()
     const lastPoint = points.slice(-1)[0]
@@ -158,6 +160,7 @@ const RegionComponents = {
           strokeWidth={2}
           stroke={colorAlpha(region.color, 0.75)}
           fill={colorAlpha(region.color, 0.25)}
+          id={region.id}
         />
         {points.map(({ x, y, angle }, i) => (
           <g
@@ -244,6 +247,7 @@ export const RegionShapes = ({
   const iw = imagePosition.bottomRight.x - imagePosition.topLeft.x
   const ih = imagePosition.bottomRight.y - imagePosition.topLeft.y
   if (isNaN(iw) || isNaN(ih)) return null
+
   return (
     <svg
       width={iw}
@@ -271,3 +275,4 @@ export const RegionShapes = ({
 }
 
 export default RegionShapes
+

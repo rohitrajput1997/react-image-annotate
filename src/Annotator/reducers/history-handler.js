@@ -49,14 +49,25 @@ export default (reducer) => {
     if (action.type === "RESTORE_HISTORY") {
       if (state.history.length > 0) {
         let history_return = () => {
-          console.log(nextState)
-          let obj = {
-            annotation: {
-              ...nextState.history[0],
-              regionsArr: nextState.images[0].regions,
-            },
+          let obj = {}
+          if (nextState.annotationType === "video") {
+            obj = {
+              annotation: {
+                ...nextState?.history?.[0],
+                regionsArr:
+                  nextState?.keyframes?.[nextState.currentVideoTime]?.regions,
+              },
+            }
+          } else {
+            obj = {
+              annotation: {
+                ...nextState?.history?.[0],
+                regionsArr: nextState?.images?.[0]?.regions,
+              },
+            }
           }
           let newArr = [...window.annotation_redo]
+
           newArr.push(obj)
 
           // let final = newArr.filter((item, index, self) => {

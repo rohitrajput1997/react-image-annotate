@@ -533,6 +533,7 @@ export const ImageCanvas = ({
               delete_annotation={delete_annotation}
               setdelete_annotation={setdelete_annotation}
               isReadingMode={isReadingMode}
+              mat={mat}
             />
           </PreventScrollToParents>
         )}
@@ -739,3 +740,4 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
+

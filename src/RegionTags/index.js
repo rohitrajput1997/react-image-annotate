@@ -32,6 +32,7 @@ export const RegionTags = ({
   delete_annotation,
   setdelete_annotation,
   isReadingMode,
+  mat,
 }) => {
   const RegionLabel =
     RegionEditLabel != null ? RegionEditLabel : DefaultRegionLabel
@@ -47,6 +48,17 @@ export const RegionTags = ({
         region.editingLabels && !region.locked ? 170 : region.tags ? 60 : 50
 
       const displayOnTop = pbox.y > labelBoxHeight
+      let ploygonRegion = region?.points
+        ?.map(([px, py], i) => {
+          const proj = mat
+            .clone()
+            .inverse()
+            .applyToPoint(px * iw, py * ih)
+          if (i === 0) {
+            return { left: proj.x, top: proj.y }
+          }
+        })
+        .filter(Boolean)?.[0]
 
       const coords = displayOnTop
         ? {
@@ -83,6 +95,7 @@ export const RegionTags = ({
           </div>
         )
       }
+
       return (
         <div
           key={region.id}
@@ -91,6 +104,16 @@ export const RegionTags = ({
             ...coords,
             zIndex: 15,
             width: 200,
+            ...{
+              left:
+                region.type === "polygon"
+                  ? ploygonRegion?.left - 4 || coords.left
+                  : coords.left,
+              top:
+                region.type === "polygon"
+                  ? ploygonRegion?.top - 8 || coords.top
+                  : coords.top,
+            },
           }}
           onMouseDown={(e) => e.preventDefault()}
           onMouseUp={(e) => e.preventDefault()}
