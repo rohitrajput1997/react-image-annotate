@@ -195,6 +195,7 @@ export const ImageCanvas = ({
           tool,
           points: [pos.x, pos.y],
           brushRadius,
+          type: "brush",
           popUp: {
             open: false,
             classification: selectedCls && {
@@ -215,6 +216,7 @@ export const ImageCanvas = ({
           points: [pos.x, pos.y],
           brushRadius,
           keyframes: videoTime,
+          type: "brush",
         },
       ])
     }
@@ -243,29 +245,6 @@ export const ImageCanvas = ({
     setLines(line)
 
     const { x, y } = getScaledPoint(stage, ((1 / mat.a) * 100) / 100)
-
-    // if (tool === "pen") {
-    //   setLines([
-    //     ...lines,
-    //     {
-    //       tool,
-    //       points: [x, y],
-    //       brushRadius,
-    //       popUp: {
-    //         open: false,
-    //       },
-    //     },
-    //   ])
-    // } else {
-    //   setLines([
-    //     ...lines,
-    //     {
-    //       tool,
-    //       points: [x, y],
-    //       brushRadius,
-    //     },
-    //   ])
-    // }
   }
   const getLatestMat = useEventCallback(() => mat)
   useWasdMode({ getLatestMat, changeMat })
@@ -538,22 +517,6 @@ export const ImageCanvas = ({
           </PreventScrollToParents>
         )}
 
-        {/* {!showTags && highlightedRegion && (
-          <div key="topLeftTag" className={classes.fixedRegionLabel}>
-            <RegionLabel
-              disableClose
-              allowedClasses={regionClsList}
-              allowedTags={regionTagList}
-              onChange={onChangeRegion}
-              onDelete={onDeleteRegion}
-              editing
-              region={highlightedRegion}
-              imageSrc={imageSrc}
-              allowComments={allowComments}
-            />
-          </div>
-        )} */}
-
         {zoomWithPrimary && zoomBox !== null && (
           <div
             key="zoomBox"
@@ -740,4 +703,3 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
-

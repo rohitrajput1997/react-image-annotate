@@ -22,7 +22,7 @@ export default ({
   onMouseDown,
   dragging,
   selectedTool,
-  handleMouseUp
+  handleMouseUp,
 }) => {
   const mousePosition = useRef({ x: 0, y: 0 })
   const prevMousePosition = useRef({ x: 0, y: 0 })
@@ -160,18 +160,17 @@ export default ({
         onMouseUp({ x: projMouse.x / iw, y: projMouse.y / ih })
       }
     },
-    onWheel: (e) => {
-      if (selectedTool !== "zoom") {
-        const direction = e.deltaY > 0 ? 1 : e.deltaY < 0 ? -1 : 0
-        zoomIn(direction, mousePosition.current)
-      }
+    // onWheel: (e) => {
+    //   if (selectedTool !== "zoom") {
+    //     const direction = e.deltaY > 0 ? 1 : e.deltaY < 0 ? -1 : 0
+    //     zoomIn(direction, mousePosition.current)
+    //   }
 
-      // e.preventDefault()
-    },
+    //   // e.preventDefault()
+    // },
     onContextMenu: (e) => {
       e.preventDefault()
     },
   }
   return { mouseEvents, mousePosition }
 }
-
