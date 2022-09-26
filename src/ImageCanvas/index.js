@@ -174,6 +174,8 @@ export const ImageCanvas = ({
   const [zoomStart, changeZoomStart] = useRafState(null)
   const [zoomEnd, changeZoomEnd] = useRafState(null)
   const [mat, changeMat] = useRafState(getDefaultMat())
+  const [isTagged, setTegged] = useState(true)
+  const [local_id, setLoacal_id] = useState(getRandomId())
   const maskImages = useRef({})
   const windowSize = useWindowSize()
   const getScaledPoint = (stage, scale) => {
@@ -187,16 +189,17 @@ export const ImageCanvas = ({
     const pos = getScaledPoint(stage, ((1 / mat.a) * 100) / 100)
 
     if (tool === "pen") {
-      setLines([
+      let localId = local_id
+      let lines_date = [
         ...lines,
         {
-          id: getRandomId(),
+          id: localId,
           qc_label: invaild_show,
           tool,
           points: [pos.x, pos.y],
           brushRadius,
           type: "brush",
-          popUp: {
+          popUp: isTagged && {
             open: false,
             classification: selectedCls && {
               value: selectedCls || "",
@@ -204,8 +207,14 @@ export const ImageCanvas = ({
             },
           },
           keyframes: videoTime,
+          isPopupShow: isTagged,
         },
-      ])
+      ]
+      setLines(lines_date)
+      if (lines_date.length) {
+        setTegged(false)
+        setLoacal_id(localId)
+      }
     } else {
       setLines([
         ...lines,
@@ -565,6 +574,8 @@ export const ImageCanvas = ({
               videoTime={videoTime}
               mouseEvents={mouseEvents}
               isReadingMode={isReadingMode}
+              setTegged={setTegged}
+              setLoacal_id={setLoacal_id}
             />
           </div>
         </PreventScrollToParents>
@@ -703,3 +714,4 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
+

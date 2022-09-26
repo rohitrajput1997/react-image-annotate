@@ -59,7 +59,10 @@ function BrushPopup({
   videoTime,
   mouseEvents,
   isReadingMode,
+  setTegged,
+  setLoacal_id,
 }) {
+  const getRandomId = () => Math.random().toString().split(".")[1]
   const classes = useStyles()
   const [open, setOpen] = useState(-1)
   const handleClickAway = () => {
@@ -78,6 +81,7 @@ function BrushPopup({
           {showTags &&
             lines?.map(
               (item, index) =>
+                item.isPopupShow === true &&
                 item.tool === "pen" && (
                   <div
                     style={{
@@ -115,234 +119,227 @@ function BrushPopup({
                             : { top: 0 }),
                         }}
                       >
-                        {
-                          // document
-                          //   ?.querySelector(`.${classes.regionInfo}`)
-                          //   ?.computedStyleMap()
-                          //   ?.get("opacity")?.value &&
-                          // document
-                          //   ?.querySelector(`.${classes.regionInfo}`)
-                          //   ?.computedStyleMap()
-                          //   ?.get("opacity")?.value !== 0.5 &&
-                          open === index ? (
-                            <div style={{ width: 200, padding: 10 }}>
+                        {open === index ? (
+                          <div style={{ width: 200, padding: 10 }}>
+                            <div
+                              style={{
+                                display: "flex",
+                                flexDirection: "row",
+                                alignItems: "flex-end",
+                              }}
+                            >
                               <div
                                 style={{
                                   display: "flex",
-                                  flexDirection: "row",
-                                  alignItems: "flex-end",
+                                  backgroundColor:
+                                    colors[
+                                      lazyBrushClassification?.findIndex(
+                                        (dropdown) =>
+                                          dropdown ===
+                                          item?.popUp?.classification?.label
+                                      ) || 0 % colors.length
+                                    ] || "red",
+                                  color: "#fff",
+                                  padding: 4,
+                                  paddingLeft: 8,
+                                  paddingRight: 8,
+                                  borderRadius: 4,
+                                  fontWeight: "bold",
+                                  textShadow: "0px 0px 5px rgba(0,0,0,0.4)",
                                 }}
                               >
-                                <div
-                                  style={{
-                                    display: "flex",
-                                    backgroundColor:
-                                      colors[
-                                        lazyBrushClassification?.findIndex(
-                                          (dropdown) =>
-                                            dropdown ===
-                                            item?.popUp?.classification?.label
-                                        ) || 0 % colors.length
-                                      ] || "red",
-                                    color: "#fff",
-                                    padding: 4,
-                                    paddingLeft: 8,
-                                    paddingRight: 8,
-                                    borderRadius: 4,
-                                    fontWeight: "bold",
-                                    textShadow: "0px 0px 5px rgba(0,0,0,0.4)",
-                                  }}
-                                >
-                                  Brush
-                                </div>
-                                <div style={{ flexGrow: 1 }} />
-                                <IconButton
-                                  onClick={(e) => {
-                                    let linessave = [...lines]
-                                    linessave.splice(index, 1)
-                                    lines = linessave
-                                    setLines(linessave)
-                                    let arr = [...delete_annotation]
-                                    arr.push(item)
+                                Brush
+                              </div>
+                              <div style={{ flexGrow: 1 }} />
+                              <IconButton
+                                onClick={(e) => {
+                                  let linessave = [...lines]
+                                  let filter_arr = linessave.filter(
+                                    (filters) =>
+                                      filters.id !== item.id && filters
+                                  )
 
-                                    setdelete_annotation(arr)
+                                  setLines(filter_arr)
+                                  let arr = [...delete_annotation]
+                                  let delete_arr = linessave.filter(
+                                    (filter) => filter.id === item.id && filter
+                                  )
+                                  arr.push(delete_arr)
+
+                                  setdelete_annotation(arr)
+                                }}
+                                tabIndex={-1}
+                                style={{ width: 22, height: 22 }}
+                                size="small"
+                                variant="outlined"
+                              >
+                                <TrashIcon
+                                  style={{
+                                    marginTop: -8,
+                                    width: 16,
+                                    height: 16,
+                                  }}
+                                />
+                              </IconButton>
+                              {invaild_show && (
+                                <IconButton
+                                  onClick={() => {
+                                    let linessave = [...lines]
+                                    lines[index].invalid = lines[index].invalid
+                                      ? false
+                                      : true
+
+                                    setLines(linessave)
                                   }}
                                   tabIndex={-1}
                                   style={{ width: 22, height: 22 }}
                                   size="small"
                                   variant="outlined"
                                 >
-                                  <TrashIcon
+                                  <WarningAmberIcon
                                     style={{
+                                      color: lines[index].invalid
+                                        ? "#faad14"
+                                        : "grey",
                                       marginTop: -8,
                                       width: 16,
                                       height: 16,
                                     }}
+                                    // color={
+                                    //   lines[index].invalid ? "primary" : "secondary"
+                                    // }
                                   />
                                 </IconButton>
-                                {invaild_show && (
-                                  <IconButton
-                                    onClick={() => {
-                                      let linessave = [...lines]
-                                      lines[index].invalid = lines[index]
-                                        .invalid
-                                        ? false
-                                        : true
+                              )}
+                            </div>
+                            <div style={{ marginTop: 6 }}>
+                              <CreatableSelect
+                                // menuShouldBlockScroll={true}
+                                menuPosition="fixed"
+                                menuPlacement={"auto"}
+                                placeholder="Classification"
+                                onChange={(o, actionMeta) => {
+                                  let linessave = [...lines]
+                                  lines[index].popUp.classification = o
+                                  lines[index].color = `rgba(${convertHextoRgb(
+                                    colors[
+                                      lazyBrushClassification?.findIndex(
+                                        (dropdown) =>
+                                          dropdown ===
+                                          item?.popUp?.classification?.label
+                                      ) || 0 % colors.length
+                                    ] || "#FF0000"
+                                  )},0.5)`
 
-                                      setLines(linessave)
-                                    }}
-                                    tabIndex={-1}
-                                    style={{ width: 22, height: 22 }}
-                                    size="small"
-                                    variant="outlined"
-                                  >
-                                    <WarningAmberIcon
-                                      style={{
-                                        color: lines[index].invalid
-                                          ? "#faad14"
-                                          : "grey",
-                                        marginTop: -8,
-                                        width: 16,
-                                        height: 16,
-                                      }}
-                                      // color={
-                                      //   lines[index].invalid ? "primary" : "secondary"
-                                      // }
-                                    />
-                                  </IconButton>
+                                  setLines(linessave)
+                                }}
+                                value={lines[index].popUp.classification}
+                                options={asMutable(
+                                  lazyBrushClassification.map((c) => ({
+                                    value: c,
+                                    label: c,
+                                  }))
                                 )}
-                              </div>
-                              <div style={{ marginTop: 6 }}>
-                                <CreatableSelect
-                                  // menuShouldBlockScroll={true}
-                                  menuPosition="fixed"
-                                  menuPlacement={"auto"}
-                                  placeholder="Classification"
-                                  onChange={(o, actionMeta) => {
-                                    let linessave = [...lines]
-                                    lines[index].popUp.classification = o
-                                    lines[
-                                      index
-                                    ].color = `rgba(${convertHextoRgb(
+                              />
+                            </div>
+                            <div style={{ marginTop: 4 }}>
+                              <CreatableSelect
+                                // menuShouldBlockScroll={true}
+                                menuPosition="fixed"
+                                menuPlacement={"auto"}
+                                // menuIsOpen={true}
+                                value={lines[index].popUp.tags}
+                                placeholder="Tags"
+                                onChange={(o, actionMeta) => {
+                                  let linessave = [...lines]
+                                  lines[index].popUp.tags = o
+                                  lines[index].tag_count =
+                                    lines?.[index]?.popUp?.tags?.length
+                                  setLines(linessave)
+                                  setTegged(true)
+                                  setLoacal_id(getRandomId())
+                                }}
+                                isMulti
+                                options={asMutable(
+                                  lazyBrushTags.map((c) => ({
+                                    value: c,
+                                    label: c,
+                                  }))
+                                )}
+                              />
+                            </div>
+
+                            <div style={{ marginTop: 4, display: "flex" }}>
+                              <div style={{ flexGrow: 1 }} />
+                              <Button
+                                onClick={() => {
+                                  // let linessave = [...lines]
+                                  // lines[index].popUp.open = false
+                                  // setLines(linessave)
+                                  setOpen(-1)
+                                }}
+                                size="small"
+                                variant="contained"
+                                color="primary"
+                              >
+                                <CheckIcon />
+                              </Button>
+                            </div>
+                          </div>
+                        ) : (
+                          <div
+                            style={{ padding: 8 }}
+                            onClick={() => {
+                              // let linessave = [...lines]
+                              // lines[index].popUp.open = true
+                              // let i = 0
+                              // for (i = 0; i < lines?.length; i++) {
+                              //   if (i !== index) {
+                              //     lines[i].popUp.open = false
+                              //   }
+                              // }
+                              // setLines(linessave)
+                              !isReadingMode && setOpen(index)
+                            }}
+                          >
+                            {item?.popUp?.classification && (
+                              <div
+                                className="name"
+                                style={{
+                                  display: "flex",
+                                  justifyContent: "flex-start",
+                                  alignItems: "center",
+                                  width: "max-content",
+                                }}
+                              >
+                                <div
+                                  style={{
+                                    backgroundColor:
                                       colors[
                                         lazyBrushClassification?.findIndex(
                                           (dropdown) =>
                                             dropdown ===
-                                            item?.popUp?.classification?.label
-                                        ) || 0 % colors.length
-                                      ] || "#FF0000"
-                                    )},0.5)`
-
-                                    setLines(linessave)
+                                            item?.popUp?.classification.label
+                                        ) % colors.length
+                                      ],
+                                    width: "10px",
+                                    height: "10px",
+                                    boxShadow: "0px 0px 2px rgb(0 0 0 / 40%)",
+                                    marginRight: "4px",
+                                    borderRadius: "5px",
                                   }}
-                                  value={lines[index].popUp.classification}
-                                  options={asMutable(
-                                    lazyBrushClassification.map((c) => ({
-                                      value: c,
-                                      label: c,
-                                    }))
-                                  )}
                                 />
+                                <span>{item?.popUp?.classification.label}</span>
                               </div>
-                              <div style={{ marginTop: 4 }}>
-                                <CreatableSelect
-                                  // menuShouldBlockScroll={true}
-                                  menuPosition="fixed"
-                                  menuPlacement={"auto"}
-                                  // menuIsOpen={true}
-                                  value={lines[index].popUp.tags}
-                                  placeholder="Tags"
-                                  onChange={(o, actionMeta) => {
-                                    let linessave = [...lines]
-                                    lines[index].popUp.tags = o
-                                    lines[index].tag_count =
-                                      lines?.[index]?.popUp?.tags?.length
-                                    setLines(linessave)
-                                  }}
-                                  isMulti
-                                  options={asMutable(
-                                    lazyBrushTags.map((c) => ({
-                                      value: c,
-                                      label: c,
-                                    }))
-                                  )}
-                                />
-                              </div>
+                            )}
 
-                              <div style={{ marginTop: 4, display: "flex" }}>
-                                <div style={{ flexGrow: 1 }} />
-                                <Button
-                                  onClick={() => {
-                                    // let linessave = [...lines]
-                                    // lines[index].popUp.open = false
-                                    // setLines(linessave)
-                                    setOpen(-1)
-                                  }}
-                                  size="small"
-                                  variant="contained"
-                                  color="primary"
-                                >
-                                  <CheckIcon />
-                                </Button>
-                              </div>
+                            <div className="tags">
+                              {item?.popUp?.tags?.map((t) => (
+                                <div className="tag">{`${t.label}`}</div>
+                              ))}
                             </div>
-                          ) : (
-                            <div
-                              style={{ padding: 8 }}
-                              onClick={() => {
-                                // let linessave = [...lines]
-                                // lines[index].popUp.open = true
-                                // let i = 0
-                                // for (i = 0; i < lines?.length; i++) {
-                                //   if (i !== index) {
-                                //     lines[i].popUp.open = false
-                                //   }
-                                // }
-                                // setLines(linessave)
-                                !isReadingMode && setOpen(index)
-                              }}
-                            >
-                              {item?.popUp?.classification && (
-                                <div
-                                  className="name"
-                                  style={{
-                                    display: "flex",
-                                    justifyContent: "flex-start",
-                                    alignItems: "center",
-                                    width: "max-content",
-                                  }}
-                                >
-                                  <div
-                                    style={{
-                                      backgroundColor:
-                                        colors[
-                                          lazyBrushClassification?.findIndex(
-                                            (dropdown) =>
-                                              dropdown ===
-                                              item?.popUp?.classification.label
-                                          ) % colors.length
-                                        ],
-                                      width: "10px",
-                                      height: "10px",
-                                      boxShadow: "0px 0px 2px rgb(0 0 0 / 40%)",
-                                      marginRight: "4px",
-                                      borderRadius: "5px",
-                                    }}
-                                  />
-                                  <span>
-                                    {item?.popUp?.classification.label}
-                                  </span>
-                                </div>
-                              )}
-
-                              <div className="tags">
-                                {item?.popUp?.tags?.map((t) => (
-                                  <div className="tag">{`${t.label}`}</div>
-                                ))}
-                              </div>
-                            </div>
-                          )
-                        }
+                          </div>
+                        )}
                       </Paper>
                     </PreventScrollToParents>
                   </div>
@@ -355,4 +352,3 @@ function BrushPopup({
 }
 
 export default BrushPopup
-
