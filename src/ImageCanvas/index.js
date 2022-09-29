@@ -199,7 +199,7 @@ export const ImageCanvas = ({
           points: [pos.x, pos.y],
           brushRadius,
           type: "brush",
-          popUp: isTagged && {
+          popUp: {
             open: false,
             classification: selectedCls && {
               value: selectedCls || "",

@@ -185,10 +185,19 @@ function BrushPopup({
                                 <IconButton
                                   onClick={() => {
                                     let linessave = [...lines]
-                                    lines[index].invalid = lines[index].invalid
-                                      ? false
-                                      : true
 
+                                    let find_same_id = linessave?.map(
+                                      (items, itemIndex) => {
+                                        if (items.id === item.id) {
+                                          lines[itemIndex].invalid = lines[
+                                            itemIndex
+                                          ].invalid
+                                            ? false
+                                            : true
+                                        }
+                                        return linessave
+                                      }
+                                    )
                                     setLines(linessave)
                                   }}
                                   tabIndex={-1}
@@ -205,9 +214,6 @@ function BrushPopup({
                                       width: 16,
                                       height: 16,
                                     }}
-                                    // color={
-                                    //   lines[index].invalid ? "primary" : "secondary"
-                                    // }
                                   />
                                 </IconButton>
                               )}
@@ -220,16 +226,28 @@ function BrushPopup({
                                 placeholder="Classification"
                                 onChange={(o, actionMeta) => {
                                   let linessave = [...lines]
-                                  lines[index].popUp.classification = o
-                                  lines[index].color = `rgba(${convertHextoRgb(
-                                    colors[
-                                      lazyBrushClassification?.findIndex(
-                                        (dropdown) =>
-                                          dropdown ===
-                                          item?.popUp?.classification?.label
-                                      ) || 0 % colors.length
-                                    ] || "#FF0000"
-                                  )},0.5)`
+
+                                  let find_same_id = linessave?.map(
+                                    (items, itemIndex) => {
+                                      if (items.id === item.id) {
+                                        lines[itemIndex].popUp.classification =
+                                          o
+                                        lines[
+                                          itemIndex
+                                        ].color = `rgba(${convertHextoRgb(
+                                          colors[
+                                            lazyBrushClassification?.findIndex(
+                                              (dropdown) =>
+                                                dropdown ===
+                                                item?.popUp?.classification
+                                                  ?.label
+                                            ) || 0 % colors.length
+                                          ] || "#FF0000"
+                                        )},0.5)`
+                                      }
+                                      return linessave
+                                    }
+                                  )
 
                                   setLines(linessave)
                                 }}
@@ -252,9 +270,22 @@ function BrushPopup({
                                 placeholder="Tags"
                                 onChange={(o, actionMeta) => {
                                   let linessave = [...lines]
-                                  lines[index].popUp.tags = o
-                                  lines[index].tag_count =
-                                    lines?.[index]?.popUp?.tags?.length
+
+                                  let find_same_id = linessave?.map(
+                                    (items, itemIndex) => {
+                                      if (items.id === item.id) {
+                                        lines[itemIndex].popUp.tags = o
+                                        lines[itemIndex].tag_count =
+                                          lines?.[
+                                            itemIndex
+                                          ]?.popUp?.tags?.length
+                                      }
+                                      return linessave
+                                    }
+                                  )
+
+                                  setLines(linessave)
+
                                   setLines(linessave)
                                   setTegged(true)
                                   setLoacal_id(getRandomId())
@@ -273,9 +304,6 @@ function BrushPopup({
                               <div style={{ flexGrow: 1 }} />
                               <Button
                                 onClick={() => {
-                                  // let linessave = [...lines]
-                                  // lines[index].popUp.open = false
-                                  // setLines(linessave)
                                   setOpen(-1)
                                 }}
                                 size="small"
@@ -290,15 +318,6 @@ function BrushPopup({
                           <div
                             style={{ padding: 8 }}
                             onClick={() => {
-                              // let linessave = [...lines]
-                              // lines[index].popUp.open = true
-                              // let i = 0
-                              // for (i = 0; i < lines?.length; i++) {
-                              //   if (i !== index) {
-                              //     lines[i].popUp.open = false
-                              //   }
-                              // }
-                              // setLines(linessave)
                               !isReadingMode && setOpen(index)
                             }}
                           >
@@ -352,3 +371,4 @@ function BrushPopup({
 }
 
 export default BrushPopup
+
