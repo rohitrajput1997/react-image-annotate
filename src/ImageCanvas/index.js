@@ -207,12 +207,15 @@ export const ImageCanvas = ({
             },
           },
           keyframes: videoTime,
-          isPopupShow: isTagged,
+          isPopupShow: lines.length === 0 ? true : isTagged,
         },
       ]
       setLines(lines_date)
       if (lines_date.length) {
         setTegged(false)
+        setLoacal_id(localId)
+      } else if (lines.length === 0) {
+        setTegged(true)
         setLoacal_id(localId)
       }
     } else {
@@ -714,4 +717,3 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
-
