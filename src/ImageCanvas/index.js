@@ -183,13 +183,21 @@ export const ImageCanvas = ({
     return { x: x / scale, y: y / scale }
   }
   const isDrawing = React.useRef(false)
-
+  window.showTagged = () => setTegged(true)
   const handleMouseDown = (e) => {
     isDrawing.current = true
     const pos = getScaledPoint(stage, ((1 / mat.a) * 100) / 100)
 
     if (tool === "pen") {
       let localId = local_id
+      let tagged = lines?.find((item) => {
+        if (item.id === localId && item.isparent === true) {
+          return true
+        } else {
+          return false
+        }
+      })
+
       let lines_date = [
         ...lines,
         {
@@ -207,7 +215,10 @@ export const ImageCanvas = ({
             },
           },
           keyframes: videoTime,
-          isPopupShow: lines.length === 0 ? true : isTagged,
+          isPopupShow:
+            lines.length === 0 ? true : tagged === undefined ? true : isTagged,
+          isparent:
+            lines.length === 0 ? true : tagged === undefined ? true : isTagged,
         },
       ]
       setLines(lines_date)
@@ -216,6 +227,9 @@ export const ImageCanvas = ({
         setLoacal_id(localId)
       } else if (lines.length === 0) {
         setTegged(true)
+        setLoacal_id(localId)
+      } else if (tagged === undefined) {
+        setTegged(false)
         setLoacal_id(localId)
       }
     } else {
@@ -717,3 +731,4 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
+
