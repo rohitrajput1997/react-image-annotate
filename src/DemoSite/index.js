@@ -91,6 +91,19 @@ export default () => {
             qc_label: true,
             keyframes: "0",
           },
+          {
+            type: "box",
+            x: 0.10589285714285715,
+            y: 0.08487394957983194,
+            w: 0.15364845938375352,
+            h: 0.15630252100840336,
+            highlighted: true,
+            editingLabels: false,
+            color: "#ff0000",
+            id: "6859032797397029",
+            qc_label: true,
+            keyframes: "0",
+          },
         ],
       },
       {
@@ -239,3 +252,4 @@ export default () => {
     </div>
   )
 }
+

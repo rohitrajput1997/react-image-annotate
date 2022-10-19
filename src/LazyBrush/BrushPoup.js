@@ -61,6 +61,7 @@ function BrushPopup({
   isReadingMode,
   setTegged,
   setLoacal_id,
+  handleMouseUp,
 }) {
   const getRandomId = () => Math.random().toString().split(".")[1]
   const classes = useStyles()
@@ -77,7 +78,7 @@ function BrushPopup({
   return (
     <ThemeProvider theme={theme}>
       <ClickAwayListener onClickAway={handleClickAway}>
-        <div>
+        <div onMouseUp={() => handleMouseUp()}>
           {showTags &&
             lines?.map(
               (item, index) =>

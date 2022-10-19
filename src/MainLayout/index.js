@@ -18,7 +18,6 @@ import ImageCanvas from "../ImageCanvas"
 import KeyframesSelector from "../KeyframesSelectorSidebarBox"
 import KeyframeTimeline from "../KeyframeTimeline"
 import BrushKeyFrame from "../LazyBrush/BrushKeyFrame"
-import VerticalSlider from "../LazyBrush/BrushSlider"
 import RegionSelector from "../RegionSelectorSidebarBox"
 import SettingsDialog from "../SettingsDialog"
 import { useSettings } from "../SettingsProvider"
@@ -243,6 +242,8 @@ export const MainLayout = ({
       annotationType={state.annotationType}
       isMuted={state.isMuted}
       selectedCls={state.selectedCls}
+      setTool={setTool}
+      setbrushRadius={setbrushRadius}
     />
   )
 
@@ -592,43 +593,7 @@ export const MainLayout = ({
                 ].filter(Boolean)
               }
             >
-              <div
-                style={{
-                  display: "flex",
-
-                  justifyContent: "center",
-
-                  alignItems: "center",
-                }}
-              >
-                {state.selectedTool === "create-a-brush" ||
-                state.selectedTool === "eraser" ? (
-                  <div
-                    style={{
-                      maxHeight: "300px",
-                      display: "flex",
-                      flexDirection: "column",
-                      justifyContent: "center",
-
-                      alignItems: "center",
-
-                      height: "300px",
-                      padding: "8px 4px",
-                      backgroundColor: "white",
-                      boxShadow: "5px 5px 10px rgb(0 0 0 / 10%)",
-                      margin: "0px 8px",
-                    }}
-                  >
-                    <VerticalSlider
-                      brushRadius={brushRadius}
-                      setbrushRadius={setbrushRadius}
-                      setTool={setTool}
-                      selectTool={state.selectedTool}
-                    />
-                  </div>
-                ) : null}
-                {canvas}
-              </div>
+              {canvas}
             </Workspace>
             {/* <BrushDialog
               open={openBrush}

@@ -1,3 +1,5 @@
+import { faHandRock } from "@fortawesome/free-solid-svg-icons"
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
 import { createTheme, styled, ThemeProvider } from "@mui/material/styles"
 import Tooltip from "@mui/material/Tooltip"
 import React, { Fragment, memo } from "react"
@@ -28,7 +30,13 @@ const arePropsEqual = (prev, next) => {
     prev.mat === next.mat
   )
 }
-
+const faStyle = {
+  marginTop: 0,
+  width: 16,
+  height: 16,
+  marginBottom: 0,
+  color: "white",
+}
 export const RegionSelectAndTransformBox = memo(
   ({
     region: r,
@@ -96,8 +104,19 @@ export const RegionSelectAndTransformBox = memo(
                     top: pbox.y - 4 - 2 + pbox.h * py,
                     cursor: boxCursorMap[py * 2][px * 2],
                     borderRadius: px === 0.5 && py === 0.5 ? 4 : undefined,
+                    zIndex: 8,
                   }}
-                />
+                >
+                  {console.log()}
+                  {boxCursorMap[py * 2][px * 2] === "grab" && (
+                    <FontAwesomeIcon
+                      style={faStyle}
+                      size="xs"
+                      fixedWidth
+                      icon={faHandRock}
+                    />
+                  )}
+                </TransformGrabber>
               ))}
             {r.type === "polygon" &&
               !dragWithPrimary &&
@@ -234,3 +253,4 @@ export const RegionSelectAndTransformBoxes = memo(
 )
 
 export default RegionSelectAndTransformBoxes
+

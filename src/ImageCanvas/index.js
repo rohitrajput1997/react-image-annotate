@@ -20,6 +20,7 @@ import useExcludePattern from "../hooks/use-exclude-pattern"
 import useWindowSize from "../hooks/use-window-size.js"
 import ImageMask from "../ImageMask"
 import BrushPopup from "../LazyBrush/BrushPoup"
+import VerticalSlider from "../LazyBrush/BrushSlider"
 import PointDistances from "../PointDistances"
 import PreventScrollToParents from "../PreventScrollToParents"
 import RegionSelectAndTransformBoxes from "../RegionSelectAndTransformBoxes"
@@ -163,6 +164,8 @@ export const ImageCanvas = ({
   annotationType,
   selectedCls,
   isReadingMode,
+  setbrushRadius,
+  setTool,
 }: Props) => {
   const classes = useStyles()
 
@@ -543,6 +546,47 @@ export const ImageCanvas = ({
           </PreventScrollToParents>
         )}
 
+        <div
+          style={{
+            display: "flex",
+
+            justifyContent: "center",
+
+            alignItems: "center",
+          }}
+        >
+          {selectedTool === "create-a-brush" || selectedTool === "eraser" ? (
+            <div
+              style={{
+                maxHeight: "300px",
+                display: "flex",
+                flexDirection: "column",
+                justifyContent: "center",
+
+                alignItems: "center",
+
+                height: "300px",
+                padding: "8px 4px",
+                backgroundColor: "white",
+                boxShadow: "5px 5px 10px rgb(0 0 0 / 10%)",
+                margin: "0px 8px",
+                position: "absolute",
+                zIndex: 1000,
+                left: 0,
+                top: "100px",
+              }}
+              onMouseUp={() => handleMouseUp()}
+            >
+              <VerticalSlider
+                brushRadius={brushRadius}
+                setbrushRadius={setbrushRadius}
+                setTool={setTool}
+                selectTool={selectedTool}
+              />
+            </div>
+          ) : null}
+        </div>
+
         {zoomWithPrimary && zoomBox !== null && (
           <div
             key="zoomBox"
@@ -593,6 +637,7 @@ export const ImageCanvas = ({
               isReadingMode={isReadingMode}
               setTegged={setTegged}
               setLoacal_id={setLoacal_id}
+              handleMouseUp={handleMouseUp}
             />
           </div>
         </PreventScrollToParents>

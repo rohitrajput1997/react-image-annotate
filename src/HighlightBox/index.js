@@ -1,9 +1,9 @@
 // @flow
 
-import React from "react"
-import classnames from "classnames"
-import { makeStyles } from "@mui/styles"
 import { createTheme, ThemeProvider } from "@mui/material/styles"
+import { makeStyles } from "@mui/styles"
+import classnames from "classnames"
+import React from "react"
 
 const theme = createTheme()
 const useStyles = makeStyles((theme) => ({
@@ -131,6 +131,7 @@ export const HighlightBox = ({
                     : undefined,
               }),
           position: "absolute",
+          zIndex: 8,
           ...styleCoords,
         }}
       >
@@ -141,3 +142,4 @@ export const HighlightBox = ({
 }
 
 export default HighlightBox
+
