@@ -14,6 +14,7 @@ import { Layer, Line, Stage } from "react-konva"
 import { useRafState } from "react-use"
 import { Matrix } from "transformation-matrix-js"
 import useEventCallback from "use-event-callback"
+import colors from "../colors"
 
 import Crosshairs from "../Crosshairs"
 import useExcludePattern from "../hooks/use-exclude-pattern"
@@ -32,6 +33,26 @@ import styles from "./styles"
 import useMouse from "./use-mouse"
 import useProjectRegionBox from "./use-project-box"
 import useWasdMode from "./use-wasd-mode"
+const convertHextoRgb = (color) => {
+  try {
+    let hashRemove = color.replace("#", "")
+    var aRgbHex = hashRemove.match(/.{1,2}/g)
+    var aRgb = [
+      parseInt(aRgbHex[0], 16),
+      parseInt(aRgbHex[1], 16),
+      parseInt(aRgbHex[2], 16),
+    ]
+    return aRgb.toString()
+  } catch (err) {
+    var aRgbHex = "FF0000".match(/.{1,2}/g)
+    var aRgb = [
+      parseInt(aRgbHex[0], 16),
+      parseInt(aRgbHex[1], 16),
+      parseInt(aRgbHex[2], 16),
+    ]
+    return aRgb.toString()
+  }
+}
 
 const theme = createTheme()
 let newStyles = {
@@ -179,6 +200,7 @@ export const ImageCanvas = ({
   const [mat, changeMat] = useRafState(getDefaultMat())
   const [isTagged, setTegged] = useState(true)
   const [local_id, setLoacal_id] = useState(getRandomId())
+  const [selected_color, setSelected_color] = useState("")
   const maskImages = useRef({})
   const windowSize = useWindowSize()
   const getScaledPoint = (stage, scale) => {
@@ -187,6 +209,16 @@ export const ImageCanvas = ({
   }
   const isDrawing = React.useRef(false)
   window.showTagged = () => setTegged(true)
+  React.useEffect(() => {
+    let index = lazyBrushClassification?.findIndex(
+      (dropdown) => dropdown === selectedCls
+    )
+    let color = `rgba(${convertHextoRgb(
+      colors[index || 0 % colors.length] || "#FF0000"
+    )},0.5)`
+
+    setSelected_color(color)
+  }, [selectedCls, lazyBrushClassification])
   const handleMouseDown = (e) => {
     isDrawing.current = true
     const pos = getScaledPoint(stage, ((1 / mat.a) * 100) / 100)
@@ -217,6 +249,7 @@ export const ImageCanvas = ({
               label: selectedCls || "",
             },
           },
+          color: selected_color || "rgba(223,75,38,0.5)",
           keyframes: videoTime,
           isPopupShow:
             lines.length === 0 ? true : tagged === undefined ? true : isTagged,
@@ -638,6 +671,7 @@ export const ImageCanvas = ({
               setTegged={setTegged}
               setLoacal_id={setLoacal_id}
               handleMouseUp={handleMouseUp}
+              convertHextoRgb={convertHextoRgb}
             />
           </div>
         </PreventScrollToParents>
@@ -720,7 +754,9 @@ export const ImageCanvas = ({
                         stroke={
                           line.tool === "eraser"
                             ? "#df4b26"
-                            : line.color || "rgba(223, 75, 38,0.55)"
+                            : line.color ||
+                              selected_color ||
+                              "rgba(223,75,38,0.5)"
                         }
                         strokeWidth={line.brushRadius}
                         tension={0.5}

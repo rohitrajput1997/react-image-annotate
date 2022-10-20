@@ -23,26 +23,7 @@ import colors from "../colors"
 import styles from "../RegionLabel/styles"
 const theme = createTheme()
 const useStyles = makeStyles((theme) => styles)
-const convertHextoRgb = (color) => {
-  try {
-    let hashRemove = color.replace("#", "")
-    var aRgbHex = hashRemove.match(/.{1,2}/g)
-    var aRgb = [
-      parseInt(aRgbHex[0], 16),
-      parseInt(aRgbHex[1], 16),
-      parseInt(aRgbHex[2], 16),
-    ]
-    return aRgb.toString()
-  } catch (err) {
-    var aRgbHex = "FF0000".match(/.{1,2}/g)
-    var aRgb = [
-      parseInt(aRgbHex[0], 16),
-      parseInt(aRgbHex[1], 16),
-      parseInt(aRgbHex[2], 16),
-    ]
-    return aRgb.toString()
-  }
-}
+
 function BrushPopup({
   top,
   left,
@@ -62,6 +43,7 @@ function BrushPopup({
   setTegged,
   setLoacal_id,
   handleMouseUp,
+  convertHextoRgb,
 }) {
   const getRandomId = () => Math.random().toString().split(".")[1]
   const classes = useStyles()
