@@ -1,5 +1,6 @@
 import CheckIcon from "@mui/icons-material/Check"
 import TrashIcon from "@mui/icons-material/Delete"
+import LockIcon from "@mui/icons-material/Lock"
 import WarningAmberIcon from "@mui/icons-material/WarningAmber"
 import { makeStyles } from "@mui/styles"
 import PreventScrollToParents from "../PreventScrollToParents"
@@ -65,7 +66,8 @@ function BrushPopup({
             lines?.map(
               (item, index) =>
                 item.isPopupShow === true &&
-                item.tool === "pen" && (
+                item.tool === "pen" &&
+                !item.isHide && (
                   <div
                     style={{
                       left: `${item.points[0] * scale}px`,
@@ -287,7 +289,7 @@ function BrushPopup({
                               <div style={{ flexGrow: 1 }} />
                               <Button
                                 onClick={() => {
-                                  setOpen(-1)
+                                  !lines.isLocked && setOpen(-1)
                                 }}
                                 size="small"
                                 variant="contained"
@@ -298,49 +300,59 @@ function BrushPopup({
                             </div>
                           </div>
                         ) : (
-                          <div
-                            style={{ padding: 8 }}
-                            onClick={() => {
-                              !isReadingMode && setOpen(index)
-                            }}
-                          >
-                            {item?.popUp?.classification && (
-                              <div
-                                className="name"
-                                style={{
-                                  display: "flex",
-                                  justifyContent: "flex-start",
-                                  alignItems: "center",
-                                  width: "max-content",
-                                }}
-                              >
-                                <div
-                                  style={{
-                                    backgroundColor:
-                                      colors[
-                                        lazyBrushClassification?.findIndex(
-                                          (dropdown) =>
-                                            dropdown ===
-                                            item?.popUp?.classification.label
-                                        ) % colors.length
-                                      ],
-                                    width: "10px",
-                                    height: "10px",
-                                    boxShadow: "0px 0px 2px rgb(0 0 0 / 40%)",
-                                    marginRight: "4px",
-                                    borderRadius: "5px",
-                                  }}
-                                />
-                                <span>{item?.popUp?.classification.label}</span>
-                              </div>
-                            )}
-
-                            <div className="tags">
-                              {item?.popUp?.tags?.map((t) => (
-                                <div className="tag">{`${t.label}`}</div>
-                              ))}
+                          !item.isHide && (
+                            <div
+                              style={{ padding: !item.isLocked && 8 }}
+                              onClick={() => {
+                                if (!lines.isLocked) {
+                                  if (!isReadingMode) {
+                                    !lines.isLocked && setOpen(index)
+                                  }
+                                }
+                              }}
+                            >
+                              {item.isLocked ? (
+                                <LockIcon fontSize="small" />
+                              ) : (
+                                <>
+                                  {item?.popUp?.classification && (
+                                    <div
+                                      className="name"
+                                      style={{
+                                        display: "flex",
+                                        justifyContent: "flex-start",
+                                        alignItems: "center",
+                                        width: "max-content",
+                                      }}
+                                    >
+                                      <div
+                                        style={{
+                                          backgroundColor: item?.color?.replace(
+                                            "0.5",
+                                            "1"
+                                          ),
+                                          width: "10px",
+                                          height: "10px",
+                                          boxShadow:
+                                            "0px 0px 2px rgb(0 0 0 / 40%)",
+                                          marginRight: "4px",
+                                          borderRadius: "5px",
+                                        }}
+                                      />
+                                      <span>
+                                        {item?.popUp?.classification.label}
+                                      </span>
+                                    </div>
+                                  )}
+                                  <div className="tags">
+                                    {item?.popUp?.tags?.map((t) => (
+                                      <div className="tag">{`${t.label}`}</div>
+                                    ))}
+                                  </div>
+                                </>
+                              )}
                             </div>
-                          </div>
+                          )
                         )}
                       </Paper>
                     </PreventScrollToParents>

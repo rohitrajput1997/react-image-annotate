@@ -255,6 +255,8 @@ export const ImageCanvas = ({
             lines.length === 0 ? true : tagged === undefined ? true : isTagged,
           isparent:
             lines.length === 0 ? true : tagged === undefined ? true : isTagged,
+          isLocked: false,
+          isHide: false,
         },
       ]
       setLines(lines_date)
@@ -279,6 +281,8 @@ export const ImageCanvas = ({
           brushRadius,
           keyframes: videoTime,
           type: "brush",
+          isLocked: false,
+          isHide: false,
         },
       ])
     }
@@ -746,33 +750,36 @@ export const ImageCanvas = ({
                 ref={setStageRef}
               >
                 <Layer>
-                  {lines.map((line, i) => (
-                    <>
-                      <Line
-                        key={i}
-                        points={line.points}
-                        stroke={
-                          line.tool === "eraser"
-                            ? "#df4b26"
-                            : line.color ||
-                              selected_color ||
-                              "rgba(223,75,38,0.5)"
-                        }
-                        strokeWidth={line.brushRadius}
-                        tension={0.5}
-                        lineCap="round"
-                        globalCompositeOperation={
-                          line.tool === "eraser"
-                            ? "destination-out"
-                            : "source-over"
-                        }
-                        scale={{
-                          x: ((1 / mat.a) * 100) / 100,
-                          y: ((1 / mat.a) * 100) / 100,
-                        }}
-                      />
-                    </>
-                  ))}
+                  {lines.map(
+                    (line, i) =>
+                      !line?.isHide && (
+                        <>
+                          <Line
+                            key={i}
+                            points={line.points}
+                            stroke={
+                              line.tool === "eraser"
+                                ? "#df4b26"
+                                : line.color ||
+                                  selected_color ||
+                                  "rgba(223,75,38,0.5)"
+                            }
+                            strokeWidth={line.brushRadius}
+                            tension={0.5}
+                            lineCap="round"
+                            globalCompositeOperation={
+                              line.tool === "eraser"
+                                ? "destination-out"
+                                : "source-over"
+                            }
+                            scale={{
+                              x: ((1 / mat.a) * 100) / 100,
+                              y: ((1 / mat.a) * 100) / 100,
+                            }}
+                          />
+                        </>
+                      )
+                  )}
                 </Layer>
               </Stage>
             </div>

@@ -18,6 +18,7 @@ import ImageCanvas from "../ImageCanvas"
 import KeyframesSelector from "../KeyframesSelectorSidebarBox"
 import KeyframeTimeline from "../KeyframeTimeline"
 import BrushKeyFrame from "../LazyBrush/BrushKeyFrame"
+import BrushRegion from "../LazyBrush/BrushRegion"
 import RegionSelector from "../RegionSelectorSidebarBox"
 import SettingsDialog from "../SettingsDialog"
 import { useSettings } from "../SettingsProvider"
@@ -570,6 +571,15 @@ export const MainLayout = ({
                       keyframes={state.keyframes}
                     />
                   ),
+                  <BrushRegion
+                    onChangeVideoTime={action("CHANGE_VIDEO_TIME", "newTime")}
+                    currentTime={state.currentVideoTime}
+                    duration={state.videoDuration}
+                    brushLines={lines}
+                    delete_annotation={delete_annotation}
+                    setdelete_annotation={setdelete_annotation}
+                    setLines={setLines}
+                  />,
 
                   state.keyframes && (
                     <BrushKeyFrame
@@ -620,4 +630,3 @@ export const MainLayout = ({
 }
 
 export default MainLayout
-
