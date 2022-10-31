@@ -23,10 +23,13 @@ const KeyframeRow = styled("div")(({ theme }) => ({
   "& .classification": {
     display: "flex",
     alignItems: "center",
+    fontSize: "11px",
     justifyContent: "space-between",
+    fontWeight: "bold",
     "& .series": {
       textAlign: "right",
       paddingRight: "10px",
+      fontSize: "11px",
     },
   },
   "&.current": {
@@ -47,10 +50,14 @@ const KeyframeRow = styled("div")(({ theme }) => ({
   "& .trash": {
     "& .icon": {
       fontSize: 18,
-      color: colors.grey[600],
-      transition: "transform 80ms",
+
+      color: "#005f86",
+      width: "16px",
+      height: "16px",
+      opacity: 0.5,
+      transition: "200ms opacity",
       "&:hover": {
-        color: colors.grey[800],
+        color: "#005f86",
         transform: "scale(1.25,1.25)",
       },
     },
@@ -187,3 +194,4 @@ const BrushRegion = ({
 }
 
 export default BrushRegion
+

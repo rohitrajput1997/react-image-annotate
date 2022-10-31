@@ -84,7 +84,10 @@ export const ClassSelectionMenu = ({
         {regionClsList.map((label, index) => (
           <LabelContainer
             className={classnames({ selected: label === selectedCls })}
-            onClick={() => onSelectCls(label)}
+            onClick={() => {
+              onSelectCls(label)
+              window.showTagged()
+            }}
           >
             <Circle
               style={{ backgroundColor: colors[index % colors.length] }}

@@ -208,7 +208,10 @@ export const ImageCanvas = ({
     return { x: x / scale, y: y / scale }
   }
   const isDrawing = React.useRef(false)
-  window.showTagged = () => setTegged(true)
+  window.showTagged = () => {
+    setTegged(true)
+    setLoacal_id(getRandomId())
+  }
   React.useEffect(() => {
     let index = lazyBrushClassification?.findIndex(
       (dropdown) => dropdown === selectedCls
