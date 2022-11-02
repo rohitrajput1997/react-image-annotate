@@ -89,6 +89,7 @@ export const ClassSelectionMenu = ({
               window.showTagged()
             }}
           >
+            {console.log(index % colors.length)}
             <Circle
               style={{ backgroundColor: colors[index % colors.length] }}
             />

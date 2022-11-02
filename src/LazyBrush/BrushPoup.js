@@ -45,12 +45,16 @@ function BrushPopup({
   setLoacal_id,
   handleMouseUp,
   convertHextoRgb,
+  setbrushHighlight,
 }) {
   const getRandomId = () => Math.random().toString().split(".")[1]
   const classes = useStyles()
   const [open, setOpen] = useState(-1)
   const handleClickAway = () => {
-    setOpen(-1)
+    // setOpen(-1)
+  }
+  window.brushHighlighted = (value) => {
+    setOpen(value)
   }
   const popUpPos = ({ index, top }) => {
     const labelBoxHeight = open === index ? 170 : 60
@@ -74,6 +78,7 @@ function BrushPopup({
                       top: `${item.points[1] * scale}px`,
                       position: "absolute",
                       width: "200px",
+                      opacity: 1,
                     }}
                     onMouseDown={(e) => e.preventDefault()}
                     onMouseUp={(e) => e.preventDefault()}
@@ -89,6 +94,7 @@ function BrushPopup({
                       <Paper
                         className={classnames(classes.regionInfo)}
                         style={{
+                          opacity: open === index && 1,
                           zIndex: 20,
                           // top: `${19.166664123535156}px`,
                           // left: `${197.90878098221688}px`,
@@ -122,7 +128,7 @@ function BrushPopup({
                                         (dropdown) =>
                                           dropdown ===
                                           item?.popUp?.classification?.label
-                                      ) || 0 % colors.length
+                                      ) % colors.length
                                     ] || "red",
                                   color: "#fff",
                                   padding: 4,
@@ -226,7 +232,7 @@ function BrushPopup({
                                                 dropdown ===
                                                 item?.popUp?.classification
                                                   ?.label
-                                            ) || 0 % colors.length
+                                            ) % colors.length
                                           ] || "#FF0000"
                                         )},0.5)`
                                       }
@@ -289,7 +295,10 @@ function BrushPopup({
                               <div style={{ flexGrow: 1 }} />
                               <Button
                                 onClick={() => {
-                                  !lines.isLocked && setOpen(-1)
+                                  if (!lines.isLocked) {
+                                    setOpen(-1)
+                                    setbrushHighlight(-1)
+                                  }
                                 }}
                                 size="small"
                                 variant="contained"
@@ -306,7 +315,8 @@ function BrushPopup({
                               onClick={() => {
                                 if (!lines.isLocked) {
                                   if (!isReadingMode) {
-                                    !lines.isLocked && setOpen(index)
+                                    setOpen(index)
+                                    setbrushHighlight(index)
                                   }
                                 }
                               }}

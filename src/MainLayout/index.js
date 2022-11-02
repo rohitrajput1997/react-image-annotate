@@ -104,6 +104,7 @@ export const MainLayout = ({
   const [brushRadius, setbrushRadius] = useState(5)
   const [tool, setTool] = React.useState("pen")
   const [isMuted, setisMuted] = useState(false)
+  const [brushHighlight, setbrushHighlight] = useState(false)
   React.useEffect(() => {
     if (state.selectedTool === "create-a-brush") {
       setTool("pen")
@@ -245,6 +246,7 @@ export const MainLayout = ({
       selectedCls={state.selectedCls}
       setTool={setTool}
       setbrushRadius={setbrushRadius}
+      setbrushHighlight={setbrushHighlight}
     />
   )
 
@@ -579,6 +581,7 @@ export const MainLayout = ({
                     delete_annotation={delete_annotation}
                     setdelete_annotation={setdelete_annotation}
                     setLines={setLines}
+                    brushHighlight={brushHighlight}
                   />,
 
                   state.keyframes && (
@@ -630,3 +633,4 @@ export const MainLayout = ({
 }
 
 export default MainLayout
+

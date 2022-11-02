@@ -108,6 +108,7 @@ export const Annotator = ({
   showUpdate = false,
   rightMenu = true,
   isReadingMode = false,
+  brushHighlighted = -1,
 }: Props) => {
   if (typeof selectedImage === "string") {
     selectedImage = (images || []).findIndex((img) => img.src === selectedImage)
@@ -144,6 +145,7 @@ export const Annotator = ({
       videoName,
       keypointDefinitions,
       allowComments,
+      brushHighlighted,
 
       ...(annotationType === "image"
         ? {

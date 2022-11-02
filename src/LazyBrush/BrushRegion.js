@@ -20,6 +20,8 @@ const KeyframeRow = styled("div")(({ theme }) => ({
   padding: 8,
   fontSize: 14,
   color: colors.grey[700],
+  // backgroundColor: colors.blue[100],
+
   "& .classification": {
     display: "flex",
     alignItems: "center",
@@ -71,6 +73,7 @@ const BrushRegion = ({
   setLines,
   brushLines,
   delete_annotation,
+  brushHighlight,
 }) => {
   //   const keyframeTimes = brushLines
 
@@ -88,7 +91,16 @@ const BrushRegion = ({
               index === self.findIndex((t) => t.id === arr.id && arr.id)
           )
           ?.map((t, index) => (
-            <KeyframeRow fullWidth key={t}>
+            <KeyframeRow
+              fullWidth
+              key={t}
+              style={{
+                backgroundColor: brushHighlight === index && "#bbdefb",
+              }}
+              onClick={() => {
+                window.brushHighlighted(index)
+              }}
+            >
               <div className="classification">
                 <span> #{index + 1}</span>
                 <div

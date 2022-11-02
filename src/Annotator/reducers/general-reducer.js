@@ -852,6 +852,7 @@ export default (state: MainLayoutState, action: Action) => {
           return state
         }
         case "fullscreen": {
+         
           return setIn(state, ["fullScreen"], true)
         }
         case "exit fullscreen":
@@ -947,4 +948,5 @@ export default (state: MainLayoutState, action: Action) => {
   }
   return state
 }
+
 

@@ -187,6 +187,7 @@ export const ImageCanvas = ({
   isReadingMode,
   setbrushRadius,
   setTool,
+  setbrushHighlight,
 }: Props) => {
   const classes = useStyles()
 
@@ -216,11 +217,13 @@ export const ImageCanvas = ({
     let index = lazyBrushClassification?.findIndex(
       (dropdown) => dropdown === selectedCls
     )
-    let color = `rgba(${convertHextoRgb(
-      colors[index || 0 % colors.length] || "#FF0000"
-    )},0.5)`
+    if (index !== -1 && index !== undefined) {
+      let color = `rgba(${convertHextoRgb(
+        colors[index % colors.length] || "#FF0000"
+      )},0.5)`
 
-    setSelected_color(color)
+      setSelected_color(color)
+    }
   }, [selectedCls, lazyBrushClassification])
   const handleMouseDown = (e) => {
     isDrawing.current = true
@@ -679,6 +682,7 @@ export const ImageCanvas = ({
               setLoacal_id={setLoacal_id}
               handleMouseUp={handleMouseUp}
               convertHextoRgb={convertHextoRgb}
+              setbrushHighlight={setbrushHighlight}
             />
           </div>
         </PreventScrollToParents>
