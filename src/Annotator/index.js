@@ -231,6 +231,17 @@ export const Annotator = ({
       return setLines(intial_lines)
     }
   }
+  window.handleBrush_delete = () => {
+    let newArr = [...window.annotation_redo] || []
+    if (newArr.length) {
+      let lastElement = newArr[newArr.length - 1].brush
+      const intial_lines = [...lines, ...lastElement]
+      newArr.splice(window.annotation_redo.length - 1, 1)
+      window.annotation_redo = newArr
+      window.undoArray = [...window.undoArray, "brush"]
+      return setLines(intial_lines)
+    }
+  }
 
   window.hendleAnnotation_redo = () => {
     dispatch({

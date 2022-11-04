@@ -82,6 +82,11 @@ const BrushKeyFrame = ({
                   setLines(linessave)
                   let arr = [...delete_annotation]
                   arr.push(t)
+                  window.undoArray = [...window.undoArray, "brush"]
+                  let obj = { brush: arr }
+                  let newArr = [...window.annotation_redo]
+                  newArr.push(obj)
+                  window.annotation_redo = newArr
 
                   setdelete_annotation(arr)
                   e.stopPropagation()

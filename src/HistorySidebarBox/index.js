@@ -13,7 +13,6 @@ import { makeStyles } from "@mui/styles"
 import isEqual from "lodash/isEqual"
 import moment from "moment"
 import React, { memo } from "react"
-import { setIn } from "seamless-immutable"
 import SidebarBoxContainer from "../SidebarBoxContainer"
 const theme = createTheme()
 const useStyles = makeStyles((theme) => ({
@@ -46,10 +45,16 @@ export const HistorySidebarBox = ({
 
       window.undoArray = newArr
     } else if (lastElement === "brush") {
-      window.undoBrush()
-      let newArr = [...window.undoArray]
-      newArr.splice(window.undoArray.length - 1, 1)
-      window.undoArray = newArr
+      if (
+        window.annotation_redo[window.annotation_redo.length - 1]?.brush?.length
+      ) {
+        window.handleBrush_delete()
+      } else {
+        window.undoBrush()
+        let newArr = [...window.undoArray]
+        newArr.splice(window.undoArray.length - 1, 1)
+        window.undoArray = newArr
+      }
     }
   }
   const handleUndoKeydown = () => {
@@ -156,3 +161,4 @@ export default memo(HistorySidebarBox, (prevProps, nextProps) => {
     nextProps.history.map((a) => [a.name, a.time])
   )
 })
+

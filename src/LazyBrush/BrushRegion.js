@@ -129,6 +129,11 @@ const BrushRegion = ({
                       (filter) => filter.id === t.id && filter
                     )
                     arr.push(delete_arr)
+                    window.undoArray = [...window.undoArray, "brush"]
+                    let obj = { brush: delete_arr }
+                    let newArr = [...window.annotation_redo]
+                    newArr.push(obj)
+                    window.annotation_redo = newArr
 
                     setdelete_annotation(arr)
                   }}

@@ -152,11 +152,22 @@ function BrushPopup({
 
                                   setLines(filter_arr)
                                   let arr = [...delete_annotation]
-                                  let delete_arr = linessave.filter(
-                                    (filter) => filter.id === item.id && filter
-                                  )
+                                  let delete_arr = linessave
+                                    .filter((filter) => {
+                                      if (filter.id === item.id) {
+                                        return filter
+                                      }
+                                    })
+                                    .filter(Boolean)
                                   arr.push(delete_arr)
-
+                                  window.undoArray = [
+                                    ...window.undoArray,
+                                    "brush",
+                                  ]
+                                  let obj = { brush: delete_arr }
+                                  let newArr = [...window.annotation_redo]
+                                  newArr.push(obj)
+                                  window.annotation_redo = newArr
                                   setdelete_annotation(arr)
                                 }}
                                 tabIndex={-1}
@@ -190,6 +201,10 @@ function BrushPopup({
                                       }
                                     )
                                     setLines(linessave)
+                                    window.undoArray = [
+                                      ...window.undoArray,
+                                      "brush",
+                                    ]
                                   }}
                                   tabIndex={-1}
                                   style={{ width: 22, height: 22 }}

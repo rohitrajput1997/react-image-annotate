@@ -763,7 +763,7 @@ export const ImageCanvas = ({
                         <>
                           <Line
                             key={i}
-                            points={line.points}
+                            points={line?.points}
                             stroke={
                               line.tool === "eraser"
                                 ? "#df4b26"
@@ -826,4 +826,3 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
-
