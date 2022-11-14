@@ -33,6 +33,7 @@ type Props = {
   onOpen: (Region) => null,
   onRegionClassAdded: () => {},
   allowComments?: boolean,
+  isImageMode?: boolean,
 }
 
 export const RegionLabel = ({
@@ -50,6 +51,7 @@ export const RegionLabel = ({
   delete_annotation,
   setdelete_annotation,
   isReadingMode,
+  isImageMode,
 }: Props) => {
   const classes = useStyles()
   const commentInputRef = useRef(null)
@@ -251,4 +253,3 @@ export default memo(
     prevProps.editing === nextProps.editing &&
     prevProps.region === nextProps.region
 )
-

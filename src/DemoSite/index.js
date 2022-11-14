@@ -6,32 +6,7 @@ export default () => {
   const [annotatorProps, changeAnnotatorProps] = React.useState({
     taskDescription:
       "Annotate each image according to this _markdown_ specification.",
-    regionTagList: [
-      "Bag",
-      "Bangles bracelets",
-      "Bathrobe",
-      "Belt",
-      "Blazer",
-      "Blouse saree",
-      "Boots",
-      "Bra",
-      "Briefs",
-      "Camisole",
-      "Casual shoes",
-      "Coats",
-      "Coords",
-      "Corset",
-      "Dress",
-      "Dungree",
-      "Dupatta",
-      "Earcuff",
-      "Earrings",
-      "Ethnic bottom",
-      "Finger rings",
-      "Flats",
-      "Flip flop",
-      "Footware",
-    ],
+
     regionClsList: [
       "Bag",
       "Bangles bracelets",

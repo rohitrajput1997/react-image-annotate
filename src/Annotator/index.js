@@ -1,5 +1,6 @@
 // @flow
 
+import { TextField } from "@mui/material"
 import React, { useEffect, useReducer, useState } from "react"
 import makeImmutable, { without } from "seamless-immutable"
 import useEventCallback from "use-event-callback"
@@ -301,6 +302,16 @@ export const Annotator = ({
         isReadingMode={isReadingMode}
         isImageMode={isImageMode}
       />
+      <br />
+      <div
+        style={{ display: "flex", justifyContent: "start", margin: "0 10px" }}
+      >
+        {state?.images?.[0]?.regions?.map((item) => (
+          <div style={{ marginRight: "2px", marginBottom: "2px" }}>
+            <TextField value={item.cls} />
+          </div>
+        ))}
+      </div>
     </SettingsProvider>
   )
 }

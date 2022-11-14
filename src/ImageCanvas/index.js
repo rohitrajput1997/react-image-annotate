@@ -189,6 +189,7 @@ export const ImageCanvas = ({
   setbrushRadius,
   setTool,
   setbrushHighlight,
+  isImageMode,
 }: Props) => {
   const classes = useStyles()
 
@@ -587,6 +588,7 @@ export const ImageCanvas = ({
               setdelete_annotation={setdelete_annotation}
               isReadingMode={isReadingMode}
               mat={mat}
+              isImageMode={isImageMode}
             />
           </PreventScrollToParents>
         )}
