@@ -14,6 +14,7 @@ export type ToolEnum =
   | "create-expanding-line"
   | "create-keypoints"
   | "undo_anntation"
+  | "zoom_tool_minus"
 
 export type Image = {
   src: string,

@@ -161,6 +161,7 @@ export const Annotator = ({
       qc_label: invaild_show,
     })
   )
+
   const [lines, setLines] = React.useState([])
   const [delete_annotation, setdelete_annotation] = useState([])
   const dispatch = useEventCallback((action: Action) => {
@@ -302,4 +303,3 @@ export const Annotator = ({
 }
 
 export default Annotator
-

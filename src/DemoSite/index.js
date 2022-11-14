@@ -192,6 +192,7 @@ export default () => {
           "redo_anntation",
           "create-a-brush",
           "eraser",
+          "zoom_tool_minus",
         ]}
         invaild_show={true}
         showUpdate={true}
@@ -201,4 +202,3 @@ export default () => {
     </div>
   )
 }
-

@@ -137,6 +137,7 @@ export const ImageCanvas = ({
   onMouseUp = (p) => null,
   dragWithPrimary = false,
   zoomWithPrimary = false,
+  zoomWithSecondary = false,
   createWithPrimary = false,
   pointDistancePrecision = 0,
   regionClsList,
@@ -333,6 +334,7 @@ export const ImageCanvas = ({
     changeZoomEnd,
     changeDragging,
     zoomWithPrimary,
+    zoomWithSecondary,
     dragWithPrimary,
     onMouseMove,
     onMouseDown,
@@ -509,11 +511,10 @@ export const ImageCanvas = ({
               ? "grabbing"
               : dragWithPrimary
               ? "grab"
+              : zoomWithSecondary
+              ? "zoom-out"
               : zoomWithPrimary
-              ? // ? mat.a < 1
-                //   ? "zoom-out"
-                //   : "zoom-in"
-                "zoom-in"
+              ? "zoom-in"
               : undefined,
         }}
       >
@@ -546,6 +547,7 @@ export const ImageCanvas = ({
             dragWithPrimary={dragWithPrimary}
             createWithPrimary={createWithPrimary}
             zoomWithPrimary={zoomWithPrimary}
+            zoomWithSecondary={zoomWithSecondary}
             onBeginMovePoint={onBeginMovePoint}
             onSelectRegion={onSelectRegion}
             layoutParams={layoutParams}
@@ -826,3 +828,4 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
+

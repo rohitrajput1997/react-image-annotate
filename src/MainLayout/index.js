@@ -187,7 +187,11 @@ export const MainLayout = ({
       pointDistancePrecision={state.pointDistancePrecision}
       createWithPrimary={state.selectedTool.includes("create")}
       dragWithPrimary={state.selectedTool === "pan"}
-      zoomWithPrimary={state.selectedTool === "zoom"}
+      zoomWithPrimary={
+        state.selectedTool === "zoom" ||
+        state.selectedTool === "zoom_tool_minus"
+      }
+      zoomWithSecondary={state.selectedTool === "zoom_tool_minus"}
       showPointDistances={state.showPointDistances}
       videoTime={
         state.annotationType === "image"
@@ -433,8 +437,13 @@ export const MainLayout = ({
 
                 {
                   name: "zoom",
-                  helperText:
-                    "Zoom In/Out (scroll)" + getHotkeyHelpText("zoom_tool"),
+                  helperText: "Zoom In" + getHotkeyHelpText("zoom_tool"),
+                  // alwaysShowing: true,
+                  className: "zoom",
+                },
+                {
+                  name: "zoom_tool_minus",
+                  helperText: "Zoom Out" + getHotkeyHelpText("zoom_tool_minus"),
                   // alwaysShowing: true,
                   className: "zoom",
                 },
@@ -633,4 +642,3 @@ export const MainLayout = ({
 }
 
 export default MainLayout
-

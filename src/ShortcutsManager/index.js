@@ -13,6 +13,11 @@ export const defaultHotkeys = [
     binding: "z",
   },
   {
+    id: "zoom_tool_minus",
+    description: "Reduce image Size",
+    binding: "y",
+  },
+  {
     id: "create_point",
     description: "Create a point",
   },
@@ -85,6 +90,12 @@ export const useDispatchHotkeyHandlers = ({ dispatch }) => {
         dispatch({
           type: "SELECT_TOOL",
           selectedTool: "zoom",
+        })
+      },
+      zoom_tool_minus: () => {
+        dispatch({
+          type: "SELECT_TOOL",
+          selectedTool: "zoom_tool_minus",
         })
       },
       create_point: () => {

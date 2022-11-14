@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from "react"
-import SidebarBoxContainer from "../SidebarBoxContainer"
+import React, { useEffect, useState } from "react"
 import { setIn } from "seamless-immutable"
+import SidebarBoxContainer from "../SidebarBoxContainer"
 import ShortcutField from "./ShortcutField"
 
 const defaultShortcuts = {
@@ -17,6 +17,13 @@ const defaultShortcuts = {
     },
     name: "Zoom In/Out",
     key: "z",
+  },
+  zoom_tool_minus: {
+    action: {
+      type: "SELECT_TOOL",
+    },
+    name: "Zoom Out",
+    key: "x",
   },
   "create-point": {
     action: {

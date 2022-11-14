@@ -12,7 +12,8 @@ import {
   faMask,
   faMousePointer,
   faRedo,
-  faSearch,
+  faSearchMinus,
+  faSearchPlus,
   faTag,
   faUndo,
   faVectorSquare,
@@ -37,7 +38,15 @@ export const iconDictionary = {
     <FontAwesomeIcon style={faStyle} size="xs" fixedWidth icon={faHandPaper} />
   ),
   zoom: () => (
-    <FontAwesomeIcon style={faStyle} size="xs" fixedWidth icon={faSearch} />
+    <FontAwesomeIcon style={faStyle} size="xs" fixedWidth icon={faSearchPlus} />
+  ),
+  zoom_tool_minus: () => (
+    <FontAwesomeIcon
+      style={faStyle}
+      size="xs"
+      fixedWidth
+      icon={faSearchMinus}
+    />
   ),
   "show-tags": () => (
     <FontAwesomeIcon style={faStyle} size="xs" fixedWidth icon={faTag} />
@@ -102,3 +111,4 @@ export const iconDictionary = {
 }
 
 export default iconDictionary
+
