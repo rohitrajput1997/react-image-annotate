@@ -109,6 +109,7 @@ export const Annotator = ({
   rightMenu = true,
   isReadingMode = false,
   brushHighlighted = -1,
+  isImageMode,
 }: Props) => {
   if (typeof selectedImage === "string") {
     selectedImage = (images || []).findIndex((img) => img.src === selectedImage)
@@ -200,6 +201,7 @@ export const Annotator = ({
         )
       }
     }
+
     dispatchToReducer(action)
   })
 
@@ -297,6 +299,7 @@ export const Annotator = ({
         showUpdate={showUpdate}
         rightMenu={rightMenu}
         isReadingMode={isReadingMode}
+        isImageMode={isImageMode}
       />
     </SettingsProvider>
   )

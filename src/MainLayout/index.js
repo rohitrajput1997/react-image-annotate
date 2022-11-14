@@ -96,6 +96,7 @@ export const MainLayout = ({
   showUpdate = false,
   rightMenu = true,
   isReadingMode = false,
+  isImageMode,
 }: Props) => {
   const classes = useStyles()
   const settings = useSettings()
@@ -251,6 +252,7 @@ export const MainLayout = ({
       setTool={setTool}
       setbrushRadius={setbrushRadius}
       setbrushHighlight={setbrushHighlight}
+      isImageMode={isImageMode}
     />
   )
 
@@ -582,18 +584,20 @@ export const MainLayout = ({
                       keyframes={state.keyframes}
                     />
                   ),
-                  <BrushRegion
-                    onChangeVideoTime={action("CHANGE_VIDEO_TIME", "newTime")}
-                    currentTime={state.currentVideoTime}
-                    duration={state.videoDuration}
-                    brushLines={lines}
-                    delete_annotation={delete_annotation}
-                    setdelete_annotation={setdelete_annotation}
-                    setLines={setLines}
-                    brushHighlight={brushHighlight}
-                  />,
+                  !isImageMode && (
+                    <BrushRegion
+                      onChangeVideoTime={action("CHANGE_VIDEO_TIME", "newTime")}
+                      currentTime={state.currentVideoTime}
+                      duration={state.videoDuration}
+                      brushLines={lines}
+                      delete_annotation={delete_annotation}
+                      setdelete_annotation={setdelete_annotation}
+                      setLines={setLines}
+                      brushHighlight={brushHighlight}
+                    />
+                  ),
 
-                  state.keyframes && (
+                  !isImageMode && state.keyframes && (
                     <BrushKeyFrame
                       onChangeVideoTime={action("CHANGE_VIDEO_TIME", "newTime")}
                       currentTime={state.currentVideoTime}
@@ -642,3 +646,4 @@ export const MainLayout = ({
 }
 
 export default MainLayout
+
