@@ -5,7 +5,7 @@
 export const textractObjects = (blocks) => {
   // send image to textract and get the response
   // Temporarily using sample response and sample height,width of image
-  console.log(blocks)
+
   var img_height = 500
   var img_width = 500
   var textractResp = {
@@ -35,7 +35,7 @@ export const textractObjects = (blocks) => {
 export const bb_intersection = (ip_bb, bb_list) => {
   // function to return objects from bb_list which intersect with ip_bb box
   try {
-    var op_txts = []
+    let op_txts = []
     for (let txt in bb_list) {
       var bb_obj = bb_list[txt]
       if (
@@ -46,7 +46,7 @@ export const bb_intersection = (ip_bb, bb_list) => {
           ip_bb.y2 < bb_obj.y1
         )
       ) {
-        op_txts.push(bb_obj)
+        op_txts.push(bb_obj.Text)
       }
     }
     return op_txts
@@ -54,3 +54,4 @@ export const bb_intersection = (ip_bb, bb_list) => {
     console.log("bb_inter")
   }
 }
+

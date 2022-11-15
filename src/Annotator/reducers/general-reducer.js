@@ -2,6 +2,7 @@
 import clamp from "clamp"
 import isEqual from "lodash/isEqual"
 import { getIn, setIn } from "seamless-immutable"
+import { bb_intersection } from "../../box_interction"
 import colors from "../../colors"
 import { moveRegion } from "../../ImageCanvas/region-tools.js"
 import type { Action, MainLayoutState } from "../../MainLayout/types"
@@ -66,6 +67,7 @@ export default (state: MainLayoutState, action: Action) => {
   }
   const modifyRegion = (regionId, obj) => {
     try {
+      console.log("here..1..")
       const [region, regionIndex] = getRegion(regionId)
       if (!region) return state
       if (obj !== null) {
@@ -130,8 +132,10 @@ export default (state: MainLayoutState, action: Action) => {
       return setIn(state, ["selectedCls"], action.cls)
     }
     case "CHANGE_REGION": {
+      console.log("here1")
       const regionIndex = getRegionIndex(action.region)
       if (regionIndex === null) return state
+      window.onChangeOCR(regionIndex, "name", action.region.cls)
       const oldRegion = activeImage.regions[regionIndex]
       if (oldRegion.cls !== action.region.cls) {
         state = saveToHistory(state, "Change Region Classification")
@@ -147,6 +151,7 @@ export default (state: MainLayoutState, action: Action) => {
       if (!isEqual(oldRegion.comment, action.region.comment)) {
         state = saveToHistory(state, "Change Region Comment")
       }
+
       return setIn(
         state,
         [...pathToActiveImage, "regions", regionIndex],
@@ -344,6 +349,19 @@ export default (state: MainLayoutState, action: Action) => {
           if (regionIndex === null) return state
           const box = activeImage.regions[regionIndex]
 
+          window.onChangeOCR(
+            regionIndex,
+            "value",
+            bb_intersection(
+              {
+                x1: dx * 500,
+                x2: (dw + dx) * 500,
+                y1: dy * 500,
+                y2: (dh + dy) * 500,
+              },
+              window.textractList
+            ).join(" ")
+          )
           return setIn(state, [...pathToActiveImage, "regions", regionIndex], {
             ...box,
             x: dx,
@@ -567,7 +585,9 @@ export default (state: MainLayoutState, action: Action) => {
             id: getRandomId(),
             qc_label: state.qc_label,
             keyframes: state.currentVideoTime || 0,
+            ocr_value: "text1",
           }
+
           state = setIn(state, ["mode"], {
             mode: "RESIZE_BOX",
             editLabelEditorAfter: true,
@@ -801,6 +821,7 @@ export default (state: MainLayoutState, action: Action) => {
     case "DELETE_REGION": {
       const regionIndex = getRegionIndex(action.region)
       if (regionIndex === null) return state
+      window.onChangeOCR(regionIndex, "delete", "")
       return setIn(
         state,
         [...pathToActiveImage, "regions"],
@@ -852,7 +873,6 @@ export default (state: MainLayoutState, action: Action) => {
           return state
         }
         case "fullscreen": {
-         
           return setIn(state, ["fullScreen"], true)
         }
         case "exit fullscreen":
@@ -948,5 +968,3 @@ export default (state: MainLayoutState, action: Action) => {
   }
   return state
 }
-
-

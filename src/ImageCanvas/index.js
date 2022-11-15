@@ -560,12 +560,14 @@ export const ImageCanvas = ({
             showHighlightBox={showHighlightBox}
           />
         )}
-        <div
-          className={classes.zoomIndicator}
-          style={{ zIndex: 10000000, right: "320px" }}
-        >
-          {((1 / mat.a) * 100).toFixed(0)}%
-        </div>
+        {!isImageMode && (
+          <div
+            className={classes.zoomIndicator}
+            style={{ zIndex: 10000000, right: "320px" }}
+          >
+            {((1 / mat.a) * 100).toFixed(0)}%
+          </div>
+        )}
         {imageLoaded && showTags && !dragging && (
           <PreventScrollToParents key="regionTags">
             <RegionTags
@@ -830,4 +832,3 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
-

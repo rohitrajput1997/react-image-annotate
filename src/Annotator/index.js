@@ -1,9 +1,9 @@
 // @flow
 
-import React, { useEffect, useReducer, useState } from "react"
+import React, { useEffect, useMemo, useReducer, useState } from "react"
 import makeImmutable, { without } from "seamless-immutable"
 import useEventCallback from "use-event-callback"
-import { bb_intersection, textractObjects } from "../box_interction"
+import { textractObjects } from "../box_interction"
 import type { KeypointsDefinition } from "../ImageCanvas/region-tools"
 import MainLayout from "../MainLayout"
 import type { Action, Image } from "../MainLayout/types"
@@ -118,6 +118,7 @@ export const Annotator = ({
     if (selectedImage === -1) selectedImage = undefined
   }
   const annotationType = images ? "image" : "video"
+  const [orcTxt, setORCTxt] = useState(new Map())
   const [state, dispatchToReducer] = useReducer(
     historyHandler(
       combineReducers(
@@ -165,7 +166,20 @@ export const Annotator = ({
     })
   )
 
-  var textractList = textractObjects(blocks) // call textract and parse response
+  window.textractList = textractObjects(blocks) // call textract and parse response
+
+  window.onChangeOCR = (index, label, value) => {
+    let a1 = new Map(orcTxt)
+    if (label === "delete") {
+      a1.delete(index)
+    } else {
+      a1.set(index, {
+        ...a1.get(index),
+        [label]: value,
+      })
+    }
+    setORCTxt(a1)
+  }
 
   const [lines, setLines] = React.useState([])
   const [delete_annotation, setdelete_annotation] = useState([])
@@ -208,6 +222,18 @@ export const Annotator = ({
 
     dispatchToReducer(action)
   })
+
+  const layoutORC = useMemo(() => {
+    let array = []
+    for (let [key, value] of orcTxt) {
+      console.log(key, value)
+      array.push({
+        key,
+        value,
+      })
+    }
+    return array
+  }, [orcTxt])
 
   const onRegionClassAdded = useEventCallback((cls) => {
     dispatchToReducer({
@@ -304,78 +330,18 @@ export const Annotator = ({
         rightMenu={rightMenu}
         isReadingMode={isReadingMode}
         isImageMode={isImageMode}
+        layoutORC={layoutORC}
+        onChangeLayoutORC={(e, key) => {
+          let a2 = new Map(orcTxt)
+          a2.set(key, {
+            ...a2.get(key),
+            value: e.target.value,
+          })
+          setORCTxt(a2)
+        }}
       />
-      <br />
-      <div
-        style={{ display: "flex", justifyContent: "start", margin: "0 10px" }}
-      >
-        {state?.images?.[0]?.regions
-          ?.filter(
-            (item, index, arr) =>
-              index === arr.findIndex((items) => item.cls === items.cls)
-          )
-          ?.map((map_item, index) => {
-            if (map_item.cls) {
-              let filter_arr = state?.images?.[0]?.regions.filter(
-                (final_item) => map_item.cls === final_item.cls
-              )
-              if (filter_arr.length <= 1) {
-                // let {} = map_item
-                var input_bb = {
-                  Text: "Optional",
-                  x1: map_item.x * 500,
-                  y1: map_item.y * 500,
-                  x2: map_item.w * 500,
-                  y2: map_item.h * 500,
-                } //sample bb input
-                var intersected = bb_intersection(input_bb, textractList) //get intersection
-                console.log(intersected)
-                return (
-                  <div>
-                    <label for={map_item.cls}>{map_item.cls}</label>
-                    <textarea
-                      id={map_item.cls}
-                      onChange={(e) => {}}
-                      value={intersected?.map((item) => item.Text)}
-                    />
-                  </div>
-                )
-              } else {
-                let arr = []
-                let arr_f = filter_arr?.map((items) => {
-                  var input_bb = {
-                    Text: "Optional",
-                    x1: items.x * 500,
-                    y1: items.y * 500,
-                    x2: items.w * 500,
-                    y2: items.h * 500,
-                  }
-                  var intersected = bb_intersection(input_bb, textractList)
-                  let keys = intersected?.map((item) => item.Text)
-                  arr.push(keys)
-                  return intersected
-                })
-                //get intersection
-
-                return (
-                  <div>
-                    <label for={map_item.cls}>{map_item.cls}</label>
-
-                    <textarea
-                      id={map_item.cls}
-                      value={arr}
-                      onChange={(e) => {}}
-                    />
-                  </div>
-                )
-              }
-            }
-          })}
-        {isImageMode && <button>Submit</button>}
-      </div>
     </SettingsProvider>
   )
 }
 
 export default Annotator
-

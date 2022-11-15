@@ -12,6 +12,7 @@ import useEventCallback from "use-event-callback"
 import useKey from "use-key-hook"
 import getActiveImage from "../Annotator/reducers/get-active-image"
 import ClassSelectionMenu from "../ClassSelectionMenu"
+import MiniDrawer from "../Components/Drawer"
 import DebugBox from "../DebugSidebarBox"
 import HistorySidebarBox from "../HistorySidebarBox"
 import ImageCanvas from "../ImageCanvas"
@@ -97,6 +98,8 @@ export const MainLayout = ({
   rightMenu = true,
   isReadingMode = false,
   isImageMode,
+  layoutORC,
+  onChangeLayoutORC,
 }: Props) => {
   const classes = useStyles()
   const settings = useSettings()
@@ -302,325 +305,350 @@ export const MainLayout = ({
               state.fullScreen && "Fullscreen"
             )}
           >
-            <Workspace
-              allowFullscreen
-              iconDictionary={iconDictionary}
-              hideHeader={hideHeader}
-              hideHeaderText={hideHeaderText}
-              headerLeftSide={[
-                state.annotationType === "video" ? (
-                  <KeyframeTimeline
-                    currentTime={state.currentVideoTime}
-                    duration={state.videoDuration}
-                    onChangeCurrentTime={action("CHANGE_VIDEO_TIME", "newTime")}
-                    keyframes={state.keyframes}
-                    brushLines={lines}
-                  />
-                ) : activeImage ? (
-                  <div
-                    className={`${classes.headerTitle} image_annotation_title`}
-                  >
-                    {activeImage.name}
-                  </div>
-                ) : null,
-              ].filter(Boolean)}
-              headerItems={[
-                !hidePrev && {
-                  name: "Prev",
-                  className: "prev",
-                  iconName: "Prev",
-                },
-                !hideNext && {
-                  name: "Next",
-                  className: "next",
-                  iconName: "Next",
-                },
-                state.annotationType !== "video"
-                  ? null
-                  : !state.videoPlaying
-                  ? { name: "Play", className: "play", iconName: "Play" }
-                  : { name: "Pause", className: "pause", iconName: "Pause" },
-                state.annotationType === "video"
-                  ? state.isMuted
-                    ? {
-                        name: "unmute",
-                        className: "isMuted",
-                        iconName: "unmute",
-                      }
-                    : {
-                        name: "mute",
-                        className: "isMuted",
-                        iconName: "mute",
-                      }
-                  : null,
-                !hideClone &&
-                  !nextImageHasRegions &&
-                  activeImage.regions && {
-                    name: "Clone",
-                    className: "clone",
-                    iconName: "Clone",
-                  },
-                !hideSettings && {
-                  name: "Settings",
-                  className: "settings",
-                  iconName: "Settings",
-                },
-                // state.selectedTool === "create-a-brush" && {
-                //   name: "Brush Radius",
-                //   className: "brushRadius",
-                //   iconName: "brush radius",
-                // },
-                !hideQuery && {
-                  name: "Add Query",
-                  className: "query",
-                  iconName: "add query",
-                  disabled: isaddQueryDisabled,
-                },
-                !hideSaveNext && {
-                  name: "Save & next",
-                  className: "savenext",
-                  iconName: "save & next",
-                  disabled: issavenextDisabled,
-                },
-                !hideSave && {
-                  name: "Submit",
-                  className: "save",
-                  iconName: "submit",
-                  disabled: isSubmitDisabled,
-                },
-                showUpdate && {
-                  name: "Update",
-                  className: "save",
-                  iconName: "submit",
-                  disabled: isSubmitDisabled,
-                },
-
-                !hideFullScreen &&
-                  (state.fullScreen
-                    ? {
-                        name: "Window",
-                        className: "window",
-                        iconName: "Window",
-                      }
-                    : {
-                        name: "Fullscreen",
-                        className: "Fullscreen",
-                        iconName: "Fullscreen",
-                      }),
-              ].filter(Boolean)}
-              onClickHeaderItem={onClickHeaderItem}
-              onClickIconSidebarItem={onClickIconSidebarItem}
-              selectedTools={[
-                state.selectedTool,
-                state.showTags && "show-tags",
-                state.showMask && "show-mask",
-              ].filter(Boolean)}
-              selectToolsP={
-                state.showTags
-                  ? ["show-tags", state.selectedTool]
-                  : [state.selectedTool]
-              }
-              rightMenu={rightMenu}
-              iconSidebarItems={[
-                {
-                  name: "select",
-                  helperText: "Select" + getHotkeyHelpText("select_tool"),
-                  // alwaysShowing: true,
-                  className: "select",
-                },
-                {
-                  name: "pan",
-                  helperText:
-                    "Drag/Pan (right or middle click)" +
-                    getHotkeyHelpText("pan_tool"),
-                  // alwaysShowing: true,
-                  className: "pan",
-                },
-
-                {
-                  name: "zoom",
-                  helperText: "Zoom In" + getHotkeyHelpText("zoom_tool"),
-                  // alwaysShowing: true,
-                  className: "zoom",
-                },
-                {
-                  name: "zoom_tool_minus",
-                  helperText: "Zoom Out" + getHotkeyHelpText("zoom_tool_minus"),
-                  // alwaysShowing: true,
-                  className: "zoom",
-                },
-                {
-                  name: "show-tags",
-                  helperText: "Show / Hide Tags",
-                  alwaysShowing: true,
-                  className: "tags",
-                },
-                {
-                  name: "create-point",
-                  helperText: "Add Point" + getHotkeyHelpText("create_point"),
-                  className: "create_point",
-                },
-                {
-                  name: "create-box",
-                  helperText:
-                    "Add Bounding Box" +
-                    getHotkeyHelpText("create_bounding_box"),
-                  className: "create_box",
-                },
-
-                {
-                  name: "create-polygon",
-                  helperText:
-                    "Add Polygon" + getHotkeyHelpText("create_polygon"),
-                  className: "create_polygon",
-                },
-                {
-                  name: "create-line",
-                  helperText: "Add Line",
-                  className: "add_line",
-                },
-                {
-                  name: "create-expanding-line",
-                  helperText: "Add Expanding Line",
-                  className: "create_expand",
-                },
-                {
-                  name: "create-keypoints",
-                  helperText: "Add Keypoints (Pose)",
-                  className: "create_keypoint",
-                },
-                state.fullImageSegmentationMode && {
-                  name: "show-mask",
-                  alwaysShowing: true,
-                  helperText: "Show / Hide Mask",
-                  className: "show_hids_mask",
-                },
-                {
-                  name: "modify-allowed-area",
-                  helperText: "Modify Allowed Area",
-                  className: "modify_allow_area",
-                },
-
-                {
-                  name: "create-a-brush",
-                  helperText:
-                    "Create By Paint Brush" +
-                    getHotkeyHelpText("create-a-brush"),
-                  // alwaysShowing: true,
-                  className: "create-a-brush",
-                },
-                {
-                  name: "eraser",
-                  helperText: "Eraser",
-                  // alwaysShowing: true,
-                },
-                {
-                  name: "undo_anntation",
-                  helperText: "undo annotation",
-                  // alwaysShowing: true,
-                },
-                {
-                  name: "redo_anntation",
-                  helperText: "redo annotation",
-                  // alwaysShowing: true,
-                },
-              ]
-                .filter(Boolean)
-                .filter(
-                  (a) => a.alwaysShowing || state.enabledTools.includes(a.name)
-                )}
-              rightSidebarItems={
-                rightMenu &&
-                [
-                  debugModeOn && (
-                    <DebugBox
-                      state={debugModeOn}
-                      lastAction={state.lastAction}
-                    />
-                  ),
-                  state.taskDescription && (
-                    <TaskDescription description={state.taskDescription} />
-                  ),
-                  state.regionClsList && (
-                    <ClassSelectionMenu
-                      selectedCls={state.selectedCls}
-                      regionClsList={state.regionClsList}
-                      onSelectCls={action("SELECT_CLASSIFICATION", "cls")}
-                    />
-                  ),
-                  state.labelImages && (
-                    <TagsSidebarBox
-                      currentImage={activeImage}
-                      imageClsList={state.imageClsList}
-                      imageTagList={state.imageTagList}
-                      onChangeImage={action("CHANGE_IMAGE", "delta")}
-                      expandedByDefault
-                    />
-                  ),
-                  // (state.images?.length || 0) > 1 && (
-                  //   <ImageSelector
-                  //     onSelect={action("SELECT_REGION", "region")}
-                  //     images={state.images}
-                  //   />
-                  // ),
-                  <RegionSelector
-                    regions={activeImage ? activeImage.regions : emptyArr}
-                    onSelectRegion={action("SELECT_REGION", "region")}
-                    onDeleteRegion={action("DELETE_REGION", "region")}
-                    onChangeRegion={action("CHANGE_REGION", "region")}
-                    delete_annotation={delete_annotation}
-                    setdelete_annotation={setdelete_annotation}
-                  />,
-                  state.keyframes && (
-                    <KeyframesSelector
-                      onChangeVideoTime={action("CHANGE_VIDEO_TIME", "newTime")}
-                      onDeleteKeyframe={action("DELETE_KEYFRAME", "time")}
+            {!isImageMode && (
+              <Workspace
+                allowFullscreen
+                iconDictionary={iconDictionary}
+                hideHeader={hideHeader}
+                hideHeaderText={hideHeaderText}
+                headerLeftSide={[
+                  state.annotationType === "video" ? (
+                    <KeyframeTimeline
+                      currentTime={state.currentVideoTime}
+                      duration={state.videoDuration}
                       onChangeCurrentTime={action(
                         "CHANGE_VIDEO_TIME",
                         "newTime"
                       )}
-                      currentTime={state.currentVideoTime}
-                      duration={state.videoDuration}
                       keyframes={state.keyframes}
-                    />
-                  ),
-                  !isImageMode && (
-                    <BrushRegion
-                      onChangeVideoTime={action("CHANGE_VIDEO_TIME", "newTime")}
-                      currentTime={state.currentVideoTime}
-                      duration={state.videoDuration}
                       brushLines={lines}
-                      delete_annotation={delete_annotation}
-                      setdelete_annotation={setdelete_annotation}
-                      setLines={setLines}
-                      brushHighlight={brushHighlight}
                     />
-                  ),
+                  ) : activeImage ? (
+                    <div
+                      className={`${classes.headerTitle} image_annotation_title`}
+                    >
+                      {activeImage.name}
+                    </div>
+                  ) : null,
+                ].filter(Boolean)}
+                headerItems={[
+                  !hidePrev && {
+                    name: "Prev",
+                    className: "prev",
+                    iconName: "Prev",
+                  },
+                  !hideNext && {
+                    name: "Next",
+                    className: "next",
+                    iconName: "Next",
+                  },
+                  state.annotationType !== "video"
+                    ? null
+                    : !state.videoPlaying
+                    ? { name: "Play", className: "play", iconName: "Play" }
+                    : { name: "Pause", className: "pause", iconName: "Pause" },
+                  state.annotationType === "video"
+                    ? state.isMuted
+                      ? {
+                          name: "unmute",
+                          className: "isMuted",
+                          iconName: "unmute",
+                        }
+                      : {
+                          name: "mute",
+                          className: "isMuted",
+                          iconName: "mute",
+                        }
+                    : null,
+                  !hideClone &&
+                    !nextImageHasRegions &&
+                    activeImage.regions && {
+                      name: "Clone",
+                      className: "clone",
+                      iconName: "Clone",
+                    },
+                  !hideSettings && {
+                    name: "Settings",
+                    className: "settings",
+                    iconName: "Settings",
+                  },
+                  // state.selectedTool === "create-a-brush" && {
+                  //   name: "Brush Radius",
+                  //   className: "brushRadius",
+                  //   iconName: "brush radius",
+                  // },
+                  !hideQuery && {
+                    name: "Add Query",
+                    className: "query",
+                    iconName: "add query",
+                    disabled: isaddQueryDisabled,
+                  },
+                  !hideSaveNext && {
+                    name: "Save & next",
+                    className: "savenext",
+                    iconName: "save & next",
+                    disabled: issavenextDisabled,
+                  },
+                  !hideSave && {
+                    name: "Submit",
+                    className: "save",
+                    iconName: "submit",
+                    disabled: isSubmitDisabled,
+                  },
+                  showUpdate && {
+                    name: "Update",
+                    className: "save",
+                    iconName: "submit",
+                    disabled: isSubmitDisabled,
+                  },
 
-                  !isImageMode && state.keyframes && (
-                    <BrushKeyFrame
-                      onChangeVideoTime={action("CHANGE_VIDEO_TIME", "newTime")}
-                      currentTime={state.currentVideoTime}
-                      duration={state.videoDuration}
-                      brushLines={lines}
+                  !hideFullScreen &&
+                    (state.fullScreen
+                      ? {
+                          name: "Window",
+                          className: "window",
+                          iconName: "Window",
+                        }
+                      : {
+                          name: "Fullscreen",
+                          className: "Fullscreen",
+                          iconName: "Fullscreen",
+                        }),
+                ].filter(Boolean)}
+                onClickHeaderItem={onClickHeaderItem}
+                onClickIconSidebarItem={onClickIconSidebarItem}
+                selectedTools={[
+                  state.selectedTool,
+                  state.showTags && "show-tags",
+                  state.showMask && "show-mask",
+                ].filter(Boolean)}
+                selectToolsP={
+                  state.showTags
+                    ? ["show-tags", state.selectedTool]
+                    : [state.selectedTool]
+                }
+                rightMenu={rightMenu}
+                iconSidebarItems={[
+                  {
+                    name: "select",
+                    helperText: "Select" + getHotkeyHelpText("select_tool"),
+                    // alwaysShowing: true,
+                    className: "select",
+                  },
+                  {
+                    name: "pan",
+                    helperText:
+                      "Drag/Pan (right or middle click)" +
+                      getHotkeyHelpText("pan_tool"),
+                    // alwaysShowing: true,
+                    className: "pan",
+                  },
+
+                  {
+                    name: "zoom",
+                    helperText: "Zoom In" + getHotkeyHelpText("zoom_tool"),
+                    // alwaysShowing: true,
+                    className: "zoom",
+                  },
+                  {
+                    name: "zoom_tool_minus",
+                    helperText:
+                      "Zoom Out" + getHotkeyHelpText("zoom_tool_minus"),
+                    // alwaysShowing: true,
+                    className: "zoom",
+                  },
+                  {
+                    name: "show-tags",
+                    helperText: "Show / Hide Tags",
+                    alwaysShowing: true,
+                    className: "tags",
+                  },
+                  {
+                    name: "create-point",
+                    helperText: "Add Point" + getHotkeyHelpText("create_point"),
+                    className: "create_point",
+                  },
+                  {
+                    name: "create-box",
+                    helperText:
+                      "Add Bounding Box" +
+                      getHotkeyHelpText("create_bounding_box"),
+                    className: "create_box",
+                  },
+
+                  {
+                    name: "create-polygon",
+                    helperText:
+                      "Add Polygon" + getHotkeyHelpText("create_polygon"),
+                    className: "create_polygon",
+                  },
+                  {
+                    name: "create-line",
+                    helperText: "Add Line",
+                    className: "add_line",
+                  },
+                  {
+                    name: "create-expanding-line",
+                    helperText: "Add Expanding Line",
+                    className: "create_expand",
+                  },
+                  {
+                    name: "create-keypoints",
+                    helperText: "Add Keypoints (Pose)",
+                    className: "create_keypoint",
+                  },
+                  state.fullImageSegmentationMode && {
+                    name: "show-mask",
+                    alwaysShowing: true,
+                    helperText: "Show / Hide Mask",
+                    className: "show_hids_mask",
+                  },
+                  {
+                    name: "modify-allowed-area",
+                    helperText: "Modify Allowed Area",
+                    className: "modify_allow_area",
+                  },
+
+                  {
+                    name: "create-a-brush",
+                    helperText:
+                      "Create By Paint Brush" +
+                      getHotkeyHelpText("create-a-brush"),
+                    // alwaysShowing: true,
+                    className: "create-a-brush",
+                  },
+                  {
+                    name: "eraser",
+                    helperText: "Eraser",
+                    // alwaysShowing: true,
+                  },
+                  {
+                    name: "undo_anntation",
+                    helperText: "undo annotation",
+                    // alwaysShowing: true,
+                  },
+                  {
+                    name: "redo_anntation",
+                    helperText: "redo annotation",
+                    // alwaysShowing: true,
+                  },
+                ]
+                  .filter(Boolean)
+                  .filter(
+                    (a) =>
+                      a.alwaysShowing || state.enabledTools.includes(a.name)
+                  )}
+                rightSidebarItems={
+                  rightMenu &&
+                  [
+                    debugModeOn && (
+                      <DebugBox
+                        state={debugModeOn}
+                        lastAction={state.lastAction}
+                      />
+                    ),
+                    state.taskDescription && (
+                      <TaskDescription description={state.taskDescription} />
+                    ),
+                    state.regionClsList && (
+                      <ClassSelectionMenu
+                        selectedCls={state.selectedCls}
+                        regionClsList={state.regionClsList}
+                        onSelectCls={action("SELECT_CLASSIFICATION", "cls")}
+                      />
+                    ),
+                    state.labelImages && (
+                      <TagsSidebarBox
+                        currentImage={activeImage}
+                        imageClsList={state.imageClsList}
+                        imageTagList={state.imageTagList}
+                        onChangeImage={action("CHANGE_IMAGE", "delta")}
+                        expandedByDefault
+                      />
+                    ),
+                    // (state.images?.length || 0) > 1 && (
+                    //   <ImageSelector
+                    //     onSelect={action("SELECT_REGION", "region")}
+                    //     images={state.images}
+                    //   />
+                    // ),
+                    <RegionSelector
+                      regions={activeImage ? activeImage.regions : emptyArr}
+                      onSelectRegion={action("SELECT_REGION", "region")}
+                      onDeleteRegion={action("DELETE_REGION", "region")}
+                      onChangeRegion={action("CHANGE_REGION", "region")}
                       delete_annotation={delete_annotation}
                       setdelete_annotation={setdelete_annotation}
+                    />,
+                    state.keyframes && (
+                      <KeyframesSelector
+                        onChangeVideoTime={action(
+                          "CHANGE_VIDEO_TIME",
+                          "newTime"
+                        )}
+                        onDeleteKeyframe={action("DELETE_KEYFRAME", "time")}
+                        onChangeCurrentTime={action(
+                          "CHANGE_VIDEO_TIME",
+                          "newTime"
+                        )}
+                        currentTime={state.currentVideoTime}
+                        duration={state.videoDuration}
+                        keyframes={state.keyframes}
+                      />
+                    ),
+                    !isImageMode && (
+                      <BrushRegion
+                        onChangeVideoTime={action(
+                          "CHANGE_VIDEO_TIME",
+                          "newTime"
+                        )}
+                        currentTime={state.currentVideoTime}
+                        duration={state.videoDuration}
+                        brushLines={lines}
+                        delete_annotation={delete_annotation}
+                        setdelete_annotation={setdelete_annotation}
+                        setLines={setLines}
+                        brushHighlight={brushHighlight}
+                      />
+                    ),
+
+                    !isImageMode && state.keyframes && (
+                      <BrushKeyFrame
+                        onChangeVideoTime={action(
+                          "CHANGE_VIDEO_TIME",
+                          "newTime"
+                        )}
+                        currentTime={state.currentVideoTime}
+                        duration={state.videoDuration}
+                        brushLines={lines}
+                        delete_annotation={delete_annotation}
+                        setdelete_annotation={setdelete_annotation}
+                        setLines={setLines}
+                      />
+                    ),
+                    <HistorySidebarBox
+                      history={state.history}
+                      onRestoreHistory={action("RESTORE_HISTORY")}
+                      line={lines}
                       setLines={setLines}
-                    />
-                  ),
-                  <HistorySidebarBox
-                    history={state.history}
-                    onRestoreHistory={action("RESTORE_HISTORY")}
-                    line={lines}
-                    setLines={setLines}
-                    delete_annotation={delete_annotation}
-                    setdelete_annotation={setdelete_annotation}
-                  />,
-                ].filter(Boolean)
-              }
-            >
-              {canvas}
-            </Workspace>
+                      delete_annotation={delete_annotation}
+                      setdelete_annotation={setdelete_annotation}
+                    />,
+                  ].filter(Boolean)
+                }
+              >
+                {canvas}
+              </Workspace>
+            )}
+            <MiniDrawer
+              image_canvas={canvas}
+              state={state}
+              isImageMode={isImageMode}
+              onClickIconSidebarItem={onClickIconSidebarItem}
+              layoutORC={layoutORC}
+              onChangeLayoutORC={onChangeLayoutORC}
+            />
+
             {/* <BrushDialog
               open={openBrush}
               onClose={() => {
@@ -646,4 +674,3 @@ export const MainLayout = ({
 }
 
 export default MainLayout
-
