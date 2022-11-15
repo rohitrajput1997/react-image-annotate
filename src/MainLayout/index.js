@@ -100,6 +100,7 @@ export const MainLayout = ({
   isImageMode,
   layoutORC,
   onChangeLayoutORC,
+  handleSubmit,
 }: Props) => {
   const classes = useStyles()
   const settings = useSettings()
@@ -640,14 +641,17 @@ export const MainLayout = ({
                 {canvas}
               </Workspace>
             )}
-            <MiniDrawer
-              image_canvas={canvas}
-              state={state}
-              isImageMode={isImageMode}
-              onClickIconSidebarItem={onClickIconSidebarItem}
-              layoutORC={layoutORC}
-              onChangeLayoutORC={onChangeLayoutORC}
-            />
+            {isImageMode && (
+              <MiniDrawer
+                image_canvas={canvas}
+                state={state}
+                isImageMode={isImageMode}
+                onClickIconSidebarItem={onClickIconSidebarItem}
+                layoutORC={layoutORC}
+                onChangeLayoutORC={onChangeLayoutORC}
+                handleSubmit={handleSubmit}
+              />
+            )}
 
             {/* <BrushDialog
               open={openBrush}
@@ -674,3 +678,4 @@ export const MainLayout = ({
 }
 
 export default MainLayout
+

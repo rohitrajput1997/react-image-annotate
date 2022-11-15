@@ -112,6 +112,7 @@ export const Annotator = ({
   brushHighlighted = -1,
   isImageMode,
   blocks,
+  handleSubmit,
 }: Props) => {
   if (typeof selectedImage === "string") {
     selectedImage = (images || []).findIndex((img) => img.src === selectedImage)
@@ -339,6 +340,7 @@ export const Annotator = ({
           })
           setORCTxt(a2)
         }}
+        handleSubmit={handleSubmit}
       />
     </SettingsProvider>
   )

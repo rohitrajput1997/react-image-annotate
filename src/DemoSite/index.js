@@ -68,6 +68,7 @@ export default () => {
     allowComments: false,
   })
   let isImageMode = true
+  const handleSubmit = () => {}
   return (
     <div>
       <Annotator
@@ -106,6 +107,7 @@ export default () => {
         hideClone={isImageMode}
         hideSettings={isImageMode}
         hideFullScreen={isImageMode}
+        handleSubmit={(state, ocr) => handleSubmit(ocr)}
         blocks={[
           {
             BlockType: "WORD",

@@ -6,6 +6,7 @@ import ListItem from "@mui/material/ListItem"
 import ListItemButton from "@mui/material/ListItemButton"
 import ListItemIcon from "@mui/material/ListItemIcon"
 import * as React from "react"
+import AnnotationButton from "./AnnotationButton"
 import AnnotationInput from "./AnnotationInput"
 
 export default function MiniDrawer({
@@ -15,9 +16,10 @@ export default function MiniDrawer({
   onClickIconSidebarItem,
   layoutORC,
   onChangeLayoutORC,
+  handleSubmit,
 }) {
   const [open, setOpen] = React.useState(false)
-  console.log(state)
+
   const faStyle = { marginTop: 4, width: 16, height: 16, marginBottom: 4 }
 
   return (
@@ -84,7 +86,12 @@ export default function MiniDrawer({
                   alignItems: "flex-end",
                 }}
               >
-                <button className="btn_submit">Submit</button>
+                <AnnotationButton
+                  onClick={() => {
+                    handleSubmit(state, layoutORC)
+                  }}
+                  title={"Submit"}
+                ></AnnotationButton>
               </div>
             </>
           )}
@@ -106,7 +113,7 @@ export default function MiniDrawer({
                 <Grid item xs={12} md={6} key={index}>
                   <AnnotationInput
                     rows={3}
-                    label={value.name}
+                    title={value.name}
                     id={value.name}
                     value={value.value}
                     fullWidth
@@ -124,4 +131,3 @@ export default function MiniDrawer({
     </>
   )
 }
-
