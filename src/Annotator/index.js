@@ -1,9 +1,9 @@
 // @flow
 
-import { TextField } from "@mui/material"
 import React, { useEffect, useReducer, useState } from "react"
 import makeImmutable, { without } from "seamless-immutable"
 import useEventCallback from "use-event-callback"
+import { bb_intersection, textractObjects } from "../box_interction"
 import type { KeypointsDefinition } from "../ImageCanvas/region-tools"
 import MainLayout from "../MainLayout"
 import type { Action, Image } from "../MainLayout/types"
@@ -111,6 +111,7 @@ export const Annotator = ({
   isReadingMode = false,
   brushHighlighted = -1,
   isImageMode,
+  blocks,
 }: Props) => {
   if (typeof selectedImage === "string") {
     selectedImage = (images || []).findIndex((img) => img.src === selectedImage)
@@ -163,6 +164,8 @@ export const Annotator = ({
       qc_label: invaild_show,
     })
   )
+
+  var textractList = textractObjects(blocks) // call textract and parse response
 
   const [lines, setLines] = React.useState([])
   const [delete_annotation, setdelete_annotation] = useState([])
@@ -306,14 +309,52 @@ export const Annotator = ({
       <div
         style={{ display: "flex", justifyContent: "start", margin: "0 10px" }}
       >
-        {state?.images?.[0]?.regions?.map((item) => (
-          <div style={{ marginRight: "2px", marginBottom: "2px" }}>
-            <TextField value={item.cls} />
-          </div>
-        ))}
+        {state?.images?.[0]?.regions
+          ?.filter(
+            (item, index, arr) =>
+              index === arr.findIndex((items) => item.cls === items.cls)
+          )
+          ?.map((map_item, index) => {
+            if (map_item.cls) {
+              let filter_arr = state?.images?.[0]?.regions.filter(
+                (final_item) => map_item.cls === final_item.cls
+              )
+              if (filter_arr.length <= 1) {
+                // let {} = map_item
+                var input_bb = {
+                  Text: "Optional",
+                  x1: map_item.x,
+                  y1: map_item.y,
+                  x2: map_item.w,
+                  y2: map_item.h,
+                } //sample bb input
+                var intersected = bb_intersection(input_bb, textractList) //get intersection
+                console.log(intersected)
+                return (
+                  <div>
+                    <label for={map_item.cls}>{map_item.cls}</label>
+                    <textarea id={map_item.cls} onChange={(e) => {}} />
+                  </div>
+                )
+              } else {
+                return (
+                  <div>
+                    <label for={map_item.cls}>{map_item.cls}</label>
+                    <textarea
+                      id={map_item.cls}
+                      value={""}
+                      onChange={(e) => {}}
+                    />
+                  </div>
+                )
+              }
+            }
+          })}
+        {isImageMode && <button>Submit</button>}
       </div>
     </SettingsProvider>
   )
 }
 
 export default Annotator
+
