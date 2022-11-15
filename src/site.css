@@ -20,3 +20,18 @@ box-shadow: 4px 0px 7px 0px #005f86 !important;
 z-index: 7 !important;
 position: absolute !important;
 }
+
+.btn_submit {
+  background-color: #005f86 !important;
+  border-radius: 6px !important;
+  color: #fff !important;
+  font-family: Montserrat-Medium;
+  font-size: 0.9rem !important;
+  font-weight: 400 !important;
+  height: 40px !important;
+  display: flex !important;
+  align-items: center !important;
+  min-width: 8rem;
+  justify-content: center;
+  border: none;
+}

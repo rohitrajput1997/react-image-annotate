@@ -323,26 +323,47 @@ export const Annotator = ({
                 // let {} = map_item
                 var input_bb = {
                   Text: "Optional",
-                  x1: map_item.x,
-                  y1: map_item.y,
-                  x2: map_item.w,
-                  y2: map_item.h,
+                  x1: map_item.x * 500,
+                  y1: map_item.y * 500,
+                  x2: map_item.w * 500,
+                  y2: map_item.h * 500,
                 } //sample bb input
                 var intersected = bb_intersection(input_bb, textractList) //get intersection
                 console.log(intersected)
                 return (
                   <div>
                     <label for={map_item.cls}>{map_item.cls}</label>
-                    <textarea id={map_item.cls} onChange={(e) => {}} />
+                    <textarea
+                      id={map_item.cls}
+                      onChange={(e) => {}}
+                      value={intersected?.map((item) => item.Text)}
+                    />
                   </div>
                 )
               } else {
+                let arr = []
+                let arr_f = filter_arr?.map((items) => {
+                  var input_bb = {
+                    Text: "Optional",
+                    x1: items.x * 500,
+                    y1: items.y * 500,
+                    x2: items.w * 500,
+                    y2: items.h * 500,
+                  }
+                  var intersected = bb_intersection(input_bb, textractList)
+                  let keys = intersected?.map((item) => item.Text)
+                  arr.push(keys)
+                  return intersected
+                })
+                //get intersection
+
                 return (
                   <div>
                     <label for={map_item.cls}>{map_item.cls}</label>
+
                     <textarea
                       id={map_item.cls}
-                      value={""}
+                      value={arr}
                       onChange={(e) => {}}
                     />
                   </div>
