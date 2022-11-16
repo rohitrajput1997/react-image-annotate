@@ -86,8 +86,7 @@ export default function MiniDrawer({
                   disablePadding
                   sx={{ display: "block" }}
                   onClick={() => {
-                    // onClickIconSidebarItem({ name: text })
-                    console.log(window.handleSubmitOcr())
+                    onClickIconSidebarItem({ name: text })
                   }}
                 >
                   <ListItemButton
@@ -196,4 +195,3 @@ export default function MiniDrawer({
     </>
   )
 }
-
