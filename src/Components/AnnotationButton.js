@@ -1,4 +1,4 @@
-import { Button, Tooltip } from "@mui/material"
+import { Button, CircularProgress } from "@mui/material"
 import PropTypes from "prop-types"
 import React from "react"
 
@@ -27,7 +27,7 @@ const AnnotationButton = ({
   classNames = `${classNames} ${disabled ? "custom_disabled_button" : ""}`
   return (
     <>
-      <Tooltip title={ribbonText}>
+      <>
         <Button
           shape={shape}
           className={classNames}
@@ -36,12 +36,20 @@ const AnnotationButton = ({
           onClick={onClick}
           loading={loading}
           id={id}
-          disabled={disabled}
+          disabled={loading}
           type={type}
+          startIcon={
+            loading && (
+              <CircularProgress
+                style={{ color: light ? "#005f86" : "white" }}
+              />
+            )
+          }
+          variant="contained"
         >
           {title}
         </Button>
-      </Tooltip>
+      </>
     </>
   )
 }

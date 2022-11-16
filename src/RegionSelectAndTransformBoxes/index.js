@@ -107,7 +107,6 @@ export const RegionSelectAndTransformBox = memo(
                     zIndex: 8,
                   }}
                 >
-                  {console.log()}
                   {boxCursorMap[py * 2][px * 2] === "grab" && (
                     <FontAwesomeIcon
                       style={faStyle}

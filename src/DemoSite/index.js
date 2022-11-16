@@ -107,7 +107,7 @@ export default () => {
         hideClone={isImageMode}
         hideSettings={isImageMode}
         hideFullScreen={isImageMode}
-        handleSubmit={(state, ocr) => handleSubmit(ocr)}
+        handleSubmit={(state, ocr) => console.log(state, ocr)}
         blocks={[
           {
             BlockType: "WORD",
@@ -4008,4 +4008,3 @@ export default () => {
     </div>
   )
 }
-

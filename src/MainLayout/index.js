@@ -12,7 +12,7 @@ import useEventCallback from "use-event-callback"
 import useKey from "use-key-hook"
 import getActiveImage from "../Annotator/reducers/get-active-image"
 import ClassSelectionMenu from "../ClassSelectionMenu"
-import MiniDrawer from "../Components/Drawer"
+import MiniDrawer from "../Components/MiniDrawer"
 import DebugBox from "../DebugSidebarBox"
 import HistorySidebarBox from "../HistorySidebarBox"
 import ImageCanvas from "../ImageCanvas"
@@ -650,6 +650,7 @@ export const MainLayout = ({
                 layoutORC={layoutORC}
                 onChangeLayoutORC={onChangeLayoutORC}
                 handleSubmit={handleSubmit}
+                isSubmitDisabled={isSubmitDisabled}
               />
             )}
 

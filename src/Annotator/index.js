@@ -227,7 +227,6 @@ export const Annotator = ({
   const layoutORC = useMemo(() => {
     let array = []
     for (let [key, value] of orcTxt) {
-      console.log(key, value)
       array.push({
         key,
         value,

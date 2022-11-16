@@ -67,7 +67,6 @@ export default (state: MainLayoutState, action: Action) => {
   }
   const modifyRegion = (regionId, obj) => {
     try {
-      console.log("here..1..")
       const [region, regionIndex] = getRegion(regionId)
       if (!region) return state
       if (obj !== null) {
@@ -132,7 +131,6 @@ export default (state: MainLayoutState, action: Action) => {
       return setIn(state, ["selectedCls"], action.cls)
     }
     case "CHANGE_REGION": {
-      console.log("here1")
       const regionIndex = getRegionIndex(action.region)
       if (regionIndex === null) return state
       window.onChangeOCR(regionIndex, "name", action.region.cls)
@@ -368,6 +366,15 @@ export default (state: MainLayoutState, action: Action) => {
             w: dw,
             y: dy,
             h: dh,
+            ocr_value: bb_intersection(
+              {
+                x1: dx * 500,
+                x2: (dw + dx) * 500,
+                y1: dy * 500,
+                y2: (dh + dy) * 500,
+              },
+              window.textractList
+            ).join(" "),
           })
         }
         case "RESIZE_KEYPOINTS": {
@@ -585,7 +592,6 @@ export default (state: MainLayoutState, action: Action) => {
             id: getRandomId(),
             qc_label: state.qc_label,
             keyframes: state.currentVideoTime || 0,
-            ocr_value: "text1",
           }
 
           state = setIn(state, ["mode"], {
@@ -968,3 +974,4 @@ export default (state: MainLayoutState, action: Action) => {
   }
   return state
 }
+

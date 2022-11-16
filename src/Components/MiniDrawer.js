@@ -17,6 +17,7 @@ export default function MiniDrawer({
   layoutORC,
   onChangeLayoutORC,
   handleSubmit,
+  isSubmitDisabled,
 }) {
   const [open, setOpen] = React.useState(false)
 
@@ -91,6 +92,8 @@ export default function MiniDrawer({
                     handleSubmit(state, layoutORC)
                   }}
                   title={"Submit"}
+                  isPrimary
+                  loading={isSubmitDisabled}
                 ></AnnotationButton>
               </div>
             </>
@@ -104,16 +107,26 @@ export default function MiniDrawer({
               overflowY: "scroll",
               overflowX: "hidden",
               minHeight: "400px",
+              marginTop: "5px",
             }}
           >
             {layoutORC.map((a, index) => {
               let value = a.value
               let key = a.key
               return (
-                <Grid item xs={12} md={6} key={index}>
+                <Grid
+                  item
+                  xs={12}
+                  md={6}
+                  key={index}
+                  className="common_inputBox"
+                >
+                  <label className="task_formlabel" htmlFor={value.name}>
+                    {value.name}
+                  </label>
                   <AnnotationInput
                     rows={3}
-                    title={value.name}
+                    // title={value.name}
                     id={value.name}
                     value={value.value}
                     fullWidth
