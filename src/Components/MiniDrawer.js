@@ -165,7 +165,7 @@ export default function MiniDrawer({
               let value = a.value
               let key = a.key
               return (
-                a.value && (
+                a.name && (
                   <Grid
                     item
                     xs={12}
@@ -197,3 +197,4 @@ export default function MiniDrawer({
     </>
   )
 }
+
