@@ -1,9 +1,11 @@
 // @flow
 
+import { Grid } from "@mui/material"
 import React, { useEffect, useMemo, useReducer, useState } from "react"
 import makeImmutable, { without } from "seamless-immutable"
 import useEventCallback from "use-event-callback"
 import { textractObjects } from "../box_interction"
+import AnnotationInput from "../Components/AnnotationInput"
 import type { KeypointsDefinition } from "../ImageCanvas/region-tools"
 import MainLayout from "../MainLayout"
 import type { Action, Image } from "../MainLayout/types"
@@ -295,8 +297,57 @@ export const Annotator = ({
 
   if (!images && !videoSrc)
     return 'Missing required prop "images" or "videoSrc"'
+  window.handleSubmitOcr = () => {
+    let intialaAnnotation = JSON.stringify(state)
 
-  return (
+    let BrushAnnotation = []
+    let deleteAnnotation = deleteAnnotationAllow ? [] : []
+    let annotation = ""
+    try {
+      annotation = JSON.parse(intialaAnnotation)
+    } catch (err) {
+      console.log(annotation)
+    }
+    let upComingRegion = []
+    let finalArr = {
+      [tilte_key]: {
+        annotationType: "",
+        annotation: [],
+        brushAnnotation: [],
+        deleteAnnotation: [],
+      },
+    }
+
+    if (annotation.annotationType === "video") {
+      upComingRegion = annotation.keyframes || {}
+      finalArr = {
+        [tilte_key]: {
+          annotationType: "video",
+          annotation: upComingRegion || [],
+          brushAnnotation: BrushAnnotation || [],
+          deleteAnnotation: deleteAnnotation?.flat() || [],
+        },
+      }
+    } else if (annotation.annotationType === "image") {
+      upComingRegion = annotation?.images?.[0]?.regions
+      finalArr = {
+        [tilte_key]: {
+          annotationType: "image",
+          annotation: upComingRegion || [],
+          brushAnnotation: BrushAnnotation || [],
+          deleteAnnotation: deleteAnnotation?.flat() || [],
+        },
+      }
+      return {
+        annotation: finalArr,
+        ocr_data: layoutORC?.map((item) => {
+          let { value, name } = item.value
+          return { title: name, content: value }
+        }),
+      }
+    }
+  }
+  const ImageCanvas = (
     <SettingsProvider>
       <MainLayout
         RegionEditLabel={RegionEditLabel}
@@ -333,19 +384,63 @@ export const Annotator = ({
         isReadingMode={isReadingMode}
         isImageMode={isImageMode}
         layoutORC={layoutORC}
-        onChangeLayoutORC={(e, key) => {
-          let a2 = new Map(orcTxt)
-          a2.set(key, {
-            ...a2.get(key),
-            value: e.target.value,
-          })
-          setORCTxt(a2)
-        }}
+        onChangeLayoutORC={(e, key) => {}}
         handleSubmit={handleSubmit}
         tilte_key={tilte_key}
         deleteAnnotationAllow={deleteAnnotationAllow}
       />
     </SettingsProvider>
+  )
+
+  return isImageMode ? (
+    <Grid container spacing={2}>
+      <Grid item xs={12} md={6}>
+        {ImageCanvas}
+      </Grid>
+      <Grid item xs={12} md={6}>
+        <Grid
+          container
+          style={{
+            maxHeight: "400px",
+            overflowY: "scroll",
+            overflowX: "hidden",
+            minHeight: "400px",
+          }}
+          spacing={2}
+        >
+          {layoutORC.map((a, index) => {
+            let value = a.value
+            let key = a.key
+            if (!value?.name || value?.name === "") return null
+            return (
+              <Grid item xs={12} md={6} key={index} className="common_inputBox">
+                <label className="task_formlabel" htmlFor={value.name}>
+                  {value.name}
+                </label>
+                <AnnotationInput
+                  rows={3}
+                  // title={value.name}
+                  id={value.name}
+                  value={value.value}
+                  fullWidth
+                  onChange={(e) => {
+                    let a2 = new Map(orcTxt)
+                    a2.set(key, {
+                      ...a2.get(key),
+                      value: e.target.value,
+                    })
+                    setORCTxt(a2)
+                  }}
+                  focused
+                />
+              </Grid>
+            )
+          })}
+        </Grid>
+      </Grid>
+    </Grid>
+  ) : (
+    ImageCanvas
   )
 }
 

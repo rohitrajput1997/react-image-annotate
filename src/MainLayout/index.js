@@ -12,7 +12,6 @@ import useEventCallback from "use-event-callback"
 import useKey from "use-key-hook"
 import getActiveImage from "../Annotator/reducers/get-active-image"
 import ClassSelectionMenu from "../ClassSelectionMenu"
-import MiniDrawer from "../Components/MiniDrawer"
 import DebugBox from "../DebugSidebarBox"
 import HistorySidebarBox from "../HistorySidebarBox"
 import ImageCanvas from "../ImageCanvas"
@@ -102,7 +101,7 @@ export const MainLayout = ({
   onChangeLayoutORC,
   handleSubmit,
   tilte_key,
-  deleteAnnotationAllow
+  deleteAnnotationAllow,
 }: Props) => {
   const classes = useStyles()
   const settings = useSettings()
@@ -308,7 +307,7 @@ export const MainLayout = ({
               state.fullScreen && "Fullscreen"
             )}
           >
-            {!isImageMode && (
+            {
               <Workspace
                 allowFullscreen
                 iconDictionary={iconDictionary}
@@ -334,90 +333,102 @@ export const MainLayout = ({
                     </div>
                   ) : null,
                 ].filter(Boolean)}
-                headerItems={[
-                  !hidePrev && {
-                    name: "Prev",
-                    className: "prev",
-                    iconName: "Prev",
-                  },
-                  !hideNext && {
-                    name: "Next",
-                    className: "next",
-                    iconName: "Next",
-                  },
-                  state.annotationType !== "video"
-                    ? null
-                    : !state.videoPlaying
-                    ? { name: "Play", className: "play", iconName: "Play" }
-                    : { name: "Pause", className: "pause", iconName: "Pause" },
-                  state.annotationType === "video"
-                    ? state.isMuted
-                      ? {
-                          name: "unmute",
-                          className: "isMuted",
-                          iconName: "unmute",
-                        }
-                      : {
-                          name: "mute",
-                          className: "isMuted",
-                          iconName: "mute",
-                        }
-                    : null,
-                  !hideClone &&
-                    !nextImageHasRegions &&
-                    activeImage.regions && {
-                      name: "Clone",
-                      className: "clone",
-                      iconName: "Clone",
-                    },
-                  !hideSettings && {
-                    name: "Settings",
-                    className: "settings",
-                    iconName: "Settings",
-                  },
-                  // state.selectedTool === "create-a-brush" && {
-                  //   name: "Brush Radius",
-                  //   className: "brushRadius",
-                  //   iconName: "brush radius",
-                  // },
-                  !hideQuery && {
-                    name: "Add Query",
-                    className: "query",
-                    iconName: "add query",
-                    disabled: isaddQueryDisabled,
-                  },
-                  !hideSaveNext && {
-                    name: "Save & next",
-                    className: "savenext",
-                    iconName: "save & next",
-                    disabled: issavenextDisabled,
-                  },
-                  !hideSave && {
-                    name: "Submit",
-                    className: "save",
-                    iconName: "submit",
-                    disabled: isSubmitDisabled,
-                  },
-                  showUpdate && {
-                    name: "Update",
-                    className: "save",
-                    iconName: "submit",
-                    disabled: isSubmitDisabled,
-                  },
+                headerItems={
+                  !isImageMode
+                    ? [
+                        !hidePrev && {
+                          name: "Prev",
+                          className: "prev",
+                          iconName: "Prev",
+                        },
+                        !hideNext && {
+                          name: "Next",
+                          className: "next",
+                          iconName: "Next",
+                        },
+                        state.annotationType !== "video"
+                          ? null
+                          : !state.videoPlaying
+                          ? {
+                              name: "Play",
+                              className: "play",
+                              iconName: "Play",
+                            }
+                          : {
+                              name: "Pause",
+                              className: "pause",
+                              iconName: "Pause",
+                            },
+                        state.annotationType === "video"
+                          ? state.isMuted
+                            ? {
+                                name: "unmute",
+                                className: "isMuted",
+                                iconName: "unmute",
+                              }
+                            : {
+                                name: "mute",
+                                className: "isMuted",
+                                iconName: "mute",
+                              }
+                          : null,
+                        !hideClone &&
+                          !nextImageHasRegions &&
+                          activeImage.regions && {
+                            name: "Clone",
+                            className: "clone",
+                            iconName: "Clone",
+                          },
+                        !hideSettings && {
+                          name: "Settings",
+                          className: "settings",
+                          iconName: "Settings",
+                        },
+                        // state.selectedTool === "create-a-brush" && {
+                        //   name: "Brush Radius",
+                        //   className: "brushRadius",
+                        //   iconName: "brush radius",
+                        // },
+                        !hideQuery && {
+                          name: "Add Query",
+                          className: "query",
+                          iconName: "add query",
+                          disabled: isaddQueryDisabled,
+                        },
+                        !hideSaveNext && {
+                          name: "Save & next",
+                          className: "savenext",
+                          iconName: "save & next",
+                          disabled: issavenextDisabled,
+                        },
+                        !hideSave && {
+                          name: "Submit",
+                          className: "save",
+                          iconName: "submit",
+                          disabled: isSubmitDisabled,
+                        },
+                        showUpdate && {
+                          name: "Update",
+                          className: "save",
+                          iconName: "submit",
+                          disabled: isSubmitDisabled,
+                        },
 
-                  !hideFullScreen &&
-                    (state.fullScreen
-                      ? {
-                          name: "Window",
-                          className: "window",
-                          iconName: "Window",
-                        }
-                      : {
-                          name: "Fullscreen",
-                          className: "Fullscreen",
-                          iconName: "Fullscreen",
-                        }),
-                ].filter(Boolean)}
+                        !hideFullScreen &&
+                          (state.fullScreen
+                            ? {
+                                name: "Window",
+                                className: "window",
+                                iconName: "Window",
+                              }
+                            : {
+                                name: "Fullscreen",
+                                className: "Fullscreen",
+                                iconName: "Fullscreen",
+                              }),
+                      ].filter(Boolean)
+                    : []
+                }
                 onClickHeaderItem={onClickHeaderItem}
                 onClickIconSidebarItem={onClickIconSidebarItem}
                 selectedTools={[
@@ -642,30 +653,8 @@ export const MainLayout = ({
               >
                 {canvas}
               </Workspace>
-            )}
-            {isImageMode && (
-              <MiniDrawer
-                image_canvas={canvas}
-                state={state}
-                isImageMode={isImageMode}
-                onClickIconSidebarItem={onClickIconSidebarItem}
-                layoutORC={layoutORC}
-                onChangeLayoutORC={onChangeLayoutORC}
-                handleSubmit={handleSubmit}
-                isSubmitDisabled={isSubmitDisabled}
-                tilte_key={tilte_key}
-                deleteAnnotationAllow={deleteAnnotationAllow}
-              />
-            )}
+            }
 
-            {/* <BrushDialog
-              open={openBrush}
-              onClose={() => {
-                setBrushOpen(false)
-              }}
-              brushRadius={brushRadius}
-              setbrushRadius={setbrushRadius}
-            /> */}
             <SettingsDialog
               open={state.settingsOpen}
               onClose={() =>

@@ -360,6 +360,10 @@ export default (state: MainLayoutState, action: Action) => {
               window.textractList
             ).join(" ")
           )
+
+          // if (box.cls !== "") {
+          //   window.onChangeOCR(regionIndex, "name", box.cls)
+          // }
           return setIn(state, [...pathToActiveImage, "regions", regionIndex], {
             ...box,
             x: dx,

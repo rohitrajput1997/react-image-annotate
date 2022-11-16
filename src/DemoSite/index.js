@@ -94,7 +94,7 @@ export default () => {
         }
         invaild_show={true}
         showUpdate={!isImageMode}
-        rightMenu={true}
+        rightMenu={!isImageMode}
         isReadingMode={false}
         isImageMode={isImageMode}
         hideSaveNext={isImageMode}
