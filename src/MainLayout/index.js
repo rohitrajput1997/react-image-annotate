@@ -101,6 +101,8 @@ export const MainLayout = ({
   layoutORC,
   onChangeLayoutORC,
   handleSubmit,
+  tilte_key,
+  deleteAnnotationAllow
 }: Props) => {
   const classes = useStyles()
   const settings = useSettings()
@@ -651,6 +653,8 @@ export const MainLayout = ({
                 onChangeLayoutORC={onChangeLayoutORC}
                 handleSubmit={handleSubmit}
                 isSubmitDisabled={isSubmitDisabled}
+                tilte_key={tilte_key}
+                deleteAnnotationAllow={deleteAnnotationAllow}
               />
             )}
 

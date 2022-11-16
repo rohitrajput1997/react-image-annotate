@@ -113,6 +113,8 @@ export const Annotator = ({
   isImageMode,
   blocks,
   handleSubmit,
+  tilte_key,
+  deleteAnnotationAllow,
 }: Props) => {
   if (typeof selectedImage === "string") {
     selectedImage = (images || []).findIndex((img) => img.src === selectedImage)
@@ -340,6 +342,8 @@ export const Annotator = ({
           setORCTxt(a2)
         }}
         handleSubmit={handleSubmit}
+        tilte_key={tilte_key}
+        deleteAnnotationAllow={deleteAnnotationAllow}
       />
     </SettingsProvider>
   )

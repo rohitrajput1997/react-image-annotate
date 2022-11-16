@@ -108,6 +108,8 @@ export default () => {
         hideSettings={isImageMode}
         hideFullScreen={isImageMode}
         handleSubmit={(state, ocr) => console.log(state, ocr)}
+        tilte_key={"image_le"}
+        deleteAnnotationAllow={false}
         blocks={[
           {
             BlockType: "WORD",

@@ -6,7 +6,6 @@ import ListItem from "@mui/material/ListItem"
 import ListItemButton from "@mui/material/ListItemButton"
 import ListItemIcon from "@mui/material/ListItemIcon"
 import * as React from "react"
-import AnnotationButton from "./AnnotationButton"
 import AnnotationInput from "./AnnotationInput"
 
 export default function MiniDrawer({
@@ -18,10 +17,62 @@ export default function MiniDrawer({
   onChangeLayoutORC,
   handleSubmit,
   isSubmitDisabled,
+  deleteAnnotationAllow = false,
+  tilte_key = "",
 }) {
   const [open, setOpen] = React.useState(false)
 
   const faStyle = { marginTop: 4, width: 16, height: 16, marginBottom: 4 }
+  window.handleSubmitOcr = () => {
+    let intialaAnnotation = JSON.stringify(state)
+
+    let BrushAnnotation = []
+    let deleteAnnotation = deleteAnnotationAllow ? [] : []
+    let annotation = ""
+    try {
+      annotation = JSON.parse(intialaAnnotation)
+    } catch (err) {
+      console.log(annotation)
+    }
+    let upComingRegion = []
+    let finalArr = {
+      [tilte_key]: {
+        annotationType: "",
+        annotation: [],
+        brushAnnotation: [],
+        deleteAnnotation: [],
+      },
+    }
+
+    if (annotation.annotationType === "video") {
+      upComingRegion = annotation.keyframes || {}
+      finalArr = {
+        [tilte_key]: {
+          annotationType: "video",
+          annotation: upComingRegion || [],
+          brushAnnotation: BrushAnnotation || [],
+          deleteAnnotation: deleteAnnotation?.flat() || [],
+        },
+      }
+    } else if (annotation.annotationType === "image") {
+      upComingRegion = annotation?.images?.[0]?.regions
+      finalArr = {
+        [tilte_key]: {
+          annotationType: "image",
+          annotation: upComingRegion || [],
+          brushAnnotation: BrushAnnotation || [],
+          deleteAnnotation: deleteAnnotation?.flat() || [],
+        },
+      }
+      return {
+        annotation: finalArr,
+        ocr_data: layoutORC?.map((item) => {
+          let { value, name } = item.value
+          return { title: name, content: value }
+        }),
+      }
+    }
+  }
 
   return (
     <>
@@ -35,7 +86,8 @@ export default function MiniDrawer({
                   disablePadding
                   sx={{ display: "block" }}
                   onClick={() => {
-                    onClickIconSidebarItem({ name: text })
+                    // onClickIconSidebarItem({ name: text })
+                    console.log(window.handleSubmitOcr())
                   }}
                 >
                   <ListItemButton
@@ -78,7 +130,7 @@ export default function MiniDrawer({
           {image_canvas}
         </>
         <div style={{ margin: `10px 20px` }}>
-          {isImageMode && (
+          {/* {isImageMode && (
             <>
               <div
                 style={{
@@ -97,7 +149,7 @@ export default function MiniDrawer({
                 ></AnnotationButton>
               </div>
             </>
-          )}
+          )} */}
           <Grid
             container
             spacing={(4, 4)}
@@ -144,3 +196,4 @@ export default function MiniDrawer({
     </>
   )
 }
+
