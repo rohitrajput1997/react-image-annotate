@@ -165,28 +165,30 @@ export default function MiniDrawer({
               let value = a.value
               let key = a.key
               return (
-                <Grid
-                  item
-                  xs={12}
-                  md={6}
-                  key={index}
-                  className="common_inputBox"
-                >
-                  <label className="task_formlabel" htmlFor={value.name}>
-                    {value.name}
-                  </label>
-                  <AnnotationInput
-                    rows={3}
-                    // title={value.name}
-                    id={value.name}
-                    value={value.value}
-                    fullWidth
-                    onChange={(e) => {
-                      onChangeLayoutORC(e, key)
-                    }}
-                    focused
-                  />
-                </Grid>
+                a.value && (
+                  <Grid
+                    item
+                    xs={12}
+                    md={6}
+                    key={index}
+                    className="common_inputBox"
+                  >
+                    <label className="task_formlabel" htmlFor={value.name}>
+                      {value.name}
+                    </label>
+                    <AnnotationInput
+                      rows={3}
+                      // title={value.name}
+                      id={value.name}
+                      value={value.value}
+                      fullWidth
+                      onChange={(e) => {
+                        onChangeLayoutORC(e, key)
+                      }}
+                      focused
+                    />
+                  </Grid>
+                )
               )
             })}
           </Grid>
