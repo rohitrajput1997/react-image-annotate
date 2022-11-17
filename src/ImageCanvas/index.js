@@ -498,7 +498,7 @@ export const ImageCanvas = ({
         style={{
           width: "100%",
           height: "100%",
-          maxHeight: "calc(100vh - 68px)",
+          // maxHeight: "calc(100vh - 68px)",
           position: "relative",
           overflow: "hidden",
           cursor:
@@ -560,14 +560,14 @@ export const ImageCanvas = ({
             showHighlightBox={showHighlightBox}
           />
         )}
-        {!isImageMode && (
+        {
           <div
             className={classes.zoomIndicator}
-            style={{ zIndex: 10000000, right: "320px" }}
+            style={{ zIndex: 10000000, right: !isImageMode ? "320px" : "0px" }}
           >
             {((1 / mat.a) * 100).toFixed(0)}%
           </div>
-        )}
+        }
         {imageLoaded && showTags && !dragging && (
           <PreventScrollToParents key="regionTags">
             <RegionTags
@@ -801,6 +801,8 @@ export const ImageCanvas = ({
               style={{ opacity: 0.25 }}
               className={classes.canvas}
               ref={canvasEl}
+              width={"100%"}
+              height={"100%"}
             />
             <RegionShapes
               mat={mat}
@@ -822,6 +824,7 @@ export const ImageCanvas = ({
               onChangeVideoTime={onChangeVideoTime}
               onChangeVideoPlaying={onChangeVideoPlaying}
               isMuted={isMuted}
+              isImageMode={isImageMode}
             />
             {/* </div> */}
           </>

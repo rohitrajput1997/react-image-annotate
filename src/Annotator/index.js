@@ -116,6 +116,7 @@ export const Annotator = ({
   blocks,
   handleSubmit,
   tilte_key,
+  image_ocr_map,
   deleteAnnotationAllow,
 }: Props) => {
   if (typeof selectedImage === "string") {
@@ -123,7 +124,7 @@ export const Annotator = ({
     if (selectedImage === -1) selectedImage = undefined
   }
   const annotationType = images ? "image" : "video"
-  const [orcTxt, setORCTxt] = useState(new Map())
+  const [orcTxt, setORCTxt] = useState(image_ocr_map || new Map())
   const [state, dispatchToReducer] = useReducer(
     historyHandler(
       combineReducers(
@@ -393,7 +394,7 @@ export const Annotator = ({
   )
 
   return isImageMode ? (
-    <Grid container spacing={2}>
+    <Grid container spacing={2} style={{ height: "100vh" }}>
       <Grid item xs={12} md={6}>
         {ImageCanvas}
       </Grid>
@@ -401,10 +402,9 @@ export const Annotator = ({
         <Grid
           container
           style={{
-            maxHeight: "400px",
+            maxHeight: "100vh",
             overflowY: "scroll",
             overflowX: "hidden",
-            minHeight: "400px",
           }}
           spacing={2}
         >
