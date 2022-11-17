@@ -190,6 +190,7 @@ export const ImageCanvas = ({
   setTool,
   setbrushHighlight,
   isImageMode,
+  state,
 }: Props) => {
   const classes = useStyles()
 
@@ -591,6 +592,7 @@ export const ImageCanvas = ({
               isReadingMode={isReadingMode}
               mat={mat}
               isImageMode={isImageMode}
+              state={state}
             />
           </PreventScrollToParents>
         )}
@@ -835,3 +837,4 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
+

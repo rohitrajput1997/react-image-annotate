@@ -823,24 +823,31 @@ export default (state: MainLayoutState, action: Action) => {
       const { region } = action
       const regionIndex = getRegionIndex(action.region)
       if (regionIndex === null) return state
-      return setIn(state, [...pathToActiveImage, "regions", regionIndex], {
-        ...(activeImage.regions || [])[regionIndex],
-        editingLabels: false,
-      })
+      let remove_state = setIn(state, ["selectedCls"], "")
+      return setIn(
+        remove_state,
+        [...pathToActiveImage, "regions", regionIndex],
+        {
+          ...(activeImage.regions || [])[regionIndex],
+          editingLabels: false,
+        }
+      )
     }
     case "DELETE_REGION": {
       const regionIndex = getRegionIndex(action.region)
       if (regionIndex === null) return state
       window.onChangeOCR(regionIndex, "delete", "")
+      let remove_state = setIn(state, ["selectedCls"], "")
       return setIn(
-        state,
+        remove_state,
         [...pathToActiveImage, "regions"],
         (activeImage.regions || []).filter((r) => r.id !== action.region.id)
       )
     }
     case "DELETE_SELECTED_REGION": {
+      let remove_state = setIn(state, ["selectedCls"], "")
       return setIn(
-        state,
+        remove_state,
         [...pathToActiveImage, "regions"],
         (activeImage.regions || []).filter((r) => !r.highlighted)
       )

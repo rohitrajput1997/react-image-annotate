@@ -34,6 +34,7 @@ export const RegionTags = ({
   isReadingMode,
   mat,
   isImageMode,
+  state,
 }) => {
   const RegionLabel =
     RegionEditLabel != null ? RegionEditLabel : DefaultRegionLabel
@@ -155,6 +156,7 @@ export const RegionTags = ({
               setdelete_annotation={setdelete_annotation}
               isReadingMode={isReadingMode}
               isImageMode={isImageMode}
+              state={state}
             />
           </div>
         </div>
@@ -163,3 +165,4 @@ export const RegionTags = ({
 }
 
 export default RegionTags
+

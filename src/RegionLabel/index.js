@@ -15,6 +15,8 @@ import CreatableSelect from "react-select/creatable"
 import type { Region } from "../ImageCanvas/region-tools.js"
 import styles from "./styles"
 
+// import { getIn, setIn } from "seamless-immutable"
+
 import { asMutable } from "seamless-immutable"
 
 const theme = createTheme()
@@ -52,6 +54,8 @@ export const RegionLabel = ({
   setdelete_annotation,
   isReadingMode,
   isImageMode,
+  regions,
+  state,
 }: Props) => {
   const classes = useStyles()
   const commentInputRef = useRef(null)
@@ -180,9 +184,20 @@ export const RegionLabel = ({
                   value={
                     region.cls ? { label: region.cls, value: region.cls } : null
                   }
-                  options={asMutable(
-                    allowedClasses.map((c) => ({ value: c, label: c }))
-                  )}
+                  options={
+                    isImageMode
+                      ? asMutable(
+                          allowedClasses
+                            .map((c) => ({ value: c, label: c }))
+                            .filter(
+                              ({ value: id1 }) =>
+                                !regions.some(({ cls: id2 }) => id2 === id1)
+                            ) // roles.filter(({ value: id1 }) => !fields.roles.some(({ role: id2 }) => id2 === id1))
+                        )
+                      : asMutable(
+                          allowedClasses.map((c) => ({ value: c, label: c }))
+                        )
+                  }
                 />
               </div>
             )}
@@ -231,7 +246,9 @@ export const RegionLabel = ({
               <div style={{ marginTop: 4, display: "flex" }}>
                 <div style={{ flexGrow: 1 }} />
                 <Button
-                  onClick={() => onClose(region)}
+                  onClick={() => {
+                    onClose(region)
+                  }}
                   size="small"
                   variant="contained"
                   color="primary"

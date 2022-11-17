@@ -76,11 +76,15 @@ const AnnotationInput = ({
         </label>
       )}
       {subTextAboveInput && <label>{subTextAboveInput}</label>}
-      <input
+      <textarea
         readOnly={readOnly}
-        style={style}
+        style={{
+          ...style,
+          backgroundColor: "#edf2f7",
+          border: "2px solid #005f86",
+        }}
         autoComplete="off"
-        className="font-MontMedium text-sm"
+        className="font-MontMedium text-sm ant-input"
         onFocus={onFocus}
         name={name}
         type={type}
@@ -93,6 +97,7 @@ const AnnotationInput = ({
         min={0}
         spellCheck={false}
         ref={ref}
+        rows={3}
       />
 
       {validation && <span className="common_error">{errorMessage}</span>}
