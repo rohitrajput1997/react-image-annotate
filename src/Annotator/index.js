@@ -432,7 +432,7 @@ export const Annotator = ({
   const emptyArr = []
 
   return isImageMode ? (
-    <div>
+    <>
       <Grid
         container
         spacing={2}
@@ -449,7 +449,6 @@ export const Annotator = ({
               maxHeight: "100vh",
               overflowY: "scroll",
               overflowX: "hidden",
-              margin: "0px 5px",
             }}
             spacing={2}
           >
@@ -473,15 +472,7 @@ export const Annotator = ({
             })}
           </Grid>
         </Grid>
-      </Grid>
-      <div
-        item
-        xs={12}
-        md={3}
-        style={{
-          position: "relative",
-        }}
-      >
+
         <div
           style={{
             position: "fixed",
@@ -490,7 +481,10 @@ export const Annotator = ({
             background: "white",
             overflowY: "scroll",
             height: "100vh",
-            width: !show ? "2%" : "auto",
+            width: !show ? "0%" : "auto",
+            boxShadow: !show
+              ? ""
+              : "10px 10px 10px black, -10px -10px 10px rgba(180, 180, 180, 0.4)",
           }}
         >
           <RightSideMenu
@@ -508,12 +502,11 @@ export const Annotator = ({
             brushHighlight={false}
           />
         </div>
-      </div>
-    </div>
+      </Grid>
+    </>
   ) : (
     ImageCanvas
   )
 }
 
 export default Annotator
-

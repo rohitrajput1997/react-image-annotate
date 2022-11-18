@@ -11,6 +11,7 @@ import { withHotKeys } from "react-hotkeys"
 import useEventCallback from "use-event-callback"
 import useKey from "use-key-hook"
 import getActiveImage from "../Annotator/reducers/get-active-image"
+import RightSideMenu from "../Components/RightSideMenu"
 import ImageCanvas from "../ImageCanvas"
 import KeyframeTimeline from "../KeyframeTimeline"
 import SettingsDialog from "../SettingsDialog"
@@ -549,22 +550,24 @@ export const MainLayout = ({
                     (a) =>
                       a.alwaysShowing || state.enabledTools.includes(a.name)
                   )}
-                // rightSidebarItems={
-                //   <RightSideMenu
-                //     rightMenu={rightMenu}
-                //     debugModeOn={debugModeOn}
-                //     state={state}
-                //     action={action}
-                //     activeImage={activeImage}
-                //     delete_annotation={delete_annotation}
-                //     setdelete_annotation={setdelete_annotation}
-                //     isImageMode={isImageMode}
-                //     lines={lines}
-                //     emptyArr={emptyArr}
-                //     setLines={setLines}
-                //     brushHighlight={brushHighlight}
-                //   />
-                // }
+                rightSidebarItems={
+                  !isImageMode && (
+                    <RightSideMenu
+                      rightMenu={rightMenu}
+                      debugModeOn={debugModeOn}
+                      state={state}
+                      action={action}
+                      activeImage={activeImage}
+                      delete_annotation={delete_annotation}
+                      setdelete_annotation={setdelete_annotation}
+                      isImageMode={isImageMode}
+                      lines={lines}
+                      emptyArr={emptyArr}
+                      setLines={setLines}
+                      brushHighlight={brushHighlight}
+                    />
+                  )
+                }
               >
                 {canvas}
               </Workspace>
