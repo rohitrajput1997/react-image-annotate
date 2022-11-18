@@ -5,7 +5,6 @@ import React, { useEffect, useMemo, useReducer, useState } from "react"
 import makeImmutable, { without } from "seamless-immutable"
 import useEventCallback from "use-event-callback"
 import { textractObjects } from "../box_interction"
-import AnnotationButton from "../Components/AnnotationButton"
 import RightSideMenu from "../Components/RightSideMenu"
 import type { KeypointsDefinition } from "../ImageCanvas/region-tools"
 import MainLayout from "../MainLayout"
@@ -19,7 +18,6 @@ import getActiveImage from "./reducers/get-active-image"
 import historyHandler from "./reducers/history-handler.js"
 import imageReducer from "./reducers/image-reducer.js"
 import videoReducer from "./reducers/video-reducer.js"
-
 type Props = {
   taskDescription?: string,
   allowedArea?: { x: number, y: number, w: number, h: number },
@@ -383,6 +381,7 @@ export const Annotator = ({
     memoizedActionFns.current[fnKey] = fn
     return fn
   }
+  const [show, setShow] = React.useState(false)
   const ImageCanvas = (
     <SettingsProvider>
       <MainLayout
@@ -425,82 +424,92 @@ export const Annotator = ({
         handleSubmit={handleSubmit}
         tilte_key={tilte_key}
         deleteAnnotationAllow={deleteAnnotationAllow}
+        show={show}
+        setShow={setShow}
       />
     </SettingsProvider>
   )
   const emptyArr = []
-  const [show, setShow] = React.useState(false)
-  return isImageMode ? (
-    <Grid container spacing={2} style={{ height: "100vh" }}>
-      <Grid
-        item
-        xs={12}
-        md={show ? 5 : 6}
-        style={{ position: "relative", right: 0, display: "flex" }}
-      >
-        {ImageCanvas}
-        <AnnotationButton
-          title={!show ? "Show" : "Hide"}
-          onClick={() => {
-            setShow(!show)
-          }}
-          style={{ position: "absloute", height: "30px" }}
-        />
-      </Grid>
 
-      <Grid item xs={12} md={show ? 4 : 6}>
-        <Grid
-          container
-          style={{
-            maxHeight: "100vh",
-            overflowY: "scroll",
-            overflowX: "hidden",
-            margin: "0px 5px",
-          }}
-          spacing={2}
-        >
-          {formData?.map((a, index) => {
-            return (
-              <Grid item xs={12} md={4} key={index} className="common_inputBox">
-                <FormOCR
-                  index={index}
-                  formData={formData}
-                  setFormData={setFormData}
-                  item={a}
-                />
-              </Grid>
-            )
-          })}
+  return isImageMode ? (
+    <div>
+      <Grid
+        container
+        spacing={2}
+        style={{ height: "100vh", overflowX: "hidden" }}
+      >
+        <Grid item xs={12} md={6}>
+          {ImageCanvas}
+        </Grid>
+
+        <Grid item xs={12} md={6}>
+          <Grid
+            container
+            style={{
+              maxHeight: "100vh",
+              overflowY: "scroll",
+              overflowX: "hidden",
+              margin: "0px 5px",
+            }}
+            spacing={2}
+          >
+            {formData?.map((a, index) => {
+              return (
+                <Grid
+                  item
+                  xs={12}
+                  md={4}
+                  key={index}
+                  className="common_inputBox"
+                >
+                  <FormOCR
+                    index={index}
+                    formData={formData}
+                    setFormData={setFormData}
+                    item={a}
+                  />
+                </Grid>
+              )
+            })}
+          </Grid>
         </Grid>
       </Grid>
-
-      <Grid
+      <div
         item
         xs={12}
         md={3}
         style={{
-          position: "absolute",
-          background: "white",
-          height: "100vh",
-          right: "0",
+          position: "relative",
         }}
       >
-        <RightSideMenu
-          rightMenu={rightMenu}
-          debugModeOn={false}
-          state={state}
-          action={action}
-          activeImage={activeImage}
-          delete_annotation={delete_annotation}
-          setdelete_annotation={setdelete_annotation}
-          isImageMode={isImageMode}
-          lines={lines}
-          emptyArr={emptyArr}
-          setLines={setLines}
-          brushHighlight={false}
-        />
-      </Grid>
-    </Grid>
+        <div
+          style={{
+            position: "fixed",
+            right: 0,
+            top: 0,
+            background: "white",
+            overflowY: "scroll",
+            height: "100vh",
+            width: !show ? "2%" : "auto",
+          }}
+        >
+          <RightSideMenu
+            rightMenu={rightMenu}
+            debugModeOn={false}
+            state={state}
+            action={action}
+            activeImage={activeImage}
+            delete_annotation={delete_annotation}
+            setdelete_annotation={setdelete_annotation}
+            isImageMode={isImageMode}
+            lines={lines}
+            emptyArr={emptyArr}
+            setLines={setLines}
+            brushHighlight={false}
+          />
+        </div>
+      </div>
+    </div>
   ) : (
     ImageCanvas
   )

@@ -94,6 +94,8 @@ export const MainLayout = ({
   tilte_key,
   deleteAnnotationAllow,
   action,
+  show,
+  setShow,
 }: Props) => {
   const classes = useStyles()
   const settings = useSettings()
@@ -251,6 +253,8 @@ export const MainLayout = ({
       setbrushRadius={setbrushRadius}
       setbrushHighlight={setbrushHighlight}
       isImageMode={isImageMode}
+      show={show}
+      setShow={setShow}
     />
   )
 
@@ -583,3 +587,4 @@ export const MainLayout = ({
 }
 
 export default MainLayout
+

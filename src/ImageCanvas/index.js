@@ -33,6 +33,10 @@ import styles from "./styles"
 import useMouse from "./use-mouse"
 import useProjectRegionBox from "./use-project-box"
 import useWasdMode from "./use-wasd-mode"
+
+import KeyboardArrowLeftIcon from "@mui/icons-material/KeyboardArrowLeft"
+import KeyboardArrowRightIcon from "@mui/icons-material/KeyboardArrowRight"
+import { Fab } from "@mui/material"
 const convertHextoRgb = (color) => {
   try {
     let hashRemove = color.replace("#", "")
@@ -191,6 +195,8 @@ export const ImageCanvas = ({
   setbrushHighlight,
   isImageMode,
   state,
+  setShow,
+  show,
 }: Props) => {
   const classes = useStyles()
 
@@ -343,6 +349,8 @@ export const ImageCanvas = ({
     onMouseUp,
     selectedTool,
     handleMouseUp,
+    show,
+    setShow,
   })
 
   useLayoutEffect(() => changeMat(mat.clone()), [changeMat, mat, windowSize])
@@ -569,6 +577,49 @@ export const ImageCanvas = ({
             {((1 / mat.a) * 100).toFixed(0)}%
           </div>
         }
+        <div
+          style={{
+            zIndex: 10000000,
+            position: "absolute",
+
+            top: "50%",
+            right: 1,
+          }}
+        >
+          {!show && (
+            <Fab
+              size="small"
+              color="primary"
+              style={{
+                background: "lightGray",
+              }}
+              onClick={() => {
+                setShow(true)
+              }}
+            >
+              <KeyboardArrowLeftIcon title={!show ? "Show" : "Hide"} />
+            </Fab>
+          )}
+          {show && (
+            <Fab
+              size="small"
+              color="primary"
+              style={{
+                background: "lightGray",
+              }}
+              onClick={() => {
+                setShow(false)
+              }}
+            >
+              <KeyboardArrowRightIcon
+                title={!show ? "Show" : "Hide"}
+                onClick={() => {
+                  setShow(true)
+                }}
+              />
+            </Fab>
+          )}
+        </div>
         {imageLoaded && showTags && !dragging && (
           <PreventScrollToParents key="regionTags">
             <RegionTags
