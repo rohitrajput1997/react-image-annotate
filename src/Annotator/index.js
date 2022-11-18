@@ -5,14 +5,17 @@ import React, { useEffect, useMemo, useReducer, useState } from "react"
 import makeImmutable, { without } from "seamless-immutable"
 import useEventCallback from "use-event-callback"
 import { textractObjects } from "../box_interction"
-import AnnotationInput from "../Components/AnnotationInput"
+import AnnotationButton from "../Components/AnnotationButton"
+import RightSideMenu from "../Components/RightSideMenu"
 import type { KeypointsDefinition } from "../ImageCanvas/region-tools"
 import MainLayout from "../MainLayout"
 import type { Action, Image } from "../MainLayout/types"
+import FormOCR from "../OCR/FormOCR"
 import SettingsProvider from "../SettingsProvider"
 import getFromLocalStorage from "../utils/get-from-local-storage"
 import combineReducers from "./reducers/combine-reducers.js"
 import generalReducer from "./reducers/general-reducer.js"
+import getActiveImage from "./reducers/get-active-image"
 import historyHandler from "./reducers/history-handler.js"
 import imageReducer from "./reducers/image-reducer.js"
 import videoReducer from "./reducers/video-reducer.js"
@@ -118,6 +121,7 @@ export const Annotator = ({
   tilte_key,
   image_ocr_map,
   deleteAnnotationAllow,
+  editable_data,
 }: Props) => {
   if (typeof selectedImage === "string") {
     selectedImage = (images || []).findIndex((img) => img.src === selectedImage)
@@ -125,6 +129,7 @@ export const Annotator = ({
   }
   const annotationType = images ? "image" : "video"
   const [orcTxt, setORCTxt] = useState(image_ocr_map || new Map())
+  const [formData, setFormData] = useState(editable_data)
   const [state, dispatchToReducer] = useReducer(
     historyHandler(
       combineReducers(
@@ -175,15 +180,30 @@ export const Annotator = ({
   window.textractList = textractObjects(blocks) // call textract and parse response
 
   window.onChangeOCR = (index, label, value) => {
+    let f1 = [...formData]
     let a1 = new Map(orcTxt)
+
     if (label === "delete") {
+      const data1 = a1.get(index)
+      const index1 = f1.findIndex((d) => d.title === data1?.name)
       a1.delete(index)
+      if (index1 !== -1) {
+        f1[index1].content = ""
+      }
     } else {
       a1.set(index, {
         ...a1.get(index),
         [label]: value,
       })
     }
+    const data = a1.get(index)
+    if (data?.name) {
+      const index1 = f1.findIndex((d) => d.title === data.name)
+      if (index1 !== -1) {
+        f1[index1].content = data.value
+      }
+    }
+    setFormData(f1)
     setORCTxt(a1)
   }
 
@@ -228,7 +248,7 @@ export const Annotator = ({
 
     dispatchToReducer(action)
   })
-
+  const { currentImageIndex, activeImage } = getActiveImage(state)
   const layoutORC = useMemo(() => {
     let array = []
     for (let [key, value] of orcTxt) {
@@ -341,16 +361,32 @@ export const Annotator = ({
       }
       return {
         annotation: finalArr,
-        ocr_data: layoutORC?.map((item) => {
-          let { value, name } = item.value
-          return { title: name, content: value }
-        }),
+        formData: formData,
       }
     }
+  }
+  const memoizedActionFns = React.useRef({})
+  const action = (type: string, ...params: Array<string>) => {
+    const fnKey = `${type}(${params.join(",")})`
+    if (memoizedActionFns.current[fnKey])
+      return memoizedActionFns.current[fnKey]
+
+    const fn = (...args: any) =>
+      params.length > 0
+        ? dispatch(
+            ({
+              type,
+              ...params.reduce((acc, p, i) => ((acc[p] = args[i]), acc), {}),
+            }: any)
+          )
+        : dispatch({ type, ...args[0] })
+    memoizedActionFns.current[fnKey] = fn
+    return fn
   }
   const ImageCanvas = (
     <SettingsProvider>
       <MainLayout
+        action={action}
         RegionEditLabel={RegionEditLabel}
         alwaysShowNextButton={Boolean(onNextImage)}
         alwaysShowPrevButton={Boolean(onPrevImage)}
@@ -392,51 +428,77 @@ export const Annotator = ({
       />
     </SettingsProvider>
   )
-
+  const emptyArr = []
+  const [show, setShow] = React.useState(false)
   return isImageMode ? (
     <Grid container spacing={2} style={{ height: "100vh" }}>
-      <Grid item xs={12} md={6}>
+      <Grid
+        item
+        xs={12}
+        md={show ? 5 : 6}
+        style={{ position: "relative", right: 0, display: "flex" }}
+      >
         {ImageCanvas}
+        <AnnotationButton
+          title={!show ? "Show" : "Hide"}
+          onClick={() => {
+            setShow(!show)
+          }}
+          style={{ position: "absloute", height: "30px" }}
+        />
       </Grid>
-      <Grid item xs={12} md={6}>
+
+      <Grid item xs={12} md={show ? 4 : 6}>
         <Grid
           container
           style={{
             maxHeight: "100vh",
             overflowY: "scroll",
             overflowX: "hidden",
+            margin: "0px 5px",
           }}
           spacing={2}
         >
-          {layoutORC.map((a, index) => {
-            let value = a.value
-            let key = a.key
-            if (!value?.name || value?.name === "") return null
+          {formData?.map((a, index) => {
             return (
-              <Grid item xs={12} md={6} key={index} className="common_inputBox">
-                <label className="task_formlabel" htmlFor={value.name}>
-                  {value.name}
-                </label>
-                <AnnotationInput
-                  rows={3}
-                  // title={value.name}
-                  id={value.name}
-                  value={value.value}
-                  fullWidth
-                  onChange={(e) => {
-                    let a2 = new Map(orcTxt)
-                    a2.set(key, {
-                      ...a2.get(key),
-                      value: e.target.value,
-                    })
-                    setORCTxt(a2)
-                  }}
-                  focused
+              <Grid item xs={12} md={4} key={index} className="common_inputBox">
+                <FormOCR
+                  index={index}
+                  formData={formData}
+                  setFormData={setFormData}
+                  item={a}
                 />
               </Grid>
             )
           })}
         </Grid>
+      </Grid>
+
+      <Grid
+        item
+        xs={12}
+        md={3}
+        style={{
+          position: "absolute",
+          background: "white",
+          height: "100vh",
+          right: "0",
+        }}
+      >
+        <RightSideMenu
+          rightMenu={rightMenu}
+          debugModeOn={false}
+          state={state}
+          action={action}
+          activeImage={activeImage}
+          delete_annotation={delete_annotation}
+          setdelete_annotation={setdelete_annotation}
+          isImageMode={isImageMode}
+          lines={lines}
+          emptyArr={emptyArr}
+          setLines={setLines}
+          brushHighlight={false}
+        />
       </Grid>
     </Grid>
   ) : (
@@ -445,3 +507,4 @@ export const Annotator = ({
 }
 
 export default Annotator
+

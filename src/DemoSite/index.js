@@ -1,7 +1,7 @@
 // @flow
 import React from "react"
 import Annotator from "../Annotator"
-let data = [
+let editable_data = [
   {
     title: "sku",
     mandatory: "non-mandatory",
@@ -752,9 +752,9 @@ export default () => {
         }
         invaild_show={true}
         showUpdate={!isImageMode}
-        rightMenu={!isImageMode}
+        rightMenu={false}
         isReadingMode={false}
-        isImageMode={isImageMode}
+        isImageMode={true}
         hideSaveNext={isImageMode}
         hideQuery={isImageMode}
         hideSave={isImageMode}
@@ -4665,6 +4665,7 @@ export default () => {
           },
         ]}
         image_ocr_map={[]}
+        editable_data={editable_data}
       />
     </div>
   )

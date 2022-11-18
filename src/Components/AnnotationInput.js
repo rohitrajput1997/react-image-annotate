@@ -55,24 +55,7 @@ const AnnotationInput = ({
     >
       {title && (
         <label className={`title_input_box ${labelClass}`}>
-          {title}{" "}
-          {isRequired ? (
-            <span style={{ color: "red" }}>
-              {isAstrick
-                ? handleTooltipMessage({
-                    title: "Mandatory field to proceed with Save & Next",
-                    count: 2,
-                    isTooltip: isTooltip,
-                  })
-                : handleTooltipMessage({
-                    title: "Mandatory field to proceed with Submit",
-                    count: 1,
-                    isTooltip: isTooltip,
-                  })}
-            </span>
-          ) : (
-            ""
-          )}
+          {title} {isRequired ? <span style={{ color: "red" }}>*</span> : ""}
         </label>
       )}
       {subTextAboveInput && <label>{subTextAboveInput}</label>}

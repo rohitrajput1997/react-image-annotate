@@ -1,6 +1,6 @@
 {
   "name": "react-image-annotate_ns_demo",
-  "version": "5.0.23",
+  "version": "5.0.25",
   "dependencies": {
     "@emotion/react": "^11.7.0",
     "@emotion/styled": "^11.6.0",
@@ -45,7 +45,7 @@
     "url": "https://github.com/UniversalDataTool/react-image-annotate.git"
   },
   "scripts": {
-    "start": "react-scripts start",
+    "start": "PORT=4000 react-scripts start",
     "test": "react-scripts test",
     "eject": "react-scripts eject",
     "storybook": "start-storybook -p 9090 -s public",

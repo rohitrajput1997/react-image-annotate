@@ -11,20 +11,11 @@ import { withHotKeys } from "react-hotkeys"
 import useEventCallback from "use-event-callback"
 import useKey from "use-key-hook"
 import getActiveImage from "../Annotator/reducers/get-active-image"
-import ClassSelectionMenu from "../ClassSelectionMenu"
-import DebugBox from "../DebugSidebarBox"
-import HistorySidebarBox from "../HistorySidebarBox"
 import ImageCanvas from "../ImageCanvas"
-import KeyframesSelector from "../KeyframesSelectorSidebarBox"
 import KeyframeTimeline from "../KeyframeTimeline"
-import BrushKeyFrame from "../LazyBrush/BrushKeyFrame"
-import BrushRegion from "../LazyBrush/BrushRegion"
-import RegionSelector from "../RegionSelectorSidebarBox"
 import SettingsDialog from "../SettingsDialog"
 import { useSettings } from "../SettingsProvider"
 import { useDispatchHotkeyHandlers } from "../ShortcutsManager"
-import TagsSidebarBox from "../TagsSidebarBox"
-import TaskDescription from "../TaskDescriptionSidebarBox"
 import getHotkeyHelpText from "../utils/get-hotkey-help-text"
 import iconDictionary from "./icon-dictionary"
 import styles from "./styles"
@@ -102,6 +93,7 @@ export const MainLayout = ({
   handleSubmit,
   tilte_key,
   deleteAnnotationAllow,
+  action,
 }: Props) => {
   const classes = useStyles()
   const settings = useSettings()
@@ -111,6 +103,7 @@ export const MainLayout = ({
   const [tool, setTool] = React.useState("pen")
   const [isMuted, setisMuted] = useState(false)
   const [brushHighlight, setbrushHighlight] = useState(false)
+
   React.useEffect(() => {
     if (state.selectedTool === "create-a-brush") {
       setTool("pen")
@@ -118,24 +111,24 @@ export const MainLayout = ({
       setTool("eraser")
     }
   }, [state.selectedTool])
-  const memoizedActionFns = React.useRef({})
-  const action = (type: string, ...params: Array<string>) => {
-    const fnKey = `${type}(${params.join(",")})`
-    if (memoizedActionFns.current[fnKey])
-      return memoizedActionFns.current[fnKey]
+  // const memoizedActionFns = React.useRef({})
+  // const action = (type: string, ...params: Array<string>) => {
+  //   const fnKey = `${type}(${params.join(",")})`
+  //   if (memoizedActionFns.current[fnKey])
+  //     return memoizedActionFns.current[fnKey]
 
-    const fn = (...args: any) =>
-      params.length > 0
-        ? dispatch(
-            ({
-              type,
-              ...params.reduce((acc, p, i) => ((acc[p] = args[i]), acc), {}),
-            }: any)
-          )
-        : dispatch({ type, ...args[0] })
-    memoizedActionFns.current[fnKey] = fn
-    return fn
-  }
+  //   const fn = (...args: any) =>
+  //     params.length > 0
+  //       ? dispatch(
+  //           ({
+  //             type,
+  //             ...params.reduce((acc, p, i) => ((acc[p] = args[i]), acc), {}),
+  //           }: any)
+  //         )
+  //       : dispatch({ type, ...args[0] })
+  //   memoizedActionFns.current[fnKey] = fn
+  //   return fn
+  // }
 
   const { currentImageIndex, activeImage } = getActiveImage(state)
   let nextImage
@@ -552,104 +545,22 @@ export const MainLayout = ({
                     (a) =>
                       a.alwaysShowing || state.enabledTools.includes(a.name)
                   )}
-                rightSidebarItems={
-                  rightMenu &&
-                  [
-                    debugModeOn && (
-                      <DebugBox
-                        state={debugModeOn}
-                        lastAction={state.lastAction}
-                      />
-                    ),
-                    state.taskDescription && (
-                      <TaskDescription description={state.taskDescription} />
-                    ),
-                    state.regionClsList && (
-                      <ClassSelectionMenu
-                        selectedCls={state.selectedCls}
-                        regionClsList={state.regionClsList}
-                        onSelectCls={action("SELECT_CLASSIFICATION", "cls")}
-                      />
-                    ),
-                    state.labelImages && (
-                      <TagsSidebarBox
-                        currentImage={activeImage}
-                        imageClsList={state.imageClsList}
-                        imageTagList={state.imageTagList}
-                        onChangeImage={action("CHANGE_IMAGE", "delta")}
-                        expandedByDefault
-                      />
-                    ),
-                    // (state.images?.length || 0) > 1 && (
-                    //   <ImageSelector
-                    //     onSelect={action("SELECT_REGION", "region")}
-                    //     images={state.images}
-                    //   />
-                    // ),
-                    <RegionSelector
-                      regions={activeImage ? activeImage.regions : emptyArr}
-                      onSelectRegion={action("SELECT_REGION", "region")}
-                      onDeleteRegion={action("DELETE_REGION", "region")}
-                      onChangeRegion={action("CHANGE_REGION", "region")}
-                      delete_annotation={delete_annotation}
-                      setdelete_annotation={setdelete_annotation}
-                    />,
-                    state.keyframes && (
-                      <KeyframesSelector
-                        onChangeVideoTime={action(
-                          "CHANGE_VIDEO_TIME",
-                          "newTime"
-                        )}
-                        onDeleteKeyframe={action("DELETE_KEYFRAME", "time")}
-                        onChangeCurrentTime={action(
-                          "CHANGE_VIDEO_TIME",
-                          "newTime"
-                        )}
-                        currentTime={state.currentVideoTime}
-                        duration={state.videoDuration}
-                        keyframes={state.keyframes}
-                      />
-                    ),
-                    !isImageMode && (
-                      <BrushRegion
-                        onChangeVideoTime={action(
-                          "CHANGE_VIDEO_TIME",
-                          "newTime"
-                        )}
-                        currentTime={state.currentVideoTime}
-                        duration={state.videoDuration}
-                        brushLines={lines}
-                        delete_annotation={delete_annotation}
-                        setdelete_annotation={setdelete_annotation}
-                        setLines={setLines}
-                        brushHighlight={brushHighlight}
-                      />
-                    ),
-
-                    !isImageMode && state.keyframes && (
-                      <BrushKeyFrame
-                        onChangeVideoTime={action(
-                          "CHANGE_VIDEO_TIME",
-                          "newTime"
-                        )}
-                        currentTime={state.currentVideoTime}
-                        duration={state.videoDuration}
-                        brushLines={lines}
-                        delete_annotation={delete_annotation}
-                        setdelete_annotation={setdelete_annotation}
-                        setLines={setLines}
-                      />
-                    ),
-                    <HistorySidebarBox
-                      history={state.history}
-                      onRestoreHistory={action("RESTORE_HISTORY")}
-                      line={lines}
-                      setLines={setLines}
-                      delete_annotation={delete_annotation}
-                      setdelete_annotation={setdelete_annotation}
-                    />,
-                  ].filter(Boolean)
-                }
+                // rightSidebarItems={
+                //   <RightSideMenu
+                //     rightMenu={rightMenu}
+                //     debugModeOn={debugModeOn}
+                //     state={state}
+                //     action={action}
+                //     activeImage={activeImage}
+                //     delete_annotation={delete_annotation}
+                //     setdelete_annotation={setdelete_annotation}
+                //     isImageMode={isImageMode}
+                //     lines={lines}
+                //     emptyArr={emptyArr}
+                //     setLines={setLines}
+                //     brushHighlight={brushHighlight}
+                //   />
+                // }
               >
                 {canvas}
               </Workspace>
@@ -672,4 +583,3 @@ export const MainLayout = ({
 }
 
 export default MainLayout
-
