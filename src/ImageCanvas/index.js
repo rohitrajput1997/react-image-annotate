@@ -507,7 +507,7 @@ export const ImageCanvas = ({
         style={{
           width: "100%",
           height: "100%",
-          // maxHeight: "calc(100vh - 68px)",
+          maxHeight: "calc(100vh - 68px)",
           position: "relative",
           overflow: "hidden",
           cursor:
@@ -577,49 +577,53 @@ export const ImageCanvas = ({
             {((1 / mat.a) * 100).toFixed(0)}%
           </div>
         }
-        <div
-          style={{
-            zIndex: 10000000,
-            position: "absolute",
+        {isImageMode && (
+          <div
+            style={{
+              zIndex: 10000000,
+              position: "absolute",
 
-            top: "50%",
-            right: 1,
-          }}
-        >
-          {!show && (
-            <Fab
-              size="small"
-              color="primary"
-              style={{
-                background: "lightGray",
-              }}
-              onClick={() => {
-                setShow(true)
-              }}
-            >
-              <KeyboardArrowLeftIcon title={!show ? "Show" : "Hide"} />
-            </Fab>
-          )}
-          {show && (
-            <Fab
-              size="small"
-              color="primary"
-              style={{
-                background: "lightGray",
-              }}
-              onClick={() => {
-                setShow(false)
-              }}
-            >
-              <KeyboardArrowRightIcon
-                title={!show ? "Show" : "Hide"}
+              top: "50%",
+              right: 1,
+            }}
+          >
+            {!show && (
+              <Fab
+                size="small"
+                color="primary"
+                style={{
+                  background: "#005f86",
+                  opacity: 0.8,
+                }}
                 onClick={() => {
                   setShow(true)
                 }}
-              />
-            </Fab>
-          )}
-        </div>
+              >
+                <KeyboardArrowLeftIcon title={!show ? "Show" : "Hide"} />
+              </Fab>
+            )}
+            {show && (
+              <Fab
+                size="small"
+                color="primary"
+                style={{
+                  background: "#005f86",
+                  opacity: 0.8,
+                }}
+                onClick={() => {
+                  setShow(false)
+                }}
+              >
+                <KeyboardArrowRightIcon
+                  title={!show ? "Show" : "Hide"}
+                  onClick={() => {
+                    setShow(true)
+                  }}
+                />
+              </Fab>
+            )}
+          </div>
+        )}
         {imageLoaded && showTags && !dragging && (
           <PreventScrollToParents key="regionTags">
             <RegionTags
@@ -888,4 +892,3 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
-

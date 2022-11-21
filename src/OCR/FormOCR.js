@@ -17,6 +17,14 @@ function FormOCR({ index, formData, setFormData, item }) {
     mandatory,
     history_hide,
   } = item || {}
+  let labelStyle = {
+    whiteSpace: "nowrap",
+    width: "90%",
+    overflow: "hidden",
+    textOverflow: "ellipsis",
+
+    display: "inline-block",
+  }
   return input_type === "label" ? (
     <>
       <p className="font-MontSemiBold task_formlabel">{display_label}</p>
@@ -24,7 +32,12 @@ function FormOCR({ index, formData, setFormData, item }) {
     </>
   ) : input_type === "textArea" ? (
     <>
-      <label className="task_formlabel" htmlFor={display_label}>
+      <label
+        className="task_formlabel"
+        htmlFor={display_label}
+        style={{ ...labelStyle }}
+        title={display_label}
+      >
         {display_label}
       </label>
       <AnnotationInput
@@ -46,4 +59,3 @@ function FormOCR({ index, formData, setFormData, item }) {
 }
 
 export default FormOCR
-

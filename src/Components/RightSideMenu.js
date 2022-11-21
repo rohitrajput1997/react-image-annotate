@@ -114,7 +114,7 @@ function RightSideMenu({
     <>
       {dubegMenu}
       {taskDescp}
-      {clsRegion}
+      {/* {clsRegion} */}
       {labelImages}
       {regionList}
       {keyFrames}

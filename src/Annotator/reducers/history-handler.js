@@ -83,7 +83,9 @@ export default (reducer) => {
           //   }
           // })
           window.annotation_redo = newArr
-
+          let slice = nextState.history
+          let lastElement = slice[slice.length - 1]
+          console.log(lastElement?.state?.images?.[0]?.regions)
           return setIn(
             nextState.history[0].state,
             ["history"],
@@ -117,3 +119,4 @@ export default (reducer) => {
     return nextState
   }
 }
+

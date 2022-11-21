@@ -40,6 +40,7 @@ export const HistorySidebarBox = ({
     let lastElement = window.undoArray[window.undoArray.length - 1]
     if (lastElement === "annotation") {
       onRestoreHistory()
+      // window.onChangeOCR(window.undoArray.length - 1, "delete", "")
       let newArr = [...window.undoArray]
       newArr.splice(window.undoArray.length - 1, 1)
 
@@ -161,4 +162,3 @@ export default memo(HistorySidebarBox, (prevProps, nextProps) => {
     nextProps.history.map((a) => [a.name, a.time])
   )
 })
-

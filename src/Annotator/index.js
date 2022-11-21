@@ -116,10 +116,11 @@ export const Annotator = ({
   isImageMode,
   blocks,
   handleSubmit,
-  tilte_key,
+  tilte_key = "",
   image_ocr_map,
-  deleteAnnotationAllow,
-  editable_data,
+  deleteAnnotationAllow = false,
+  editable_data = [],
+  annotation_index = 0,
 }: Props) => {
   if (typeof selectedImage === "string") {
     selectedImage = (images || []).findIndex((img) => img.src === selectedImage)
@@ -360,6 +361,8 @@ export const Annotator = ({
       return {
         annotation: finalArr,
         formData: formData,
+        tilte_key: tilte_key,
+        annotation_index: annotation_index,
       }
     }
   }
@@ -436,7 +439,12 @@ export const Annotator = ({
       <Grid
         container
         spacing={2}
-        style={{ height: "100vh", overflowX: "hidden" }}
+        style={{
+          height: "100vh",
+          overflowX: "hidden",
+          overflowY: "hidden",
+          paddingRight: "5px",
+        }}
       >
         <Grid item xs={12} md={6}>
           {ImageCanvas}
@@ -449,6 +457,7 @@ export const Annotator = ({
               maxHeight: "100vh",
               overflowY: "scroll",
               overflowX: "hidden",
+              paddingRight: "5px",
             }}
             spacing={2}
           >
@@ -481,7 +490,7 @@ export const Annotator = ({
             background: "white",
             overflowY: "scroll",
             height: "100vh",
-            width: !show ? "0%" : "auto",
+            width: !show ? "0%" : "300px",
             boxShadow: !show
               ? ""
               : "10px 10px 10px black, -10px -10px 10px rgba(180, 180, 180, 0.4)",
