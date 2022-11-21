@@ -5,6 +5,7 @@ import React, { useEffect, useMemo, useReducer, useState } from "react"
 import makeImmutable, { without } from "seamless-immutable"
 import useEventCallback from "use-event-callback"
 import { textractObjects } from "../box_interction"
+import LocalStorage from "../Components/LocalStorage"
 import RightSideMenu from "../Components/RightSideMenu"
 import type { KeypointsDefinition } from "../ImageCanvas/region-tools"
 import MainLayout from "../MainLayout"
@@ -18,6 +19,8 @@ import getActiveImage from "./reducers/get-active-image"
 import historyHandler from "./reducers/history-handler.js"
 import imageReducer from "./reducers/image-reducer.js"
 import videoReducer from "./reducers/video-reducer.js"
+let Getrules = LocalStorage.get_task_rules() || {}
+
 type Props = {
   taskDescription?: string,
   allowedArea?: { x: number, y: number, w: number, h: number },
@@ -462,21 +465,33 @@ export const Annotator = ({
             spacing={2}
           >
             {formData?.map((a, index) => {
+              let {
+                rules,
+                editable_fields,
+                save_mandatory_fields,
+                find_and_replace,
+                hide_physical_link,
+                dropdown_data,
+              } = Getrules || {}
               return (
-                <Grid
-                  item
-                  xs={12}
-                  md={4}
-                  key={index}
-                  className="common_inputBox"
-                >
-                  <FormOCR
-                    index={index}
-                    formData={formData}
-                    setFormData={setFormData}
-                    item={a}
-                  />
-                </Grid>
+                ["label", "textArea"].includes(a.input_type) &&
+                editable_fields.includes(a.title) && (
+                  <Grid
+                    item
+                    xs={12}
+                    md={4}
+                    key={index}
+                    className="common_inputBox"
+                  >
+                    <FormOCR
+                      index={index}
+                      formData={formData}
+                      setFormData={setFormData}
+                      item={a}
+                      editable_data={formData}
+                    />
+                  </Grid>
+                )
               )
             })}
           </Grid>
@@ -519,3 +534,4 @@ export const Annotator = ({
 }
 
 export default Annotator
+

@@ -749,7 +749,7 @@ export default () => {
     ],
     allowComments: false,
   })
-  let isImageMode = false
+  let isImageMode = true
   const handleSubmit = () => {}
   return (
     <div>
