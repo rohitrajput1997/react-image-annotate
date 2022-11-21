@@ -21,11 +21,10 @@ function FormOCR({ index, formData, setFormData, item }) {
     editable_data,
   } = item || {}
   let labelStyle = {
-    whiteSpace: "nowrap",
     width: "90%",
     overflow: "hidden",
-    textOverflow: "ellipsis",
 
+    wordBreak: "break-all",
     display: "inline-block",
   }
 

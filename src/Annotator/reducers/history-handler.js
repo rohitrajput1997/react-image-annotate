@@ -66,6 +66,13 @@ export default (reducer) => {
               },
             }
           }
+
+          state.images?.[0].regions.map((r, index) => {
+            if (!r.cls || r.cls === "") {
+              window.onChangeOCR(index, "label_undo", "")
+            }
+          })
+
           let newArr = [...window.annotation_redo]
 
           newArr.push(obj)
@@ -83,9 +90,7 @@ export default (reducer) => {
           //   }
           // })
           window.annotation_redo = newArr
-          let slice = nextState.history
-          let lastElement = slice[slice.length - 1]
-          console.log(lastElement?.state?.images?.[0]?.regions)
+
           return setIn(
             nextState.history[0].state,
             ["history"],

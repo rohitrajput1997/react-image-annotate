@@ -2,7 +2,7 @@
 import clamp from "clamp"
 import isEqual from "lodash/isEqual"
 import { getIn, setIn } from "seamless-immutable"
-import { bb_intersection } from "../../box_interction"
+import { bb_intersection, polyIntersection } from "../../box_interction"
 import colors from "../../colors"
 import { moveRegion } from "../../ImageCanvas/region-tools.js"
 import type { Action, MainLayoutState } from "../../MainLayout/types"
@@ -487,6 +487,22 @@ export default (state: MainLayoutState, action: Action) => {
           case "DRAW_POLYGON": {
             const [polygon, regionIndex] = getRegion(state.mode.regionId)
             if (!polygon) break
+            const pArr = polygon.points.concat([[x, y]])
+            let fpArr = []
+            pArr.map((a) => {
+              fpArr.push({
+                x: a[0],
+                y: a[1],
+              })
+            })
+            fpArr.pop()
+
+            const text = polyIntersection(
+              { Text: "optional", xy: fpArr },
+              window.textPoligonList
+            )
+
+            window.onChangeOCR(regionIndex, "value", text.join(" "))
             return setIn(
               state,
               [...pathToActiveImage, "regions", regionIndex],

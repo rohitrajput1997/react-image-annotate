@@ -698,7 +698,7 @@ export default () => {
       "test_result",
       "and_any_other_critical_information_which_might_be_relevant",
     ],
-    enabledTools: ["select", "create-box"],
+    enabledTools: ["select", "create-box", "create-polygon"],
     videoName: "",
     videoTime: "0",
     videoSrc:

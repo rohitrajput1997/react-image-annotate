@@ -4,7 +4,7 @@ import { Grid } from "@mui/material"
 import React, { useEffect, useMemo, useReducer, useState } from "react"
 import makeImmutable, { without } from "seamless-immutable"
 import useEventCallback from "use-event-callback"
-import { textractObjects } from "../box_interction"
+import { parseTextract, textractObjects } from "../box_interction"
 import LocalStorage from "../Components/LocalStorage"
 import RightSideMenu from "../Components/RightSideMenu"
 import type { KeypointsDefinition } from "../ImageCanvas/region-tools"
@@ -180,10 +180,25 @@ export const Annotator = ({
   )
 
   window.textractList = textractObjects(blocks) // call textract and parse response
+  window.textPoligonList = parseTextract(blocks)
 
   window.onChangeOCR = (index, label, value) => {
     let f1 = [...formData]
     let a1 = new Map(orcTxt)
+
+    if (label === "label_undo") {
+      const data1 = a1.get(index)
+      if (data1.name) {
+        const index1 = f1.findIndex((d) => d.title === data1?.name)
+        if (index1 !== -1) {
+          f1[index1].content = ""
+          a1.set(index, {
+            ...a1.get(index),
+            name: undefined,
+          })
+        }
+      }
+    }
 
     if (label === "delete") {
       const data1 = a1.get(index)
@@ -192,7 +207,7 @@ export const Annotator = ({
       if (index1 !== -1) {
         f1[index1].content = ""
       }
-    } else {
+    } else if (label !== "label_undo") {
       a1.set(index, {
         ...a1.get(index),
         [label]: value,
