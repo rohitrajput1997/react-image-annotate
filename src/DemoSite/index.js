@@ -758,7 +758,7 @@ export default () => {
         onExit={(e) => console.log(e)}
         enabledTools={
           isImageMode
-            ? ["create-box", "create-polygon"]
+            ? ["create-box", "create-polygon", "zoom_tool_minus"]
             : [
                 "select",
                 "zoom",

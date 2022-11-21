@@ -67,18 +67,18 @@ function FormOCR({ index, formData, setFormData, item }) {
     </>
   ) : input_type === "textArea" ? (
     <>
-      <label
+      {/* <label
         className="task_formlabel"
         htmlFor={display_label}
         style={{ ...labelStyle }}
         title={display_label}
       >
         {display_label}
-      </label>
+      </label> */}
       <AnnotationInput
         isRequired={mandatory === "mandatory"}
         rows={3}
-        // title={value.name}
+        title={display_label}
         id={display_label}
         value={content}
         fullWidth
@@ -95,4 +95,3 @@ function FormOCR({ index, formData, setFormData, item }) {
 }
 
 export default FormOCR
-

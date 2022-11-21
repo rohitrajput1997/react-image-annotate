@@ -48,13 +48,23 @@ const AnnotationInput = ({
       </span>
     )
   }
+  let labelStyle = {
+    width: "90%",
+    overflow: "hidden",
+
+    wordBreak: "break-all",
+    display: "inline-block",
+  }
 
   return (
     <div
       className={`common_inputBox flex flex-col ${className ? className : ""}`}
     >
       {title && (
-        <label className={`title_input_box ${labelClass}`}>
+        <label
+          className={`title_input_box ${labelClass}`}
+          style={{ ...labelStyle }}
+        >
           {title} {isRequired ? <span style={{ color: "red" }}>*</span> : ""}
         </label>
       )}
@@ -64,7 +74,7 @@ const AnnotationInput = ({
         style={{
           ...style,
           backgroundColor: "#edf2f7",
-          border: "2px solid #005f86",
+          border: "none",
         }}
         autoComplete="off"
         className="font-MontMedium text-sm ant-input"

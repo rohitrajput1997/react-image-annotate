@@ -494,7 +494,7 @@ export const Annotator = ({
                   <Grid
                     item
                     xs={12}
-                    md={4}
+                    md={6}
                     key={index}
                     className="common_inputBox"
                   >
