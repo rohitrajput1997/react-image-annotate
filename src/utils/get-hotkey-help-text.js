@@ -1,11 +1,11 @@
-import { getApplicationKeyMap } from "react-hotkeys"
-
 export const getHotkeyHelpText = (commandName) => {
-  const firstSequence =
-    getApplicationKeyMap()[commandName]?.sequences?.[0]?.sequence
+  const firstSequence = ""
+  //   getApplicationKeyMap &&
+  //   getApplicationKeyMap()?.[commandName]?.sequences?.[0]?.sequence
+  // console.log(firstSequence, getApplicationKeyMap(), commandName)
+  // if (!firstSequence) return ""
 
-  if (!firstSequence) return ""
-  return ` (${firstSequence})`
+  return ""
 }
 
 export default getHotkeyHelpText
