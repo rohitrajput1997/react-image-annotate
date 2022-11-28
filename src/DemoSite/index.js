@@ -749,7 +749,7 @@ export default () => {
     ],
     allowComments: false,
   })
-  let isImageMode = true
+  let isImageMode = false
   const handleSubmit = () => {}
   return (
     <div>
@@ -758,7 +758,7 @@ export default () => {
         onExit={(e) => console.log(e)}
         enabledTools={
           isImageMode
-            ? ["create-box", "create-polygon", "zoom_tool_minus"]
+            ? ["create-box", "create-polygon", "zoom", "zoom_tool_minus"]
             : [
                 "select",
                 "zoom",
@@ -793,6 +793,7 @@ export default () => {
         tilte_key={"image_le"}
         deleteAnnotationAllow={false}
         annotation_index={0}
+        isMediaLayout={true}
         blocks={[
           {
             BlockType: "WORD",
@@ -4695,4 +4696,3 @@ export default () => {
     </div>
   )
 }
-

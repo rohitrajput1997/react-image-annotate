@@ -114,12 +114,14 @@ export default ({
           Math.abs(zoomStart.x - zoomEnd.x) < 10 &&
           Math.abs(zoomStart.y - zoomEnd.y) < 10
         ) {
-          if (0.4 < mat.a) {
-            set_scroll_number(scrollnum + 0.1)
-            zoomIn({ to: 0.9 - scrollnum }, mousePosition.current)
+          if (selectedTool === "zoom") {
+            if (((1 / mat.a) * 100).toFixed(0) < 250) {
+              zoomIn({ to: mat.a - 0.1 }, mousePosition.current)
+            }
           } else {
-            set_scroll_number(0)
-            zoomIn({ to: 1 }, mousePosition.current)
+            if (((1 / mat.a) * 100).toFixed(0) > 25) {
+              zoomIn({ to: mat.a + 0.1 }, mousePosition.current)
+            }
           }
         } else {
           const { iw, ih } = layoutParams.current
@@ -174,3 +176,4 @@ export default ({
   }
   return { mouseEvents, mousePosition }
 }
+
