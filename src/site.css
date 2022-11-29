@@ -15,7 +15,10 @@ body {
 .MuiSlider-track{
 box-shadow: 4px 0px 7px 0px #005f86 !important;
 } */
-
+iframe {
+  width: 0px !important;
+  height: 0px !important;
+}
 .konvajs-content{
 z-index: 7 !important;
 position: absolute !important;

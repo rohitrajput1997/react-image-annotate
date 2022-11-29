@@ -214,7 +214,7 @@ export const ImageCanvas = ({
   const maskImages = useRef({})
   const windowSize = useWindowSize()
   const getScaledPoint = (stage, scale) => {
-    const { x, y } = stage.getPointerPosition()
+    const { x, y } = stage.getPointerPosition() || {}
     return { x: x / scale, y: y / scale }
   }
   const isDrawing = React.useRef(false)
@@ -892,3 +892,4 @@ export const ImageCanvas = ({
 }
 
 export default ImageCanvas
+

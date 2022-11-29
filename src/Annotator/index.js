@@ -5,12 +5,12 @@ import React, { useEffect, useMemo, useReducer, useState } from "react"
 import makeImmutable, { without } from "seamless-immutable"
 import useEventCallback from "use-event-callback"
 import { parseTextract, textractObjects } from "../box_interction"
+import AnnotatorForm from "../Components/AnnotatorForm"
 import LocalStorage from "../Components/LocalStorage"
 import RightSideMenu from "../Components/RightSideMenu"
 import type { KeypointsDefinition } from "../ImageCanvas/region-tools"
 import MainLayout from "../MainLayout"
 import type { Action, Image } from "../MainLayout/types"
-import FormOCR from "../OCR/FormOCR"
 import SettingsProvider from "../SettingsProvider"
 import getFromLocalStorage from "../utils/get-from-local-storage"
 import combineReducers from "./reducers/combine-reducers.js"
@@ -124,6 +124,7 @@ export const Annotator = ({
   deleteAnnotationAllow = false,
   editable_data = [],
   annotation_index = 0,
+  customize_data = [],
 }: Props) => {
   if (typeof selectedImage === "string") {
     selectedImage = (images || []).findIndex((img) => img.src === selectedImage)
@@ -132,6 +133,9 @@ export const Annotator = ({
   const annotationType = images ? "image" : "video"
   const [orcTxt, setORCTxt] = useState(image_ocr_map || new Map())
   const [formData, setFormData] = useState(editable_data)
+  const [customizeForm, setCustomizeForm] = useState(customize_data)
+
+  let custom_info = customizeForm?.map((item) => item.title)
   const [state, dispatchToReducer] = useReducer(
     historyHandler(
       combineReducers(
@@ -183,45 +187,95 @@ export const Annotator = ({
   window.textPoligonList = parseTextract(blocks)
 
   window.onChangeOCR = (index, label, value) => {
-    let f1 = [...formData]
-    let a1 = new Map(orcTxt)
+    if (custom_info.includes(value)) {
+      let f1 = [...customizeForm]
+      let a1 = new Map(orcTxt)
 
-    if (label === "label_undo") {
-      const data1 = a1.get(index)
-      if (data1.name) {
-        const index1 = f1.findIndex((d) => d.title === data1?.name)
-        if (index1 !== -1) {
-          f1[index1].content = ""
-          a1.set(index, {
-            ...a1.get(index),
-            name: undefined,
-          })
+      if (label === "label_undo") {
+        const data1 = a1.get(index)
+        if (data1.name) {
+          const index1 = f1.findIndex((d) => d.title === data1?.name)
+          if (index1 !== -1) {
+            f1[index1].content = ""
+            a1.set(index, {
+              ...a1.get(index),
+              name: undefined,
+            })
+          }
         }
       }
-    }
 
-    if (label === "delete") {
-      const data1 = a1.get(index)
-      const index1 = f1.findIndex((d) => d.title === data1?.name)
-      a1.delete(index)
-      if (index1 !== -1) {
-        f1[index1].content = ""
+      if (label === "delete") {
+        const data1 = a1.get(index)
+        const index1 = f1.findIndex((d) => d.title === data1?.name)
+        a1.delete(index)
+        if (index1 !== -1) {
+          f1[index1].content = ""
+        }
+      } else if (label !== "label_undo") {
+        a1.set(index, {
+          ...a1.get(index),
+          [label]: value,
+        })
       }
-    } else if (label !== "label_undo") {
-      a1.set(index, {
-        ...a1.get(index),
-        [label]: value,
-      })
-    }
-    const data = a1.get(index)
-    if (data?.name) {
-      const index1 = f1.findIndex((d) => d.title === data.name)
-      if (index1 !== -1) {
-        f1[index1].content = data.value
+      const data = a1.get(index)
+      if (data?.name) {
+        const index1 = f1.findIndex((d) => d.title === data.name)
+        if (index1 !== -1) {
+          f1[index1].content = data.value
+        }
       }
+      setCustomizeForm(f1)
+      setORCTxt(a1)
+    } else {
+      let f1 = [...formData]
+      let a1 = new Map(orcTxt)
+
+      if (label === "label_undo") {
+        const data1 = a1.get(index)
+        if (data1.name) {
+          const index1 = f1.findIndex((d) => d.title === data1?.name)
+          if (index1 !== -1) {
+            f1[index1].content = ""
+            a1.set(index, {
+              ...a1.get(index),
+              name: undefined,
+            })
+          }
+        }
+      }
+
+      if (label === "delete") {
+        const data1 = a1.get(index)
+        const index1 = f1.findIndex((d) => d.title === data1?.name)
+        a1.delete(index)
+        if (index1 !== -1) {
+          f1[index1].content = ""
+          setFormData(f1)
+        } else {
+          let f1 = [...customizeForm]
+          const index1 = f1.findIndex((d) => d.title === data1?.name)
+          if (index1 !== -1) {
+            f1[index1].content = ""
+            setCustomizeForm(f1)
+          }
+        }
+      } else if (label !== "label_undo") {
+        a1.set(index, {
+          ...a1.get(index),
+          [label]: value,
+        })
+      }
+      const data = a1.get(index)
+      if (data?.name) {
+        const index1 = f1.findIndex((d) => d.title === data.name)
+        if (index1 !== -1) {
+          f1[index1].content = data.value
+        }
+      }
+      label !== "delete" && setFormData(f1)
+      setORCTxt(a1)
     }
-    setFormData(f1)
-    setORCTxt(a1)
   }
 
   const [lines, setLines] = React.useState([])
@@ -479,36 +533,15 @@ export const Annotator = ({
             }}
             spacing={2}
           >
-            {formData?.map((a, index) => {
-              let {
-                rules,
-                editable_fields,
-                save_mandatory_fields,
-                find_and_replace,
-                hide_physical_link,
-                dropdown_data,
-              } = Getrules || {}
-              return (
-                ["label", "textArea"].includes(a.input_type) &&
-                editable_fields.includes(a.title) && (
-                  <Grid
-                    item
-                    xs={12}
-                    md={6}
-                    key={index}
-                    className="common_inputBox"
-                  >
-                    <FormOCR
-                      index={index}
-                      formData={formData}
-                      setFormData={setFormData}
-                      item={a}
-                      editable_data={formData}
-                    />
-                  </Grid>
-                )
-              )
-            })}
+            <AnnotatorForm
+              AnnotatorFormArr={formData}
+              setAnnotatorFormArr={setFormData}
+            />
+
+            <AnnotatorForm
+              AnnotatorFormArr={customizeForm}
+              setAnnotatorFormArr={setCustomizeForm}
+            />
           </Grid>
         </Grid>
 
@@ -549,4 +582,3 @@ export const Annotator = ({
 }
 
 export default Annotator
-

@@ -11,4 +11,4 @@ REM if destination folder not available, create
 mkdir %Dest_Folder%
 REM copy the files
 
-Xcopy C:\Users\91865\Desktop\new\react-image-annotate\dist C:\Users\91865\Desktop\nsworkflow\frontend\dist /E /H /C /I
+Xcopy C:\Users\91865\Desktop\new\react-image-annotate\dist C:\Users\91865\Desktop\WORKFLOW\dist /E /H /C /I

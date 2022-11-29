@@ -18,6 +18,7 @@ import styles from "./styles"
 // import { getIn, setIn } from "seamless-immutable"
 
 import { asMutable } from "seamless-immutable"
+import LocalStorage from "../Components/LocalStorage.js"
 
 const theme = createTheme()
 const useStyles = makeStyles((theme) => styles)
@@ -65,7 +66,7 @@ export const RegionLabel = ({
 
     if (commentInput) return commentInput.focus()
   }
-
+  let visible_fields = LocalStorage.get_visible_fields()
   return (
     <ThemeProvider theme={theme}>
       <Paper
@@ -191,7 +192,10 @@ export const RegionLabel = ({
                             .map((c) => ({ value: c, label: c }))
                             .filter(
                               ({ value: id1 }) =>
-                                !regions.some(({ cls: id2 }) => id2 === id1)
+                                !visible_fields.includes(id1) &&
+                                !regions.some(({ cls: id2 }) => {
+                                  return id2 === id1
+                                })
                             ) // roles.filter(({ value: id1 }) => !fields.roles.some(({ role: id2 }) => id2 === id1))
                         )
                       : asMutable(

@@ -1,3 +1,4 @@
+import React from "react"
 export const image_ocr_map = (editable_fields, annotation) => {
   try {
     let mapArr = new Map()
@@ -14,4 +15,9 @@ export const image_ocr_map = (editable_fields, annotation) => {
   } catch {
     return []
   }
+}
+export const handleTooltipMessage = ({ title, count, isTooltip }) => {
+  let starCount = "*".repeat(count)
+
+  return isTooltip ? <>{` ${starCount}`}</> : " *"
 }

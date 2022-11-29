@@ -7,8 +7,14 @@ const LocalStorage = () => {
         return {}
       }
     },
+    get_visible_fields() {
+      try {
+        return this.get_task_rules()?.visible_fields
+      } catch {
+        return []
+      }
+    },
   }
 }
 
 export default LocalStorage()
-

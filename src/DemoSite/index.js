@@ -78,18 +78,7 @@ let editable_data = [
     content:
       "Dr. (Prof.) S. K. Pal MD (Medicine), DM (Endocrinology) CONSULTANT PHYSICIAN & ENDOCRINOLOGIST DIABETOLOGIST & THYROID SPECIALIST MON, WED, SAT TIME : 6 P.M. TO 8 P.M. MOBILE : 98311 22577 Regn. No. 45344 (W.B.M.C.) 2-4-22 Abhijus Dutt 46yrs the Rx",
   },
-  {
-    title: "doctors_qualification",
-    mandatory: "non-mandatory",
-    input_type: "textArea",
-    other_value: [],
-    default_type: "doctors_qualification",
-    display_label: "doctors_qualification",
-    other_default_value: "",
-    history_hide: true,
-    readonly: false,
-    content: null,
-  },
+
   {
     title: "prescription_visit_date",
     mandatory: "non-mandatory",
@@ -105,7 +94,7 @@ let editable_data = [
   {
     title: "patient_name",
     mandatory: "mandatory",
-    input_type: "textArea",
+    input_type: "input",
     other_value: [],
     default_type: "patient_name",
     display_label: "patient_name",
@@ -642,6 +631,18 @@ let editable_data = [
     readonly: false,
     content: null,
   },
+  {
+    title: "doctors_qualification",
+    mandatory: "non-mandatory",
+    input_type: "textArea",
+    other_value: [],
+    default_type: "doctors_qualification",
+    display_label: "doctors_qualification",
+    other_default_value: "",
+    history_hide: true,
+    readonly: false,
+    content: null,
+  },
 ]
 export default () => {
   const [annotatorProps, changeAnnotatorProps] = React.useState({
@@ -749,7 +750,7 @@ export default () => {
     ],
     allowComments: false,
   })
-  let isImageMode = false
+  let isImageMode = true
   const handleSubmit = () => {}
   return (
     <div>
@@ -4692,7 +4693,9 @@ export default () => {
         ]}
         image_ocr_map={[]}
         editable_data={editable_data}
+        customize_data={[]}
       />
     </div>
   )
 }
+
