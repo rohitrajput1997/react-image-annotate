@@ -1,8 +1,20 @@
 import React from "react"
 /* eslint-disable no-unused-expressions */
+
 export const errorSpan = (message) => {
   // eslint-disable-next-line react/react-in-jsx-scope
   return <span className="common_error">{message}</span>
+}
+function removeLeadingZeros(str) {
+  // Regex to remove leading
+  // zeros from a string
+  const regex = new RegExp("^0+(?!$)", "g")
+
+  // Replaces the matched
+  // value with given string
+  str = str.replaceAll(regex, "")
+
+  return str
 }
 function stringToRegex(s, m) {
   try {
@@ -17,6 +29,14 @@ function stringToRegex(s, m) {
       : new RegExp(s)
   } catch (err) {
     console.log(err)
+  }
+}
+function isNumeric(n) {
+  try {
+    let num = String(n)?.trim()
+    return !isNaN(parseFloat(num) && isFinite(num))
+  } catch {
+    return false
   }
 }
 function round(num, no) {
@@ -109,7 +129,7 @@ export const isNonMandatoryEditable = ({ rules_arr = [], editable_arr }) => {
         const firstOutput = data?.map((dd) => dd?.child)?.flat(1)
         for (i of firstOutput) {
           if (i.type === "checkbox") {
-            readOnly = i.value
+            readOnly = i.value === true ? true : false
           } else if (i.type === "dropdown") {
             title = i.value
           }
@@ -344,10 +364,11 @@ export const fielderror = (
         } else if (type === "length_range") {
           let childRange = child.map(({ value }) => value)?.toString()
           let RegexLength = childRange?.split(",")
+
           if (value && RegexLength?.[0] && RegexLength?.[1]) {
             if (
-              value?.length >= parseInt(RegexLength?.[0]) &&
-              value?.length <= parseInt(RegexLength?.[1])
+              String(value)?.length >= parseInt(RegexLength?.[0]) &&
+              String(value)?.length <= parseInt(RegexLength?.[1])
             ) {
               //
             } else {
@@ -418,9 +439,13 @@ export const fielderror = (
           if (value === "" || value === null || value === undefined) {
             if (!no) {
               text = submit
-                ? { [title]: true }
+                ? { [title]: true, mandatory: "" }
                 : errorSpan("Please fill mandatory fields")
               messageShow = "Please fill mandatory fields"
+              break
+            } else {
+              text = submit ? { [title]: false, mandatory: false } : errorSpan()
+
               break
             }
           }
@@ -570,8 +595,8 @@ export const fielderror = (
                 if (!checkStart) {
                   text = submit
                     ? { [title]: true }
-                    : errorSpan(`String Should starts with ${validatingValue}`)
-                  messageShow = `String Should starts with ${validatingValue}`
+                    : errorSpan(`Text should start with ${validatingValue}`)
+                  messageShow = `Text should start with ${validatingValue}`
                 }
               } else if (
                 r?.json?.required_fields[0]?.child?.[0]?.value?.[0] === "end"
@@ -580,8 +605,8 @@ export const fielderror = (
                 if (!checkStart) {
                   text = submit
                     ? { [title]: true }
-                    : errorSpan(`String Should ends with ${validatingValue}`)
-                  messageShow = `String Should ends with ${validatingValue}`
+                    : errorSpan(`Text should ends with ${validatingValue}`)
+                  messageShow = `Text should ends with ${validatingValue}`
                 }
               }
             } catch (err) {
@@ -589,6 +614,63 @@ export const fielderror = (
             }
           } else {
             //
+          }
+        } else if (type === "lesser_greater_than_a_field_value_specific") {
+          let compared_arr = r?.json?.required_fields[0]?.child || []
+          let findCompareFiled =
+            compared_arr?.find(
+              (item) => item.label === "Select A Field to be compared with"
+            )?.value || []
+          let compare_field_shouldbe =
+            compared_arr?.find(
+              (item) => item.label === "Compared field should be"
+            ) || {}
+          let selected_value =
+            compared_arr?.find(
+              (item) => item.label === "Value for the selected field should be"
+            )?.value || ""
+          let find_field =
+            compared_arr?.find(
+              (item) => item.label === "Final field should be"
+            ) || []
+          let final_field_sholuld_be =
+            compared_arr?.find(
+              (item) => item.label === "Value for the final field should be"
+            )?.value || ""
+          let user_final_fields = editable_arr?.find(
+            (item) => item.title === findCompareFiled?.[0]
+          )?.content
+          // text = submit ? { [title]: true } : errorSpan(` ${user_final_fields}`);
+
+          if (isNumeric(user_final_fields) && isNumeric(value)) {
+            try {
+              if (
+                eval(
+                  removeLeadingZeros(user_final_fields) +
+                    compare_field_shouldbe.value +
+                    removeLeadingZeros(selected_value)
+                )
+              ) {
+                if (
+                  !eval(
+                    removeLeadingZeros(value) +
+                      find_field.value +
+                      removeLeadingZeros(final_field_sholuld_be)
+                  )
+                ) {
+                  text = submit
+                    ? { [title]: true }
+                    : errorSpan(
+                        `${title} ${find_field.message} ${final_field_sholuld_be} if the ${findCompareFiled} ${compare_field_shouldbe.message} ${selected_value}`
+                      )
+                  messageShow = `${title} ${find_field.message} ${final_field_sholuld_be} if the ${findCompareFiled} ${compare_field_shouldbe.message} ${selected_value}`
+                  break
+                }
+              }
+            } catch (err) {
+              //
+              console.log(err, "logical operator break")
+            }
           }
         }
       }
@@ -774,3 +856,4 @@ export const getValueArr = (child, editable_arr, layouttype, submit, type) => {
     }
   }
 }
+

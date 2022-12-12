@@ -14,7 +14,15 @@ const LocalStorage = () => {
         return []
       }
     },
+    get_dropdown() {
+      try {
+        return this.get_task_rules()?.dropdown_data
+      } catch {
+        return []
+      }
+    },
   }
 }
 
 export default LocalStorage()
+

@@ -8,6 +8,7 @@ import { parseTextract, textractObjects } from "../box_interction"
 import AnnotatorForm from "../Components/AnnotatorForm"
 import LocalStorage from "../Components/LocalStorage"
 import RightSideMenu from "../Components/RightSideMenu"
+import { isNonMandatoryEditable } from "../Components/ValidationCheck"
 import type { KeypointsDefinition } from "../ImageCanvas/region-tools"
 import MainLayout from "../MainLayout"
 import type { Action, Image } from "../MainLayout/types"
@@ -134,8 +135,9 @@ export const Annotator = ({
   const [orcTxt, setORCTxt] = useState(image_ocr_map || new Map())
   const [formData, setFormData] = useState(editable_data)
   const [customizeForm, setCustomizeForm] = useState(customize_data)
-
+  let { rules } = Getrules
   let custom_info = customizeForm?.map((item) => item.title)
+
   const [state, dispatchToReducer] = useReducer(
     historyHandler(
       combineReducers(
@@ -195,6 +197,7 @@ export const Annotator = ({
         const data1 = a1.get(index)
         if (data1.name) {
           const index1 = f1.findIndex((d) => d.title === data1?.name)
+
           if (index1 !== -1) {
             f1[index1].content = ""
             a1.set(index, {
@@ -225,8 +228,21 @@ export const Annotator = ({
           f1[index1].content = data.value
         }
       }
-      setCustomizeForm(f1)
-      setORCTxt(a1)
+      let { readOnly, valueExist } =
+        isNonMandatoryEditable({
+          rules_arr: rules[data?.name],
+          editable_arr: [...f1, ...formData],
+        }) || {}
+
+      // eslint-disable-next-line no-unused-expressions
+      valueExist
+        ? readOnly
+          ? () => {}
+          : setCustomizeForm(f1)
+        : setCustomizeForm(f1)
+
+      // eslint-disable-next-line no-unused-expressions
+      valueExist ? (readOnly ? () => {} : setORCTxt(a1)) : setCustomizeForm(f1)
     } else {
       let f1 = [...formData]
       let a1 = new Map(orcTxt)
@@ -273,8 +289,17 @@ export const Annotator = ({
           f1[index1].content = data.value
         }
       }
-      label !== "delete" && setFormData(f1)
-      setORCTxt(a1)
+      let { readOnly, valueExist } =
+        isNonMandatoryEditable({
+          rules_arr: rules[data?.name],
+          editable_arr: [...f1, ...formData],
+        }) || {}
+
+      // eslint-disable-next-line no-unused-expressions
+      valueExist ? (readOnly ? () => {} : setFormData(f1)) : setFormData(f1)
+
+      // eslint-disable-next-line no-unused-expressions
+      valueExist ? (readOnly ? () => {} : setORCTxt(a1)) : setFormData(f1)
     }
   }
 
@@ -534,13 +559,17 @@ export const Annotator = ({
             spacing={2}
           >
             <AnnotatorForm
-              AnnotatorFormArr={formData}
+              editable_arr={formData || []}
               setAnnotatorFormArr={setFormData}
+              customize_arr={customizeForm || []}
+              setCustomize={setCustomizeForm}
             />
 
             <AnnotatorForm
-              AnnotatorFormArr={customizeForm}
+              editable_arr={customizeForm || []}
               setAnnotatorFormArr={setCustomizeForm}
+              customize_arr={formData || []}
+              setCustomize={setFormData}
             />
           </Grid>
         </Grid>
@@ -582,3 +611,4 @@ export const Annotator = ({
 }
 
 export default Annotator
+

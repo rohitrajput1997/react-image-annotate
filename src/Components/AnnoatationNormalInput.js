@@ -38,7 +38,13 @@ const NormalInput = ({
     }
     return upper + lower + number
   }
+  let labelStyle = {
+    width: "90%",
+    overflow: "hidden",
 
+    wordBreak: "break-all",
+    display: "inline-block",
+  }
   const showCharacterCount = (totalCount) => {
     return (
       <span
@@ -55,7 +61,10 @@ const NormalInput = ({
       className={`common_inputBox flex flex-col ${className ? className : ""}`}
     >
       {title && (
-        <label className={`title_input_box ${labelClass}`}>
+        <label
+          className={`title_input_box ${labelClass}`}
+          style={{ ...labelStyle }}
+        >
           {title}{" "}
           {isRequired ? (
             <span style={{ color: "red" }}>

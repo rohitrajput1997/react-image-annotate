@@ -4,7 +4,12 @@ import FormOCR from "../OCR/FormOCR"
 import LocalStorage from "./LocalStorage"
 let Getrules = LocalStorage.get_task_rules() || {}
 window.editable_fields = Getrules.editable_fields
-function AnnotatorForm({ AnnotatorFormArr = [], setAnnotatorFormArr }) {
+function AnnotatorForm({
+  editable_arr = [],
+  setAnnotatorFormArr,
+  customize_arr = [],
+  setCustomize = () => {},
+}) {
   let {
     rules,
     editable_fields,
@@ -16,18 +21,25 @@ function AnnotatorForm({ AnnotatorFormArr = [], setAnnotatorFormArr }) {
   } = Getrules || {}
   return (
     <>
-      {AnnotatorFormArr?.map((a, index) => {
+      {editable_arr?.map((a, index) => {
         return (
-          ["label", "textArea", "input"]?.includes(a?.input_type) &&
+          [
+            "label",
+            "textArea",
+            "input",
+            "dependentDropdown",
+            "dropdown",
+          ]?.includes(a?.input_type) &&
           editable_fields?.includes(a.title) &&
           !visible_fields?.includes(a.title) && (
             <Grid item xs={12} md={6} key={index} className="common_inputBox">
               <FormOCR
                 index={index}
-                formData={AnnotatorFormArr}
+                editable_arr={editable_arr}
                 setFormData={setAnnotatorFormArr}
                 item={a}
-                editable_data={AnnotatorFormArr}
+                customized_column_arr={customize_arr}
+                setCustomize={setCustomize}
               />
             </Grid>
           )
@@ -38,3 +50,4 @@ function AnnotatorForm({ AnnotatorFormArr = [], setAnnotatorFormArr }) {
 }
 
 export default AnnotatorForm
+
