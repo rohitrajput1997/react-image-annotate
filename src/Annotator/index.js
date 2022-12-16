@@ -242,7 +242,7 @@ export const Annotator = ({
         : setCustomizeForm(f1)
 
       // eslint-disable-next-line no-unused-expressions
-      valueExist ? (readOnly ? () => {} : setORCTxt(a1)) : setCustomizeForm(f1)
+      valueExist ? (readOnly ? () => {} : setORCTxt(a1)) : setORCTxt(a1)
     } else {
       let f1 = [...formData]
       let a1 = new Map(orcTxt)
@@ -299,7 +299,7 @@ export const Annotator = ({
       valueExist ? (readOnly ? () => {} : setFormData(f1)) : setFormData(f1)
 
       // eslint-disable-next-line no-unused-expressions
-      valueExist ? (readOnly ? () => {} : setORCTxt(a1)) : setFormData(f1)
+      valueExist ? (readOnly ? () => {} : setORCTxt(a1)) : setORCTxt(a1)
     }
   }
 
@@ -611,4 +611,3 @@ export const Annotator = ({
 }
 
 export default Annotator
-
