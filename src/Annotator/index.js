@@ -126,6 +126,7 @@ export const Annotator = ({
   editable_data = [],
   annotation_index = 0,
   customize_data = [],
+  column_key = "",
 }: Props) => {
   if (typeof selectedImage === "string") {
     selectedImage = (images || []).findIndex((img) => img.src === selectedImage)
@@ -189,6 +190,7 @@ export const Annotator = ({
   window.textPoligonList = parseTextract(blocks)
 
   window.onChangeOCR = (index, label, value) => {
+    console.log(index, label, value)
     if (custom_info.includes(value)) {
       let f1 = [...customizeForm]
       let a1 = new Map(orcTxt)
@@ -460,6 +462,7 @@ export const Annotator = ({
         formData: formData,
         tilte_key: tilte_key,
         annotation_index: annotation_index,
+        column_key: column_key,
       }
     }
   }
