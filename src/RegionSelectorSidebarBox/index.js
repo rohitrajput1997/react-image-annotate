@@ -4,10 +4,10 @@ import TrashIcon from "@mui/icons-material/Delete"
 import LockIcon from "@mui/icons-material/Lock"
 import UnlockIcon from "@mui/icons-material/LockOpen"
 import RegionIcon from "@mui/icons-material/PictureInPicture"
-import PieChartIcon from "@mui/icons-material/PieChart"
 import ReorderIcon from "@mui/icons-material/SwapVert"
 import VisibleIcon from "@mui/icons-material/Visibility"
 import VisibleOffIcon from "@mui/icons-material/VisibilityOff"
+import { Tooltip } from "@mui/material"
 import { grey } from "@mui/material/colors"
 import Grid from "@mui/material/Grid"
 import { createTheme, styled, ThemeProvider } from "@mui/material/styles"
@@ -89,10 +89,22 @@ const RowHeader = () => {
       highlighted={false}
       order={<ReorderIcon className="icon" />}
       classification={<div style={{ paddingLeft: 10 }}>Class</div>}
-      area={<PieChartIcon className="icon" />}
-      trash={<TrashIcon className="icon" />}
-      lock={<LockIcon className="icon" />}
-      visible={<VisibleIcon className="icon" />}
+      // area={<PieChartIcon className="icon" />}
+      trash={
+        <Tooltip title="Delete">
+          <TrashIcon className="icon" />
+        </Tooltip>
+      }
+      lock={
+        <Tooltip title="Lock/Unlock">
+          <LockIcon className="icon" />
+        </Tooltip>
+      }
+      visible={
+        <Tooltip title="Show/Hide">
+          <VisibleIcon className="icon" />
+        </Tooltip>
+      }
     />
   )
 }
@@ -122,48 +134,58 @@ const Row = ({
       classification={<Chip text={cls || ""} color={color || "#ddd"} />}
       area=""
       trash={
-        <TrashIcon
-          onClick={() => {
-            onDeleteRegion(r)
-            let delet_arr = [...delete_annotation]
-            delet_arr.push(r)
-            let filterArr =
-              delet_arr &&
-              delet_arr
-                .filter(
-                  (arr, index, self) =>
-                    index === self.findIndex((t) => t.id === arr.id && arr.id)
-                )
-                .map((item) => item)
-            setdelete_annotation(filterArr)
-          }}
-          className="icon2"
-        />
+        <Tooltip title="Delete">
+          <TrashIcon
+            onClick={() => {
+              onDeleteRegion(r)
+              let delet_arr = [...delete_annotation]
+              delet_arr.push(r)
+              let filterArr =
+                delet_arr &&
+                delet_arr
+                  .filter(
+                    (arr, index, self) =>
+                      index === self.findIndex((t) => t.id === arr.id && arr.id)
+                  )
+                  .map((item) => item)
+              setdelete_annotation(filterArr)
+            }}
+            className="icon2"
+          />
+        </Tooltip>
       }
       lock={
         r.locked ? (
-          <LockIcon
-            onClick={() => onChangeRegion({ ...r, locked: false })}
-            className="icon2"
-          />
+          <Tooltip title="Unlock">
+            <LockIcon
+              onClick={() => onChangeRegion({ ...r, locked: false })}
+              className="icon2"
+            />
+          </Tooltip>
         ) : (
-          <UnlockIcon
-            onClick={() => onChangeRegion({ ...r, locked: true })}
-            className="icon2"
-          />
+          <Tooltip title="Lock">
+            <UnlockIcon
+              onClick={() => onChangeRegion({ ...r, locked: true })}
+              className="icon2"
+            />
+          </Tooltip>
         )
       }
       visible={
         r.visible || r.visible === undefined ? (
-          <VisibleIcon
-            onClick={() => onChangeRegion({ ...r, visible: false })}
-            className="icon2"
-          />
+          <Tooltip title="Hide">
+            <VisibleIcon
+              onClick={() => onChangeRegion({ ...r, visible: false })}
+              className="icon2"
+            />
+          </Tooltip>
         ) : (
-          <VisibleOffIcon
-            onClick={() => onChangeRegion({ ...r, visible: true })}
-            className="icon2"
-          />
+          <Tooltip title="Show">
+            <VisibleOffIcon
+              onClick={() => onChangeRegion({ ...r, visible: true })}
+              className="icon2"
+            />
+          </Tooltip>
         )
       }
     />
@@ -237,4 +259,3 @@ export default memo(RegionSelectorSidebarBox, (prevProps, nextProps) =>
     (nextProps.regions || emptyArr).map(mapUsedRegionProperties)
   )
 )
-

@@ -11,6 +11,7 @@ import {
   IconButton,
   // makeStyles,
   Paper,
+  Tooltip,
 } from "@mui/material"
 // import { ThemeProvider } from "@mui/styles"
 import ClickAwayListener from "@mui/material/ClickAwayListener"
@@ -337,7 +338,9 @@ function BrushPopup({
                               }}
                             >
                               {item.isLocked ? (
-                                <LockIcon fontSize="small" />
+                                <Tooltip title="Annotate Locked">
+                                  <LockIcon fontSize="small" />
+                                </Tooltip>
                               ) : (
                                 <>
                                   {item?.popUp?.classification && (
@@ -391,4 +394,3 @@ function BrushPopup({
 }
 
 export default BrushPopup
-

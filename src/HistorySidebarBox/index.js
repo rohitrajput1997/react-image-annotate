@@ -2,6 +2,7 @@
 
 import HistoryIcon from "@mui/icons-material/History"
 import UndoIcon from "@mui/icons-material/Undo"
+import { Tooltip } from "@mui/material"
 import { grey } from "@mui/material/colors"
 import IconButton from "@mui/material/IconButton"
 import List from "@mui/material/List"
@@ -143,9 +144,11 @@ export const HistorySidebarBox = ({
                     onRestoreHistory()
                   }}
                 >
-                  <IconButton>
-                    <UndoIcon />
-                  </IconButton>
+                  <Tooltip title="Restore">
+                    <IconButton>
+                      <UndoIcon />
+                    </IconButton>
+                  </Tooltip>
                 </ListItemSecondaryAction>
               )}
             </ListItem>
