@@ -136,6 +136,7 @@ export const Annotator = ({
   const [orcTxt, setORCTxt] = useState(image_ocr_map || new Map())
   const [formData, setFormData] = useState(editable_data)
   const [customizeForm, setCustomizeForm] = useState(customize_data)
+
   let { rules } = Getrules
   let custom_info = customizeForm?.map((item) => item.title)
 
@@ -232,7 +233,7 @@ export const Annotator = ({
       }
       let { readOnly, valueExist } =
         isNonMandatoryEditable({
-          rules_arr: rules[data?.name],
+          rules_arr: rules?.[data?.name],
           editable_arr: [...f1, ...formData],
         }) || {}
 
@@ -293,7 +294,7 @@ export const Annotator = ({
       }
       let { readOnly, valueExist } =
         isNonMandatoryEditable({
-          rules_arr: rules[data?.name],
+          rules_arr: rules?.[data?.name],
           editable_arr: [...f1, ...formData],
         }) || {}
 
@@ -589,6 +590,7 @@ export const Annotator = ({
             boxShadow: !show
               ? ""
               : "10px 10px 10px black, -10px -10px 10px rgba(180, 180, 180, 0.4)",
+            zIndex: 1000,
           }}
         >
           <RightSideMenu

@@ -252,6 +252,8 @@ export const RegionLabel = ({
                 <Button
                   onClick={() => {
                     onClose(region)
+                    console.log(region)
+                    // window.onChangeOCR(regionIndex, "name", action.region.cls)
                   }}
                   size="small"
                   variant="contained"

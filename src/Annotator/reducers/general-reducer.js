@@ -133,7 +133,8 @@ export default (state: MainLayoutState, action: Action) => {
     case "CHANGE_REGION": {
       const regionIndex = getRegionIndex(action.region)
       if (regionIndex === null) return state
-      window.onChangeOCR(regionIndex, "name", action.region.cls)
+      // window.onChangeOCR(regionIndex, "name", action.region.cls)
+
       const oldRegion = activeImage.regions[regionIndex]
       if (oldRegion.cls !== action.region.cls) {
         state = saveToHistory(state, "Change Region Classification")
@@ -296,8 +297,32 @@ export default (state: MainLayoutState, action: Action) => {
               h,
             })
           }
+
           const regionIndex = getRegionIndex(regionId)
+
           if (regionIndex === null) return state
+          let { w, h } = activeImage.regions[regionIndex]
+          let obj = {
+            x: x - w / 2,
+            y: y - h / 2,
+            w,
+            h,
+          }
+
+          window.onChangeOCR(
+            regionIndex,
+            "value",
+            bb_intersection(
+              {
+                x1: obj?.x * 500,
+                x2: (w + obj?.x) * 500,
+                y1: obj?.y * 500,
+                y2: (h + obj?.y) * 500,
+              },
+              window.textractList
+            ).join(" ")
+          )
+
           return setIn(
             state,
             [...pathToActiveImage, "regions", regionIndex],
@@ -361,9 +386,6 @@ export default (state: MainLayoutState, action: Action) => {
             ).join(" ")
           )
 
-          // if (box.cls !== "") {
-          //   window.onChangeOCR(regionIndex, "name", box.cls)
-          // }
           return setIn(state, [...pathToActiveImage, "regions", regionIndex], {
             ...box,
             x: dx,
@@ -840,6 +862,8 @@ export default (state: MainLayoutState, action: Action) => {
       const regionIndex = getRegionIndex(action.region)
       if (regionIndex === null) return state
       let remove_state = setIn(state, ["selectedCls"], "")
+      window.onChangeOCR(regionIndex, "name", action.region.cls)
+
       return setIn(
         remove_state,
         [...pathToActiveImage, "regions", regionIndex],
@@ -1001,4 +1025,3 @@ export default (state: MainLayoutState, action: Action) => {
   }
   return state
 }
-

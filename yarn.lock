@@ -10251,10 +10251,10 @@
     "gauge" "~2.7.3"
     "set-blocking" "~2.0.0"
 
-"ns_workflow_workspace@^3.0.5":
-  "integrity" "sha512-p55aLO5ycMi8LRvjg+C+Qq7BpEdqqBXlsC5/Y3KaEykXnzcAa4Gkf0jVUl8n/IB3F1+yg8EOEU4O+GYemNA79w=="
-  "resolved" "https://registry.npmjs.org/ns_workflow_workspace/-/ns_workflow_workspace-3.0.5.tgz"
-  "version" "3.0.5"
+"ns_workflow_workspace@^3.0.8":
+  "integrity" "sha512-k12+dv3/MpFWGeiPuKu4RzBmV8Y6oBeLXtoaUUKlCUoTdsuANo9uQjQFmyCIeu2EbK+Ip68/KGXK5rbAWkMUSg=="
+  "resolved" "https://registry.npmjs.org/ns_workflow_workspace/-/ns_workflow_workspace-3.0.8.tgz"
+  "version" "3.0.8"
   dependencies:
     "@emotion/react" "^11.7.1"
     "@emotion/styled" "^11.6.0"
