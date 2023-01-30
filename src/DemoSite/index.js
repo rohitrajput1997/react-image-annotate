@@ -593,7 +593,7 @@ export default () => {
     ],
     allowComments: false,
   })
-  let isImageMode = true
+  let isImageMode = false
   const handleSubmit = () => {}
   return (
     <div>
@@ -4566,3 +4566,4 @@ export default () => {
     </div>
   )
 }
+
